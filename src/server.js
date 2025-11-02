@@ -9,6 +9,7 @@ const http = require('http');
 const { Server } = require('socket.io');
 const connectDB = require('./config/database');
 const initializeAdmin = require('./scripts/initializeAdmin');
+const seedInitialData = require('./scripts/seedInitialData');
 
 const app = express();
 const server = http.createServer(app);
@@ -27,10 +28,12 @@ const io = new Server(server, {
     }
 });
 
-// Connect to MongoDB and initialize admin
-connectDB().then(() => {
+// Connect to MongoDB and initialize
+connectDB().then(async () => {
     // Initialize admin user after database connection
-    initializeAdmin();
+    await initializeAdmin();
+    // Seed initial data (projects, channels, etc.)
+    await seedInitialData();
 });
 
 // Make io accessible in routes
