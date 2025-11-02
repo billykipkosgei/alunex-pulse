@@ -207,3 +207,53 @@ exports.updatePreferences = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+// Setup initial admin user - only works if no admin exists
+exports.setupAdmin = async (req, res) => {
+    try {
+        // Check if any admin user already exists
+        const adminExists = await User.findOne({ role: 'admin' });
+
+        if (adminExists) {
+            return res.status(400).json({
+                message: 'Admin user already exists. Please use login instead.'
+            });
+        }
+
+        const { name, email, password } = req.body;
+
+        // Validate input
+        if (!name || !email || !password) {
+            return res.status(400).json({
+                message: 'Please provide name, email, and password'
+            });
+        }
+
+        // Create admin user
+        const adminUser = await User.create({
+            name,
+            email,
+            password,
+            role: 'admin',
+            isActive: true
+        });
+
+        // Generate token
+        const token = generateToken(adminUser._id);
+
+        res.status(201).json({
+            success: true,
+            message: 'Admin user created successfully',
+            token,
+            user: {
+                id: adminUser._id,
+                name: adminUser.name,
+                email: adminUser.email,
+                role: adminUser.role,
+                initials: adminUser.getInitials()
+            }
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};

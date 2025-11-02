@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { register, login, getMe, updateProfile, updatePreferences } = require('../controllers/auth.controller');
+const { register, login, getMe, updateProfile, updatePreferences, setupAdmin } = require('../controllers/auth.controller');
 const { protect, optionalProtect } = require('../middleware/auth.middleware');
 
 // Public routes (optionalProtect allows admin to invite users)
+router.post('/setup-admin', setupAdmin);
 router.post('/register', optionalProtect, register);
 router.post('/login', login);
 
