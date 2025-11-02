@@ -6,6 +6,8 @@ exports.getChannels = async (req, res) => {
     try {
         const userId = req.user.id;
 
+        console.log('Fetching channels for user:', userId);
+
         const channels = await Channel.find({
             isDeleted: false,
             $or: [
@@ -16,6 +18,8 @@ exports.getChannels = async (req, res) => {
             .populate('project', 'name')
             .populate('createdBy', 'name email')
             .sort({ updatedAt: -1 });
+
+        console.log(`Found ${channels.length} channels`);
 
         // Get unread count for each channel
         const channelsWithUnread = await Promise.all(channels.map(async (channel) => {
@@ -37,9 +41,11 @@ exports.getChannels = async (req, res) => {
         });
     } catch (error) {
         console.error('Error fetching channels:', error);
+        console.error('Error details:', error.message);
+        console.error('Error stack:', error.stack);
         res.status(500).json({
             success: false,
-            message: 'Error fetching channels'
+            message: 'Error fetching channels: ' + error.message
         });
     }
 };
@@ -152,6 +158,8 @@ exports.createChannel = async (req, res) => {
         const { name, description, projectId, isPrivate } = req.body;
         const userId = req.user.id;
 
+        console.log('Creating channel with data:', { name, description, projectId, isPrivate, userId });
+
         if (!name) {
             return res.status(400).json({
                 success: false,
@@ -159,18 +167,30 @@ exports.createChannel = async (req, res) => {
             });
         }
 
-        const channel = await Channel.create({
+        const channelData = {
             name,
-            description,
-            project: projectId,
+            description: description || '',
             isPrivate: isPrivate || false,
             createdBy: userId,
             members: [userId]
-        });
+        };
+
+        // Only add project if provided
+        if (projectId) {
+            channelData.project = projectId;
+        }
+
+        const channel = await Channel.create(channelData);
 
         const populatedChannel = await Channel.findById(channel._id)
             .populate('project', 'name')
             .populate('createdBy', 'name email');
+
+        // Emit socket event for real-time update
+        const io = req.app.get('io');
+        if (io) {
+            io.emit('channel_created', { channel: populatedChannel });
+        }
 
         res.status(201).json({
             success: true,
@@ -178,9 +198,11 @@ exports.createChannel = async (req, res) => {
         });
     } catch (error) {
         console.error('Error creating channel:', error);
+        console.error('Error details:', error.message);
+        console.error('Error stack:', error.stack);
         res.status(500).json({
             success: false,
-            message: 'Error creating channel'
+            message: 'Error creating channel: ' + error.message
         });
     }
 };
