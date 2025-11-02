@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Department Analytics - Alunex PM</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .analytics-header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 32px;
+            border-radius: 12px;
+            margin-bottom: 32px;
+        }
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        .chart-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .metric-row:last-child {
+            border-bottom: none;
+        }
+        .trend-up {
+            color: #10b981;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .trend-down {
+            color: #ef4444;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .cost-breakdown-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .cost-breakdown-table th {
+            background: #f8fafc;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #475569;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .cost-breakdown-table td {
+            padding: 12px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .cost-breakdown-table tr:hover {
+            background: #f8fafc;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <div class="logo-icon">A</div>
+            <span>Alunex Project Management</span>
+        </div>
+        <div class="user-info">
+            <button class="btn btn-secondary" onclick="showHelpMenu(event)" title="Help & Tutorials" style="padding: 8px 12px;">
+                <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </button>
+            <div class="user-avatar">JM</div>
+            <button class="btn btn-secondary" onclick="window.location.href='login.html'">Logout</button>
+        </div>
+    </nav>
+    
+    <div class="layout">
+        <aside class="sidebar">
+            <!-- MAIN SECTION -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-header">
+                    <span>MAIN</span>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </div>
+                <div class="sidebar-section-content">
+                    <a href="dashboard.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                        </svg>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- ESTIMATION SECTION -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-header">
+                    <span>ESTIMATION</span>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </div>
+                <div class="sidebar-section-content">
+                    <a href="tender-list.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        <span>Tender List</span>
+                    </a>
+                    <a href="boq-pricing.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                        </svg>
+                        <span>BOQ & Pricing</span>
+                    </a>
+                    <a href="quote-progress.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                        </svg>
+                        <span>Quote Progress</span>
+                    </a>
+                    <a href="under-finalization.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span>Under Finalization</span>
+                    </a>
+                    <a href="awarded-lost.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span>Awarded / Lost</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- PROJECT SPACE SECTION -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-header">
+                    <span>PROJECT SPACE</span>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </div>
+                <div class="sidebar-section-content">
+                    <a href="project-overview.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/>
+                        </svg>
+                        <span>Project Overview</span>
+                    </a>
+                    <a href="engineering.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>
+                        </svg>
+                        <span>Engineering</span>
+                    </a>
+                    <a href="procurement.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                        <span>Procurement</span>
+                    </a>
+                    <a href="fabrication.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+                        </svg>
+                        <span>Fabrication</span>
+                    </a>
+                    <a href="logistics.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/>
+                        </svg>
+                        <span>Logistics</span>
+                    </a>
+                    <a href="installation.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                        </svg>
+                        <span>Installation</span>
+                    </a>
+                    <a href="qa-qc.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                        <span>QA/QC</span>
+                    </a>
+                    <a href="hse-safety.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                        </svg>
+                        <span>HSE & Site Safety</span>
+                    </a>
+                    <a href="variations-claims.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+                        </svg>
+                        <span>Variations & Claims</span>
+                    </a>
+                    <a href="closeout-snag.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                        </svg>
+                        <span>Close-Out & Snag</span>
+                    </a>
+                    <a href="documents-drawings.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
+                        </svg>
+                        <span>Documents & Drawings</span>
+                    </a>
+                    <a href="communication.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                        </svg>
+                        <span>Communication</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- MONITORING & CONTROL SECTION -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-header">
+                    <span>MONITORING & CONTROL</span>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </div>
+                <div class="sidebar-section-content">
+                    <a href="wbs-cbs.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-3zM14 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1h-4a1 1 0 01-1-1v-3z"/>
+                        </svg>
+                        <span>WBS & CBS Structure</span>
+                    </a>
+                    <a href="budget-tracking.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span>Budget Tracking</span>
+                    </a>
+                    <a href="manhour-tracking.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span>Man-Hour Tracking</span>
+                    </a>
+                    <a href="earned-value.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                        </svg>
+                        <span>Earned Value Dashboard</span>
+                    </a>
+                    <a href="cost-control.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                        </svg>
+                        <span>Cost Control (CPI/SPI)</span>
+                    </a>
+                    <a href="manpower-utilization.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                        <span>Manpower Utilization</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- INVENTORY SECTION -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-header">
+                    <span>INVENTORY</span>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </div>
+                <div class="sidebar-section-content">
+                    <a href="material-tracking.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                        </svg>
+                        <span>Material Tracking</span>
+                    </a>
+                    <a href="consumables.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
+                        </svg>
+                        <span>Consumables</span>
+                    </a>
+                    <a href="tools-equipment.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                        </svg>
+                        <span>Tools & Equipment</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- ADMIN SECTION -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-header">
+                    <span>ADMIN</span>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </div>
+                <div class="sidebar-section-content">
+                    <a href="users-roles.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                        </svg>
+                        <span>Users & Roles</span>
+                    </a>
+                    <a href="departments-capacity.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                        </svg>
+                        <span>Departments & Capacity</span>
+                    </a>
+                    <a href="rate-cards.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                        </svg>
+                        <span>Rate Cards</span>
+                    </a>
+                    <a href="settings.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                        <span>Settings</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Department Analytics Link (Standalone) -->
+            <a href="department-analytics.html" class="sidebar-item active" style="margin-top: 12px;">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+                <span>Department Analytics</span>
+            </a>
+        </aside>
+        
+        <main class="main-content">
+            <!-- Old Navigation Notice -->
+            <div style="background-color: #EFF6FF; border-left: 4px solid #3B82F6; padding: 16px; margin-bottom: 24px; border-radius: 8px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <svg style="width: 20px; height: 20px; color: #3B82F6; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <div style="color: #1E40AF; font-size: 14px; line-height: 1.6;">
+                        <strong>Legacy Page Preserved:</strong> This <strong>"Department Analytics"</strong> page from the previous system has been kept and enhanced with construction-specific metrics. It works alongside new analytics in Earned Value Dashboard, Cost Control, and Budget Tracking modules.
+                    </div>
+                </div>
+            </div>
+
+            <div class="analytics-header">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <div>
+                        <h1 style="margin-bottom: 8px; color: white;">Department Analytics & Cost Reports</h1>
+                        <p style="color: rgba(255,255,255,0.9);">Advanced insights into department performance and cost breakdown</p>
+                    </div>
+                    <div style="display: flex; gap: 12px;">
+                        <select class="form-control" style="width: auto;">
+                            <option selected>City Center Construction</option>
+                            <option>Office Complex Renovation</option>
+                        </select>
+                        <button class="btn btn-primary" onclick="alert('Exporting to PDF...')">
+                            <svg style="width: 16px; height: 16px; display: inline; margin-right: 4px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                            Export PDF
+                        </button>
+                        <button class="btn btn-secondary" onclick="alert('Exporting to Excel...')">
+                            <svg style="width: 16px; height: 16px; display: inline; margin-right: 4px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                            Export Excel
+                        </button>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
+                    <div style="background: rgba(255,255,255,0.15); padding: 16px; border-radius: 8px; backdrop-filter: blur(10px);">
+                        <div style="font-size: 13px; color: rgba(255,255,255,0.8); margin-bottom: 4px;">Budget Efficiency</div>
+                        <div style="font-size: 28px; font-weight: bold; color: white;">87.3%</div>
+                        <div class="trend-up" style="color: #6ee7b7; font-size: 12px; margin-top: 4px;">
+                            <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                            </svg>
+                            +5.2% vs target
+                        </div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.15); padding: 16px; border-radius: 8px; backdrop-filter: blur(10px);">
+                        <div style="font-size: 13px; color: rgba(255,255,255,0.8); margin-bottom: 4px;">Cost Variance</div>
+                        <div style="font-size: 28px; font-weight: bold; color: white;">-$1,250</div>
+                        <div class="trend-up" style="color: #6ee7b7; font-size: 12px; margin-top: 4px;">
+                            <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                            </svg>
+                            Under budget
+                        </div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.15); padding: 16px; border-radius: 8px; backdrop-filter: blur(10px);">
+                        <div style="font-size: 13px; color: rgba(255,255,255,0.8); margin-bottom: 4px;">Projected ROI</div>
+                        <div style="font-size: 28px; font-weight: bold; color: white;">12.4%</div>
+                        <div class="trend-up" style="color: #6ee7b7; font-size: 12px; margin-top: 4px;">
+                            <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                            </svg>
+                            Above target (10%)
+                        </div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.15); padding: 16px; border-radius: 8px; backdrop-filter: blur(10px);">
+                        <div style="font-size: 13px; color: rgba(255,255,255,0.8); margin-bottom: 4px;">Cost per Hour</div>
+                        <div style="font-size: 28px; font-weight: bold; color: white;">$32.50</div>
+                        <div class="trend-down" style="color: #fca5a5; font-size: 12px; margin-top: 4px;">
+                            <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/>
+                            </svg>
+                            -$2.50 from last month
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <h3 style="margin-bottom: 20px;">Department Performance Score</h3>
+                    <div style="space-y: 16px;">
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-weight: 600; color: #2563eb;">Engineering</span>
+                                <span style="font-weight: 600; color: #2563eb;">92%</span>
+                            </div>
+                            <div style="width: 100%; height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden;">
+                                <div style="width: 92%; height: 100%; background: #2563eb;"></div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 16px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-weight: 600; color: #10b981;">Procurement</span>
+                                <span style="font-weight: 600; color: #10b981;">88%</span>
+                            </div>
+                            <div style="width: 100%; height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden;">
+                                <div style="width: 88%; height: 100%; background: #10b981;"></div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 16px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-weight: 600; color: #f59e0b;">Fabrication</span>
+                                <span style="font-weight: 600; color: #f59e0b;">76%</span>
+                            </div>
+                            <div style="width: 100%; height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden;">
+                                <div style="width: 76%; height: 100%; background: #f59e0b;"></div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 16px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-weight: 600; color: #8b5cf6;">Installation</span>
+                                <span style="font-weight: 600; color: #8b5cf6;">95%</span>
+                            </div>
+                            <div style="width: 100%; height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden;">
+                                <div style="width: 95%; height: 100%; background: #8b5cf6;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid #e2e8f0; font-size: 12px; color: #64748b;">
+                        Performance score based on: budget adherence, timeline compliance, quality metrics
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <h3 style="margin-bottom: 20px;">Budget Variance Trend</h3>
+                    <div style="height: 200px; display: flex; align-items: flex-end; justify-content: space-around; gap: 8px; padding: 0 20px;">
+                        <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+                            <div style="width: 100%; height: 120px; background: linear-gradient(to top, #10b981, #6ee7b7); border-radius: 4px 4px 0 0;"></div>
+                            <span style="font-size: 11px; color: #64748b; margin-top: 8px;">Week 1</span>
+                            <span style="font-size: 12px; font-weight: 600; color: #10b981;">-$300</span>
+                        </div>
+                        <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+                            <div style="width: 100%; height: 150px; background: linear-gradient(to top, #10b981, #6ee7b7); border-radius: 4px 4px 0 0;"></div>
+                            <span style="font-size: 11px; color: #64748b; margin-top: 8px;">Week 2</span>
+                            <span style="font-size: 12px; font-weight: 600; color: #10b981;">-$450</span>
+                        </div>
+                        <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+                            <div style="width: 100%; height: 90px; background: linear-gradient(to top, #10b981, #6ee7b7); border-radius: 4px 4px 0 0;"></div>
+                            <span style="font-size: 11px; color: #64748b; margin-top: 8px;">Week 3</span>
+                            <span style="font-size: 12px; font-weight: 600; color: #10b981;">-$200</span>
+                        </div>
+                        <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+                            <div style="width: 100%; height: 140px; background: linear-gradient(to top, #10b981, #6ee7b7); border-radius: 4px 4px 0 0;"></div>
+                            <span style="font-size: 11px; color: #64748b; margin-top: 8px;">Week 4</span>
+                            <span style="font-size: 12px; font-weight: 600; color: #10b981;">-$300</span>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid #e2e8f0; font-size: 12px; color: #64748b;">
+                        Negative values indicate under-budget performance (good). Positive values indicate overrun.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2>Complete Cost Breakdown Report</h2>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn btn-secondary">Filter by Date</button>
+                        <button class="btn btn-secondary">Filter by Category</button>
+                    </div>
+                </div>
+                
+                <table class="cost-breakdown-table">
+                    <thead>
+                        <tr>
+                            <th>Department</th>
+                            <th>Category</th>
+                            <th>Budgeted</th>
+                            <th>Actual Cost</th>
+                            <th>Variance</th>
+                            <th>% Used</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong style="color: #2563eb;">Engineering</strong></td>
+                            <td>Labor Costs</td>
+                            <td>$5,000</td>
+                            <td>$4,200</td>
+                            <td style="color: #10b981;">-$800</td>
+                            <td>84%</td>
+                            <td><span class="badge badge-success">On Track</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong style="color: #2563eb;">Engineering</strong></td>
+                            <td>Materials</td>
+                            <td>$4,000</td>
+                            <td>$3,600</td>
+                            <td style="color: #10b981;">-$400</td>
+                            <td>90%</td>
+                            <td><span class="badge badge-success">On Track</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong style="color: #2563eb;">Engineering</strong></td>
+                            <td>Equipment/Tools</td>
+                            <td>$2,000</td>
+                            <td>$1,800</td>
+                            <td style="color: #10b981;">-$200</td>
+                            <td>90%</td>
+                            <td><span class="badge badge-success">On Track</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong style="color: #2563eb;">Engineering</strong></td>
+                            <td>Software/Licenses</td>
+                            <td>$1,000</td>
+                            <td>$900</td>
+                            <td style="color: #10b981;">-$100</td>
+                            <td>90%</td>
+                            <td><span class="badge badge-success">On Track</span></td>
+                        </tr>
+                        
+                        <tr style="background: #f8fafc;">
+                            <td colspan="2"><strong>Engineering Total</strong></td>
+                            <td><strong>$12,000</strong></td>
+                            <td><strong>$9,000</strong></td>
+                            <td style="color: #10b981;"><strong>-$1,500</strong></td>
+                            <td><strong>75%</strong></td>
+                            <td></td>
+                        </tr>
+                        
+                        <tr>
+                            <td><strong style="color: #10b981;">Procurement</strong></td>
+                            <td>Aluminum Materials</td>
+                            <td>$6,000</td>
+                            <td>$4,800</td>
+                            <td style="color: #10b981;">-$1,200</td>
+                            <td>80%</td>
+                            <td><span class="badge badge-success">On Track</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong style="color: #10b981;">Procurement</strong></td>
+                            <td>Glass Materials</td>
+                            <td>$3,000</td>
+                            <td>$2,600</td>
+                            <td style="color: #10b981;">-$400</td>
+                            <td>87%</td>
+                            <td><span class="badge badge-success">On Track</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong style="color: #10b981;">Procurement</strong></td>
+                            <td>Hardware/Fixtures</td>
+                            <td>$1,000</td>
+                            <td>$900</td>
+                            <td style="color: #10b981;">-$100</td>
+                            <td>90%</td>
+                            <td><span class="badge badge-success">On Track</span></td>
+                        </tr>
+                        
+                        <tr style="background: #f8fafc;">
+                            <td colspan="2"><strong>Procurement Total</strong></td>
+                            <td><strong>$10,000</strong></td>
+                            <td><strong>$6,000</strong></td>
+                            <td style="color: #10b981;"><strong>-$1,700</strong></td>
+                            <td><strong>60%</strong></td>
+                            <td></td>
+                        </tr>
+                        
+                        <tr>
+                            <td><strong style="color: #f59e0b;">Fabrication</strong></td>
+                            <td>Labor Costs</td>
+                            <td>$8,000</td>
+                            <td>$5,400</td>
+                            <td style="color: #10b981;">-$2,600</td>
+                            <td>68%</td>
+                            <td><span class="badge badge-success">On Track</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong style="color: #f59e0b;">Fabrication</strong></td>
+                            <td>Equipment Usage</td>
+                            <td>$4,000</td>
+                            <td>$3,750</td>
+                            <td style="color: #10b981;">-$250</td>
+                            <td>94%</td>
+                            <td><span class="badge badge-warning">Monitor</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong style="color: #f59e0b;">Fabrication</strong></td>
+                            <td>Quality Control</td>
+                            <td>$3,000</td>
+                            <td>$2,100</td>
+                            <td style="color: #10b981;">-$900</td>
+                            <td>70%</td>
+                            <td><span class="badge badge-success">On Track</span></td>
+                        </tr>
+                        
+                        <tr style="background: #f8fafc;">
+                            <td colspan="2"><strong>Fabrication Total</strong></td>
+                            <td><strong>$15,000</strong></td>
+                            <td><strong>$6,750</strong></td>
+                            <td style="color: #10b981;"><strong>-$3,750</strong></td>
+                            <td><strong>45%</strong></td>
+                            <td></td>
+                        </tr>
+                        
+                        <tr>
+                            <td><strong style="color: #8b5cf6;">Installation</strong></td>
+                            <td>Labor Costs</td>
+                            <td>$5,000</td>
+                            <td>$4,800</td>
+                            <td style="color: #10b981;">-$200</td>
+                            <td>96%</td>
+                            <td><span class="badge badge-warning">Monitor</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong style="color: #8b5cf6;">Installation</strong></td>
+                            <td>Transportation</td>
+                            <td>$2,000</td>
+                            <td>$1,900</td>
+                            <td style="color: #10b981;">-$100</td>
+                            <td>95%</td>
+                            <td><span class="badge badge-warning">Monitor</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong style="color: #8b5cf6;">Installation</strong></td>
+                            <td>Site Equipment</td>
+                            <td>$1,000</td>
+                            <td>$1,000</td>
+                            <td style="color: #64748b;">$0</td>
+                            <td>100%</td>
+                            <td><span class="badge badge-warning">At Limit</span></td>
+                        </tr>
+                        
+                        <tr style="background: #f8fafc;">
+                            <td colspan="2"><strong>Installation Total</strong></td>
+                            <td><strong>$8,000</strong></td>
+                            <td><strong>$7,000</strong></td>
+                            <td style="color: #10b981;"><strong>-$300</strong></td>
+                            <td><strong>88%</strong></td>
+                            <td></td>
+                        </tr>
+                        
+                        <tr style="background: #1e293b; color: white;">
+                            <td colspan="2"><strong>PROJECT TOTAL</strong></td>
+                            <td><strong>$45,000</strong></td>
+                            <td><strong>$28,750</strong></td>
+                            <td style="color: #6ee7b7;"><strong>-$7,250</strong></td>
+                            <td><strong>63.9%</strong></td>
+                            <td><span class="badge badge-success">On Track</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 32px;">
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;">Cost by Category</h3>
+                    <div class="metric-row">
+                        <span style="font-weight: 600;">Labor Costs</span>
+                        <div style="text-align: right;">
+                            <div style="font-weight: 600;">$15,400</div>
+                            <div style="font-size: 12px; color: #64748b;">53.6% of total</div>
+                        </div>
+                    </div>
+                    <div class="metric-row">
+                        <span style="font-weight: 600;">Materials</span>
+                        <div style="text-align: right;">
+                            <div style="font-weight: 600;">$11,000</div>
+                            <div style="font-size: 12px; color: #64748b;">38.3% of total</div>
+                        </div>
+                    </div>
+                    <div class="metric-row">
+                        <span style="font-weight: 600;">Equipment</span>
+                        <div style="text-align: right;">
+                            <div style="font-weight: 600;">$1,800</div>
+                            <div style="font-size: 12px; color: #64748b;">6.3% of total</div>
+                        </div>
+                    </div>
+                    <div class="metric-row">
+                        <span style="font-weight: 600;">Other</span>
+                        <div style="text-align: right;">
+                            <div style="font-weight: 600;">$550</div>
+                            <div style="font-size: 12px; color: #64748b;">1.9% of total</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;">Profit Analysis</h3>
+                    <div class="metric-row">
+                        <span style="font-weight: 600;">Total Revenue</span>
+                        <div style="text-align: right; font-weight: 600;">$50,000</div>
+                    </div>
+                    <div class="metric-row">
+                        <span style="font-weight: 600;">Total Costs (Actual)</span>
+                        <div style="text-align: right; font-weight: 600;">$28,750</div>
+                    </div>
+                    <div class="metric-row">
+                        <span style="font-weight: 600;">Projected Final Cost</span>
+                        <div style="text-align: right; font-weight: 600;">$43,800</div>
+                    </div>
+                    <div class="metric-row" style="border-top: 2px solid #e2e8f0; padding-top: 12px;">
+                        <span style="font-weight: 600; color: #10b981;">Projected Profit</span>
+                        <div style="text-align: right;">
+                            <div style="font-weight: 600; font-size: 18px; color: #10b981;">$6,200</div>
+                            <div style="font-size: 12px; color: #64748b;">12.4% margin</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 12px; padding: 12px; background: #f0fdf4; border-radius: 6px; font-size: 13px; color: #166534;">
+                        <strong>Above target!</strong> Original target was 10% ($5,000). Current projection: $1,200 additional profit.
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 24px; display: flex; gap: 12px; justify-content: center;">
+                <button class="btn btn-primary" onclick="alert('PDF report will be generated with all charts, tables, and analytics.')">
+                    <svg style="width: 16px; height: 16px; display: inline; margin-right: 4px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                    </svg>
+                    Download Complete Report (PDF)
+                </button>
+                <button class="btn btn-secondary" onclick="alert('Excel file will include all data tables for further analysis.')">
+                    <svg style="width: 16px; height: 16px; display: inline; margin-right: 4px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    Download Data (Excel)
+                </button>
+                <button class="btn btn-secondary" onclick="window.location.href='departments.html'">
+                    <svg style="width: 16px; height: 16px; display: inline; margin-right: 4px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    Back to Departments
+                </button>
+            </div>
+        </main>
+    </div>
+    
+    <script src="tutorial-system.js"></script>
+</body>
+</html>

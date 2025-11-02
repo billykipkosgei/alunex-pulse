@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Alunex PM</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <div class="logo-icon">A</div>
+            <span>Alunex Project Management</span>
+        </div>
+        <div class="user-info">
+            <button class="btn btn-secondary" onclick="showHelpMenu(event)" title="Help & Tutorials" style="padding: 8px 12px;">
+                <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </button>
+            <div class="user-avatar">JM</div>
+            <button class="btn btn-secondary" onclick="window.location.href='login.html'">Logout</button>
+        </div>
+    </nav>
+    
+    <div class="layout">
+        <aside class="sidebar">
+            <!-- MAIN SECTION -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-header">
+                    <span>MAIN</span>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </div>
+                <div class="sidebar-section-content">
+                    <a href="dashboard.html" class="sidebar-item active">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                        </svg>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- ESTIMATION SECTION -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-header">
+                    <span>ESTIMATION</span>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </div>
+                <div class="sidebar-section-content">
+                    <a href="tender-list.html" class="sidebar-item">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        <span>Tender List</span>
+                    </a>
+                    <a href="boq-pricing.html" class="sidebar-item">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                        </svg>
+                        <span>BOQ & Pricing</span>
+                    </a>
+                    <a href="quote-progress.html" class="sidebar-item">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                        </svg>
+                        <span>Quote Progress</span>
+                    </a>
+                    <a href="under-finalization.html" class="sidebar-item">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span>Under Finalization</span>
+                    </a>
+                    <a href="awarded-lost.html" class="sidebar-item">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span>Awarded / Lost</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- PROJECT SPACE SECTION -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-header">
+                    <span>PROJECT SPACE</span>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </div>
+                <div class="sidebar-section-content">
+                    <a href="project-overview.html" class="sidebar-item">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/>
+                        </svg>
+                        <span>Project Overview</span>
+                    </a>
+                    <a href="engineering.html" class="sidebar-item">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>
+                        </svg>
+                        <span>Engineering</span>
+                    </a>
+                    <a href="procurement.html" class="sidebar-item">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                        <span>Procurement</span>
+                    </a>
+                    <a href="fabrication.html" class="sidebar-item">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+                        </svg>
+                        <span>Fabrication</span>
+                    </a>
+                    <a href="logistics.html" class="sidebar-item">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/>
+                        </svg>
+                        <span>Logistics</span>
+                    </a>
+                    <a href="installation.html" class="sidebar-item">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                        </svg>
+                        <span>Installation</span>
+                    </a>
+                    <a href="qa-qc.html" class="sidebar-item">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                        <span>QA/QC</span>
+                    </a>
+                    <a href="hse-safety.html" class="sidebar-item">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                        </svg>
+                        <span>HSE & Site Safety</span>
+                    </a>
+                    <a href="variations-claims.html" class="sidebar-item">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+                        </svg>
+                        <span>Variations & Claims</span>
+                    </a>
+                    <a href="closeout-snag.html" class="sidebar-item">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                        </svg>
+                        <span>Close-Out & Snag</span>
+                    </a>
+                    <a href="documents-drawings.html" class="sidebar-item">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
+                        </svg>
+                        <span>Documents & Drawings</span>
+                    </a>
+                    <a href="communication.html" class="sidebar-item">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                        </svg>
+                        <span>Communication</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- MONITORING & CONTROL SECTION -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-header">
+                    <span>MONITORING & CONTROL</span>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </div>
+                <div class="sidebar-section-content">
+                    <a href="wbs-cbs.html" class="sidebar-item">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-3zM14 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1h-4a1 1 0 01-1-1v-3z"/>
+                        </svg>
+                        <span>WBS & CBS Structure</span>
+                    </a>
+                    <a href="budget-tracking.html" class="sidebar-item">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span>Budget Tracking</span>
+                    </a>
+                    <a href="manhour-tracking.html" class="sidebar-item">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span>Man-Hour Tracking</span>
+                    </a>
+                    <a href="earned-value.html" class="sidebar-item">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                        </svg>
+                        <span>Earned Value Dashboard</span>
+                    </a>
+                    <a href="cost-control.html" class="sidebar-item">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                        </svg>
+                        <span>Cost Control (CPI/SPI)</span>
+                    </a>
+                    <a href="manpower-utilization.html" class="sidebar-item">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                        <span>Manpower Utilization</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- INVENTORY SECTION -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-header">
+                    <span>INVENTORY</span>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </div>
+                <div class="sidebar-section-content">
+                    <a href="material-tracking.html" class="sidebar-item">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                        </svg>
+                        <span>Material Tracking</span>
+                    </a>
+                    <a href="consumables.html" class="sidebar-item">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
+                        </svg>
+                        <span>Consumables</span>
+                    </a>
+                    <a href="tools-equipment.html" class="sidebar-item">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                        </svg>
+                        <span>Tools & Equipment</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- ADMIN SECTION -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-header">
+                    <span>ADMIN</span>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </div>
+                <div class="sidebar-section-content">
+                    <a href="users-roles.html" class="sidebar-item">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                        </svg>
+                        <span>Users & Roles</span>
+                    </a>
+                    <a href="departments-capacity.html" class="sidebar-item">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                        </svg>
+                        <span>Departments & Capacity</span>
+                    </a>
+                    <a href="rate-cards.html" class="sidebar-item">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                        </svg>
+                        <span>Rate Cards</span>
+                    </a>
+                    <a href="settings.html" class="sidebar-item">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                        <span>Settings</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+        
+        <main class="main-content">
+            <div class="page-header">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h1>Dashboard</h1>
+                        <p>Welcome back, John! Here's your project overview for today.</p>
+                    </div>
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <label style="font-weight: 600; color: #475569; white-space: nowrap;">View Projects:</label>
+                        <select class="form-control" style="width: 250px;">
+                            <option selected>All Projects</option>
+                            <option>City Center Construction</option>
+                            <option>Office Complex Renovation</option>
+                            <option>Corporate Tower</option>
+                            <option>Residential Building</option>
+                            <option>Shopping Mall Facade</option>
+                            <option disabled>────────────────</option>
+                            <option>✓ Multi-Select Mode</option>
+                        </select>
+                        <button class="btn btn-secondary" title="Advanced Filters">
+                            <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Hours Logged Today</h3>
+                    <div class="value">6.5h</div>
+                    <div class="change">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+                        </svg>
+                        15% from yesterday
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>Active Tasks</h3>
+                    <div class="value">12</div>
+                    <div class="change" style="color: #f59e0b;">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        3 due this week
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>Team Members Online</h3>
+                    <div class="value">8/15</div>
+                    <div class="change">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                        53% active now
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>Active Projects</h3>
+                    <div class="value">5</div>
+                    <div class="change">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        2 completed this month
+                    </div>
+                </div>
+            </div>
+
+            <!-- Portfolio Financial Overview -->
+            <div class="card" style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); color: white; margin-bottom: 24px;">
+                <h2 style="font-size: 20px; margin-bottom: 20px;">Portfolio Financial Performance</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                    <div>
+                        <div style="font-size: 13px; opacity: 0.85; margin-bottom: 8px;">Total Portfolio Value</div>
+                        <div style="font-size: 28px; font-weight: 700;">AED 245.8M</div>
+                        <div style="font-size: 12px; opacity: 0.75; margin-top: 4px;">Across 5 active projects</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 13px; opacity: 0.85; margin-bottom: 8px;">Total Budget Spent</div>
+                        <div style="font-size: 28px; font-weight: 700;">AED 156.3M</div>
+                        <div style="font-size: 12px; opacity: 0.75; margin-top: 4px;">63.6% of total budget</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 13px; opacity: 0.85; margin-bottom: 8px;">Remaining Budget</div>
+                        <div style="font-size: 28px; font-weight: 700;">AED 89.5M</div>
+                        <div style="font-size: 12px; opacity: 0.75; margin-top: 4px;">36.4% available</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 13px; opacity: 0.85; margin-bottom: 8px;">Average CPI</div>
+                        <div style="font-size: 28px; font-weight: 700;">1.08</div>
+                        <div style="font-size: 12px; opacity: 0.75; margin-top: 4px;">8% under budget</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 13px; opacity: 0.85; margin-bottom: 8px;">Average SPI</div>
+                        <div style="font-size: 28px; font-weight: 700;">0.96</div>
+                        <div style="font-size: 12px; opacity: 0.75; margin-top: 4px;">4% behind schedule</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project Performance Grid -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 24px; margin-bottom: 24px;">
+                <!-- Budget Performance Chart -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Budget Performance by Project</h2>
+                        <button class="btn btn-secondary">Export</button>
+                    </div>
+
+                    <div style="padding: 20px 0;">
+                        <!-- Project 1 -->
+                        <div style="margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-size: 14px; font-weight: 600; color: #1e293b;">Dubai Marina Tower</span>
+                                <span style="font-size: 14px; color: #10b981; font-weight: 600;">CPI: 1.12</span>
+                            </div>
+                            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 4px;">
+                                <div style="flex: 1; height: 24px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                                    <div style="height: 100%; width: 68%; background: linear-gradient(90deg, #10b981 0%, #059669 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 11px; font-weight: 600;">68%</div>
+                                </div>
+                                <span style="font-size: 13px; color: #64748b; min-width: 80px;">AED 30.9M</span>
+                            </div>
+                            <div style="font-size: 12px; color: #64748b;">Budget: AED 45.5M</div>
+                        </div>
+
+                        <!-- Project 2 -->
+                        <div style="margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-size: 14px; font-weight: 600; color: #1e293b;">Abu Dhabi Financial Center</span>
+                                <span style="font-size: 14px; color: #10b981; font-weight: 600;">CPI: 1.05</span>
+                            </div>
+                            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 4px;">
+                                <div style="flex: 1; height: 24px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                                    <div style="height: 100%; width: 58%; background: linear-gradient(90deg, #10b981 0%, #059669 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 11px; font-weight: 600;">58%</div>
+                                </div>
+                                <span style="font-size: 13px; color: #64748b; min-width: 80px;">AED 42.3M</span>
+                            </div>
+                            <div style="font-size: 12px; color: #64748b;">Budget: AED 73.0M</div>
+                        </div>
+
+                        <!-- Project 3 -->
+                        <div style="margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-size: 14px; font-weight: 600; color: #1e293b;">Sharjah Innovation Hub</span>
+                                <span style="font-size: 14px; color: #f59e0b; font-weight: 600;">CPI: 0.94</span>
+                            </div>
+                            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 4px;">
+                                <div style="flex: 1; height: 24px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                                    <div style="height: 100%; width: 78%; background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 11px; font-weight: 600;">78%</div>
+                                </div>
+                                <span style="font-size: 13px; color: #64748b; min-width: 80px;">AED 38.2M</span>
+                            </div>
+                            <div style="font-size: 12px; color: #64748b;">Budget: AED 49.0M</div>
+                        </div>
+
+                        <!-- Project 4 -->
+                        <div style="margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-size: 14px; font-weight: 600; color: #1e293b;">RAK Waterfront Resort</span>
+                                <span style="font-size: 14px; color: #10b981; font-weight: 600;">CPI: 1.15</span>
+                            </div>
+                            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 4px;">
+                                <div style="flex: 1; height: 24px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                                    <div style="height: 100%; width: 45%; background: linear-gradient(90deg, #10b981 0%, #059669 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 11px; font-weight: 600;">45%</div>
+                                </div>
+                                <span style="font-size: 13px; color: #64748b; min-width: 80px;">AED 22.5M</span>
+                            </div>
+                            <div style="font-size: 12px; color: #64748b;">Budget: AED 50.0M</div>
+                        </div>
+
+                        <!-- Project 5 -->
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-size: 14px; font-weight: 600; color: #1e293b;">Ajman City Mall</span>
+                                <span style="font-size: 14px; color: #dc2626; font-weight: 600;">CPI: 0.89</span>
+                            </div>
+                            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 4px;">
+                                <div style="flex: 1; height: 24px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                                    <div style="height: 100%; width: 82%; background: linear-gradient(90deg, #dc2626 0%, #b91c1c 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 11px; font-weight: 600;">82%</div>
+                                </div>
+                                <span style="font-size: 13px; color: #64748b; min-width: 80px;">AED 22.4M</span>
+                            </div>
+                            <div style="font-size: 12px; color: #64748b;">Budget: AED 28.3M</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Schedule Performance Chart -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Schedule Performance by Project</h2>
+                        <button class="btn btn-secondary">Export</button>
+                    </div>
+
+                    <div style="padding: 20px 0;">
+                        <!-- Project 1 -->
+                        <div style="margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-size: 14px; font-weight: 600; color: #1e293b;">Dubai Marina Tower</span>
+                                <span style="font-size: 14px; color: #10b981; font-weight: 600;">SPI: 1.03</span>
+                            </div>
+                            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 4px;">
+                                <div style="flex: 1; height: 24px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                                    <div style="height: 100%; width: 72%; background: linear-gradient(90deg, #10b981 0%, #059669 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 11px; font-weight: 600;">72%</div>
+                                </div>
+                                <span style="font-size: 13px; color: #64748b; min-width: 100px;">3% ahead</span>
+                            </div>
+                            <div style="font-size: 12px; color: #64748b;">Completion: 18 Nov 2025</div>
+                        </div>
+
+                        <!-- Project 2 -->
+                        <div style="margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-size: 14px; font-weight: 600; color: #1e293b;">Abu Dhabi Financial Center</span>
+                                <span style="font-size: 14px; color: #f59e0b; font-weight: 600;">SPI: 0.92</span>
+                            </div>
+                            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 4px;">
+                                <div style="flex: 1; height: 24px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                                    <div style="height: 100%; width: 61%; background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 11px; font-weight: 600;">61%</div>
+                                </div>
+                                <span style="font-size: 13px; color: #64748b; min-width: 100px;">8% behind</span>
+                            </div>
+                            <div style="font-size: 12px; color: #64748b;">Completion: 15 Dec 2025</div>
+                        </div>
+
+                        <!-- Project 3 -->
+                        <div style="margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-size: 14px; font-weight: 600; color: #1e293b;">Sharjah Innovation Hub</span>
+                                <span style="font-size: 14px; color: #dc2626; font-weight: 600;">SPI: 0.85</span>
+                            </div>
+                            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 4px;">
+                                <div style="flex: 1; height: 24px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                                    <div style="height: 100%; width: 68%; background: linear-gradient(90deg, #dc2626 0%, #b91c1c 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 11px; font-weight: 600;">68%</div>
+                                </div>
+                                <span style="font-size: 13px; color: #64748b; min-width: 100px;">15% behind</span>
+                            </div>
+                            <div style="font-size: 12px; color: #64748b;">Completion: 22 Jan 2026</div>
+                        </div>
+
+                        <!-- Project 4 -->
+                        <div style="margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-size: 14px; font-weight: 600; color: #1e293b;">RAK Waterfront Resort</span>
+                                <span style="font-size: 14px; color: #10b981; font-weight: 600;">SPI: 1.08</span>
+                            </div>
+                            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 4px;">
+                                <div style="flex: 1; height: 24px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                                    <div style="height: 100%; width: 48%; background: linear-gradient(90deg, #10b981 0%, #059669 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 11px; font-weight: 600;">48%</div>
+                                </div>
+                                <span style="font-size: 13px; color: #64748b; min-width: 100px;">8% ahead</span>
+                            </div>
+                            <div style="font-size: 12px; color: #64748b;">Completion: 28 Feb 2026</div>
+                        </div>
+
+                        <!-- Project 5 -->
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-size: 14px; font-weight: 600; color: #1e293b;">Ajman City Mall</span>
+                                <span style="font-size: 14px; color: #f59e0b; font-weight: 600;">SPI: 0.96</span>
+                            </div>
+                            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 4px;">
+                                <div style="flex: 1; height: 24px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                                    <div style="height: 100%; width: 79%; background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 11px; font-weight: 600;">79%</div>
+                                </div>
+                                <span style="font-size: 13px; color: #64748b; min-width: 100px;">4% behind</span>
+                            </div>
+                            <div style="font-size: 12px; color: #64748b;">Completion: 10 Mar 2026</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project Health Status -->
+            <div class="card" style="margin-bottom: 24px;">
+                <div class="card-header">
+                    <h2>Project Health Matrix</h2>
+                    <button class="btn btn-secondary">View Detailed Report</button>
+                </div>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Project Name</th>
+                            <th>Budget Health</th>
+                            <th>Schedule Health</th>
+                            <th>Quality Score</th>
+                            <th>Risk Level</th>
+                            <th>Overall Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Dubai Marina Tower</strong></td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <div style="width: 60px; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                                        <div style="width: 88%; height: 100%; background: #10b981;"></div>
+                                    </div>
+                                    <span style="color: #10b981; font-size: 12px; font-weight: 600;">88%</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <div style="width: 60px; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                                        <div style="width: 92%; height: 100%; background: #10b981;"></div>
+                                    </div>
+                                    <span style="color: #10b981; font-size: 12px; font-weight: 600;">92%</span>
+                                </div>
+                            </td>
+                            <td><span class="badge badge-success">95%</span></td>
+                            <td><span class="badge" style="background: #d1fae5; color: #065f46;">Low</span></td>
+                            <td><span class="badge badge-success">On Track</span></td>
+                            <td><button class="btn btn-secondary">View</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Abu Dhabi Financial Center</strong></td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <div style="width: 60px; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                                        <div style="width: 85%; height: 100%; background: #10b981;"></div>
+                                    </div>
+                                    <span style="color: #10b981; font-size: 12px; font-weight: 600;">85%</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <div style="width: 60px; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                                        <div style="width: 76%; height: 100%; background: #f59e0b;"></div>
+                                    </div>
+                                    <span style="color: #f59e0b; font-size: 12px; font-weight: 600;">76%</span>
+                                </div>
+                            </td>
+                            <td><span class="badge badge-warning">82%</span></td>
+                            <td><span class="badge" style="background: #fef3c7; color: #92400e;">Medium</span></td>
+                            <td><span class="badge badge-warning">At Risk</span></td>
+                            <td><button class="btn btn-secondary">View</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Sharjah Innovation Hub</strong></td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <div style="width: 60px; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                                        <div style="width: 68%; height: 100%; background: #f59e0b;"></div>
+                                    </div>
+                                    <span style="color: #f59e0b; font-size: 12px; font-weight: 600;">68%</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <div style="width: 60px; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                                        <div style="width: 62%; height: 100%; background: #dc2626;"></div>
+                                    </div>
+                                    <span style="color: #dc2626; font-size: 12px; font-weight: 600;">62%</span>
+                                </div>
+                            </td>
+                            <td><span class="badge badge-warning">78%</span></td>
+                            <td><span class="badge" style="background: #fee2e2; color: #991b1b;">High</span></td>
+                            <td><span class="badge badge-danger">Critical</span></td>
+                            <td><button class="btn btn-secondary">View</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>RAK Waterfront Resort</strong></td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <div style="width: 60px; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                                        <div style="width: 94%; height: 100%; background: #10b981;"></div>
+                                    </div>
+                                    <span style="color: #10b981; font-size: 12px; font-weight: 600;">94%</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <div style="width: 60px; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                                        <div style="width: 96%; height: 100%; background: #10b981;"></div>
+                                    </div>
+                                    <span style="color: #10b981; font-size: 12px; font-weight: 600;">96%</span>
+                                </div>
+                            </td>
+                            <td><span class="badge badge-success">98%</span></td>
+                            <td><span class="badge" style="background: #d1fae5; color: #065f46;">Low</span></td>
+                            <td><span class="badge badge-success">Excellent</span></td>
+                            <td><button class="btn btn-secondary">View</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ajman City Mall</strong></td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <div style="width: 60px; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                                        <div style="width: 58%; height: 100%; background: #dc2626;"></div>
+                                    </div>
+                                    <span style="color: #dc2626; font-size: 12px; font-weight: 600;">58%</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <div style="width: 60px; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                                        <div style="width: 71%; height: 100%; background: #f59e0b;"></div>
+                                    </div>
+                                    <span style="color: #f59e0b; font-size: 12px; font-weight: 600;">71%</span>
+                                </div>
+                            </td>
+                            <td><span class="badge badge-warning">75%</span></td>
+                            <td><span class="badge" style="background: #fee2e2; color: #991b1b;">High</span></td>
+                            <td><span class="badge badge-danger">Critical</span></td>
+                            <td><button class="btn btn-secondary">View</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Recent Tasks</h2>
+                    <button class="btn btn-primary">View All Tasks</button>
+                </div>
+                
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Task Name</th>
+                            <th>Project</th>
+                            <th>Assigned To</th>
+                            <th>Due Date</th>
+                            <th>Status</th>
+                            <th>Time Logged</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Aluminum Frame Installation - Building A</strong></td>
+                            <td>City Center Construction</td>
+                            <td>Mike Johnson</td>
+                            <td>Oct 20, 2025</td>
+                            <td><span class="badge badge-warning">In Progress</span></td>
+                            <td>4.5h</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Glass Panel Quality Check</strong></td>
+                            <td>Office Complex Renovation</td>
+                            <td>Sarah Chen</td>
+                            <td>Oct 18, 2025</td>
+                            <td><span class="badge badge-success">Completed</span></td>
+                            <td>2.3h</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Window Installation - Office Complex</strong></td>
+                            <td>Corporate Tower</td>
+                            <td>David Kumar</td>
+                            <td>Oct 22, 2025</td>
+                            <td><span class="badge badge-warning">In Progress</span></td>
+                            <td>6.2h</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Safety Inspection - Site B</strong></td>
+                            <td>Residential Building</td>
+                            <td>Emma Wilson</td>
+                            <td>Oct 19, 2025</td>
+                            <td><span class="badge badge-info">Scheduled</span></td>
+                            <td>0h</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Material Order - Aluminum Sheets</strong></td>
+                            <td>Shopping Mall Facade</td>
+                            <td>James Rodriguez</td>
+                            <td>Oct 21, 2025</td>
+                            <td><span class="badge badge-danger">Blocked</span></td>
+                            <td>1.5h</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2>Team Activity</h2>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
+                    <div style="padding: 16px; background: #f8fafc; border-radius: 6px;">
+                        <div class="flex flex-between mb-1">
+                            <strong>Mike Johnson</strong>
+                            <span class="badge badge-success">Online</span>
+                        </div>
+                        <p class="text-small text-muted">Working on: Aluminum Frame Installation</p>
+                        <p class="text-small text-muted">Time today: 4.5 hours</p>
+                    </div>
+                    
+                    <div style="padding: 16px; background: #f8fafc; border-radius: 6px;">
+                        <div class="flex flex-between mb-1">
+                            <strong>Sarah Chen</strong>
+                            <span class="badge badge-success">Online</span>
+                        </div>
+                        <p class="text-small text-muted">Working on: Quality Checks</p>
+                        <p class="text-small text-muted">Time today: 3.2 hours</p>
+                    </div>
+                    
+                    <div style="padding: 16px; background: #f8fafc; border-radius: 6px;">
+                        <div class="flex flex-between mb-1">
+                            <strong>David Kumar</strong>
+                            <span class="badge badge-success">Online</span>
+                        </div>
+                        <p class="text-small text-muted">Working on: Window Installation</p>
+                        <p class="text-small text-muted">Time today: 6.2 hours</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="sidebar.js"></script>
+    <script src="tutorial-system.js"></script>
+</body>
+</html>

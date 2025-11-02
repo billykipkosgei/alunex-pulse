@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Department Analytics - Alunex PM</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .analytics-header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 32px;
+            border-radius: 12px;
+            margin-bottom: 32px;
+        }
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        .chart-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .metric-row:last-child {
+            border-bottom: none;
+        }
+        .trend-up {
+            color: #10b981;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .trend-down {
+            color: #ef4444;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .cost-breakdown-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .cost-breakdown-table th {
+            background: #f8fafc;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #475569;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .cost-breakdown-table td {
+            padding: 12px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .cost-breakdown-table tr:hover {
+            background: #f8fafc;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <div class="logo-icon">A</div>
+            <span>Alunex Project Management</span>
+        </div>
+        <div class="user-info">
+            <button class="btn btn-secondary" onclick="showHelpMenu(event)" title="Help & Tutorials" style="padding: 8px 12px;">
+                <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </button>
+            <div class="user-avatar">JM</div>
+            <button class="btn btn-secondary" onclick="window.location.href='login.html'">Logout</button>
+        </div>
+    </nav>
+    
+    <div class="layout">
+        <aside class="sidebar">
+            <a href="dashboard.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                </svg>
+                <span>Dashboard</span>
+            </a>
+            
+            <a href="time-tracking.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span>Time Tracking</span>
+            </a>
+            
+            <a href="tasks.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                </svg>
+                <span>Task Management</span>
+            </a>
+            
+            <a href="departments.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                </svg>
+                <span>Departments & Budget</span>
+            </a>
+
+            <a href="department-analytics.html" class="sidebar-item active">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+                <span>Department Analytics</span>
+            </a>
+
+            <a href="chat.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                </svg>
+                <span>Team Chat</span>
+            </a>
+            
+            <a href="files.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
+                </svg>
+                <span>File Sharing</span>
+            </a>
+            
+            <a href="reports.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+                <span>Reports & Analytics</span>
+            </a>
+            
+            <a href="video.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                </svg>
+                <span>Video Calls</span>
+            </a>
+            
+            <a href="settings.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                <span>Settings</span>
+            </a>
+        </aside>
+        
+        <main class="main-content">
+            <div class="analytics-header">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <div>
+                        <h1 style="margin-bottom: 8px; color: white;">Department Analytics & Cost Reports</h1>
+                        <p style="color: rgba(255,255,255,0.9);">Advanced insights into department performance and cost breakdown</p>
+                    </div>
+                    <div style="display: flex; gap: 12px;">
+                        <select class="form-control" style="width: auto;">
+                            <option selected>City Center Construction</option>
+                            <option>Office Complex Renovation</option>
+                        </select>
+                        <button class="btn btn-primary" onclick="alert('Exporting to PDF...')">
+                            <svg style="width: 16px; height: 16px; display: inline; margin-right: 4px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                            Export PDF
+                        </button>
+                        <button class="btn btn-secondary" onclick="alert('Exporting to Excel...')">
+                            <svg style="width: 16px; height: 16px; display: inline; margin-right: 4px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                            Export Excel
+                        </button>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
+                    <div style="background: rgba(255,255,255,0.15); padding: 16px; border-radius: 8px; backdrop-filter: blur(10px);">
+                        <div style="font-size: 13px; color: rgba(255,255,255,0.8); margin-bottom: 4px;">Budget Efficiency</div>
+                        <div style="font-size: 28px; font-weight: bold; color: white;">87.3%</div>
+                        <div class="trend-up" style="color: #6ee7b7; font-size: 12px; margin-top: 4px;">
+                            <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                            </svg>
+                            +5.2% vs target
+                        </div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.15); padding: 16px; border-radius: 8px; backdrop-filter: blur(10px);">
+                        <div style="font-size: 13px; color: rgba(255,255,255,0.8); margin-bottom: 4px;">Cost Variance</div>
+                        <div style="font-size: 28px; font-weight: bold; color: white;">-$1,250</div>
+                        <div class="trend-up" style="color: #6ee7b7; font-size: 12px; margin-top: 4px;">
+                            <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                            </svg>
+                            Under budget
+                        </div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.15); padding: 16px; border-radius: 8px; backdrop-filter: blur(10px);">
+                        <div style="font-size: 13px; color: rgba(255,255,255,0.8); margin-bottom: 4px;">Projected ROI</div>
+                        <div style="font-size: 28px; font-weight: bold; color: white;">12.4%</div>
+                        <div class="trend-up" style="color: #6ee7b7; font-size: 12px; margin-top: 4px;">
+                            <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                            </svg>
+                            Above target (10%)
+                        </div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.15); padding: 16px; border-radius: 8px; backdrop-filter: blur(10px);">
+                        <div style="font-size: 13px; color: rgba(255,255,255,0.8); margin-bottom: 4px;">Cost per Hour</div>
+                        <div style="font-size: 28px; font-weight: bold; color: white;">$32.50</div>
+                        <div class="trend-down" style="color: #fca5a5; font-size: 12px; margin-top: 4px;">
+                            <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/>
+                            </svg>
+                            -$2.50 from last month
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <h3 style="margin-bottom: 20px;">Department Performance Score</h3>
+                    <div style="space-y: 16px;">
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-weight: 600; color: #2563eb;">Engineering</span>
+                                <span style="font-weight: 600; color: #2563eb;">92%</span>
+                            </div>
+                            <div style="width: 100%; height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden;">
+                                <div style="width: 92%; height: 100%; background: #2563eb;"></div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 16px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-weight: 600; color: #10b981;">Procurement</span>
+                                <span style="font-weight: 600; color: #10b981;">88%</span>
+                            </div>
+                            <div style="width: 100%; height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden;">
+                                <div style="width: 88%; height: 100%; background: #10b981;"></div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 16px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-weight: 600; color: #f59e0b;">Fabrication</span>
+                                <span style="font-weight: 600; color: #f59e0b;">76%</span>
+                            </div>
+                            <div style="width: 100%; height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden;">
+                                <div style="width: 76%; height: 100%; background: #f59e0b;"></div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 16px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-weight: 600; color: #8b5cf6;">Installation</span>
+                                <span style="font-weight: 600; color: #8b5cf6;">95%</span>
+                            </div>
+                            <div style="width: 100%; height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden;">
+                                <div style="width: 95%; height: 100%; background: #8b5cf6;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid #e2e8f0; font-size: 12px; color: #64748b;">
+                        Performance score based on: budget adherence, timeline compliance, quality metrics
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <h3 style="margin-bottom: 20px;">Budget Variance Trend</h3>
+                    <div style="height: 200px; display: flex; align-items: flex-end; justify-content: space-around; gap: 8px; padding: 0 20px;">
+                        <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+                            <div style="width: 100%; height: 120px; background: linear-gradient(to top, #10b981, #6ee7b7); border-radius: 4px 4px 0 0;"></div>
+                            <span style="font-size: 11px; color: #64748b; margin-top: 8px;">Week 1</span>
+                            <span style="font-size: 12px; font-weight: 600; color: #10b981;">-$300</span>
+                        </div>
+                        <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+                            <div style="width: 100%; height: 150px; background: linear-gradient(to top, #10b981, #6ee7b7); border-radius: 4px 4px 0 0;"></div>
+                            <span style="font-size: 11px; color: #64748b; margin-top: 8px;">Week 2</span>
+                            <span style="font-size: 12px; font-weight: 600; color: #10b981;">-$450</span>
+                        </div>
+                        <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+                            <div style="width: 100%; height: 90px; background: linear-gradient(to top, #10b981, #6ee7b7); border-radius: 4px 4px 0 0;"></div>
+                            <span style="font-size: 11px; color: #64748b; margin-top: 8px;">Week 3</span>
+                            <span style="font-size: 12px; font-weight: 600; color: #10b981;">-$200</span>
+                        </div>
+                        <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+                            <div style="width: 100%; height: 140px; background: linear-gradient(to top, #10b981, #6ee7b7); border-radius: 4px 4px 0 0;"></div>
+                            <span style="font-size: 11px; color: #64748b; margin-top: 8px;">Week 4</span>
+                            <span style="font-size: 12px; font-weight: 600; color: #10b981;">-$300</span>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid #e2e8f0; font-size: 12px; color: #64748b;">
+                        Negative values indicate under-budget performance (good). Positive values indicate overrun.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2>Complete Cost Breakdown Report</h2>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn btn-secondary">Filter by Date</button>
+                        <button class="btn btn-secondary">Filter by Category</button>
+                    </div>
+                </div>
+                
+                <table class="cost-breakdown-table">
+                    <thead>
+                        <tr>
+                            <th>Department</th>
+                            <th>Category</th>
+                            <th>Budgeted</th>
+                            <th>Actual Cost</th>
+                            <th>Variance</th>
+                            <th>% Used</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong style="color: #2563eb;">Engineering</strong></td>
+                            <td>Labor Costs</td>
+                            <td>$5,000</td>
+                            <td>$4,200</td>
+                            <td style="color: #10b981;">-$800</td>
+                            <td>84%</td>
+                            <td><span class="badge badge-success">On Track</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong style="color: #2563eb;">Engineering</strong></td>
+                            <td>Materials</td>
+                            <td>$4,000</td>
+                            <td>$3,600</td>
+                            <td style="color: #10b981;">-$400</td>
+                            <td>90%</td>
+                            <td><span class="badge badge-success">On Track</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong style="color: #2563eb;">Engineering</strong></td>
+                            <td>Equipment/Tools</td>
+                            <td>$2,000</td>
+                            <td>$1,800</td>
+                            <td style="color: #10b981;">-$200</td>
+                            <td>90%</td>
+                            <td><span class="badge badge-success">On Track</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong style="color: #2563eb;">Engineering</strong></td>
+                            <td>Software/Licenses</td>
+                            <td>$1,000</td>
+                            <td>$900</td>
+                            <td style="color: #10b981;">-$100</td>
+                            <td>90%</td>
+                            <td><span class="badge badge-success">On Track</span></td>
+                        </tr>
+                        
+                        <tr style="background: #f8fafc;">
+                            <td colspan="2"><strong>Engineering Total</strong></td>
+                            <td><strong>$12,000</strong></td>
+                            <td><strong>$9,000</strong></td>
+                            <td style="color: #10b981;"><strong>-$1,500</strong></td>
+                            <td><strong>75%</strong></td>
+                            <td></td>
+                        </tr>
+                        
+                        <tr>
+                            <td><strong style="color: #10b981;">Procurement</strong></td>
+                            <td>Aluminum Materials</td>
+                            <td>$6,000</td>
+                            <td>$4,800</td>
+                            <td style="color: #10b981;">-$1,200</td>
+                            <td>80%</td>
+                            <td><span class="badge badge-success">On Track</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong style="color: #10b981;">Procurement</strong></td>
+                            <td>Glass Materials</td>
+                            <td>$3,000</td>
+                            <td>$2,600</td>
+                            <td style="color: #10b981;">-$400</td>
+                            <td>87%</td>
+                            <td><span class="badge badge-success">On Track</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong style="color: #10b981;">Procurement</strong></td>
+                            <td>Hardware/Fixtures</td>
+                            <td>$1,000</td>
+                            <td>$900</td>
+                            <td style="color: #10b981;">-$100</td>
+                            <td>90%</td>
+                            <td><span class="badge badge-success">On Track</span></td>
+                        </tr>
+                        
+                        <tr style="background: #f8fafc;">
+                            <td colspan="2"><strong>Procurement Total</strong></td>
+                            <td><strong>$10,000</strong></td>
+                            <td><strong>$6,000</strong></td>
+                            <td style="color: #10b981;"><strong>-$1,700</strong></td>
+                            <td><strong>60%</strong></td>
+                            <td></td>
+                        </tr>
+                        
+                        <tr>
+                            <td><strong style="color: #f59e0b;">Fabrication</strong></td>
+                            <td>Labor Costs</td>
+                            <td>$8,000</td>
+                            <td>$5,400</td>
+                            <td style="color: #10b981;">-$2,600</td>
+                            <td>68%</td>
+                            <td><span class="badge badge-success">On Track</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong style="color: #f59e0b;">Fabrication</strong></td>
+                            <td>Equipment Usage</td>
+                            <td>$4,000</td>
+                            <td>$3,750</td>
+                            <td style="color: #10b981;">-$250</td>
+                            <td>94%</td>
+                            <td><span class="badge badge-warning">Monitor</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong style="color: #f59e0b;">Fabrication</strong></td>
+                            <td>Quality Control</td>
+                            <td>$3,000</td>
+                            <td>$2,100</td>
+                            <td style="color: #10b981;">-$900</td>
+                            <td>70%</td>
+                            <td><span class="badge badge-success">On Track</span></td>
+                        </tr>
+                        
+                        <tr style="background: #f8fafc;">
+                            <td colspan="2"><strong>Fabrication Total</strong></td>
+                            <td><strong>$15,000</strong></td>
+                            <td><strong>$6,750</strong></td>
+                            <td style="color: #10b981;"><strong>-$3,750</strong></td>
+                            <td><strong>45%</strong></td>
+                            <td></td>
+                        </tr>
+                        
+                        <tr>
+                            <td><strong style="color: #8b5cf6;">Installation</strong></td>
+                            <td>Labor Costs</td>
+                            <td>$5,000</td>
+                            <td>$4,800</td>
+                            <td style="color: #10b981;">-$200</td>
+                            <td>96%</td>
+                            <td><span class="badge badge-warning">Monitor</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong style="color: #8b5cf6;">Installation</strong></td>
+                            <td>Transportation</td>
+                            <td>$2,000</td>
+                            <td>$1,900</td>
+                            <td style="color: #10b981;">-$100</td>
+                            <td>95%</td>
+                            <td><span class="badge badge-warning">Monitor</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong style="color: #8b5cf6;">Installation</strong></td>
+                            <td>Site Equipment</td>
+                            <td>$1,000</td>
+                            <td>$1,000</td>
+                            <td style="color: #64748b;">$0</td>
+                            <td>100%</td>
+                            <td><span class="badge badge-warning">At Limit</span></td>
+                        </tr>
+                        
+                        <tr style="background: #f8fafc;">
+                            <td colspan="2"><strong>Installation Total</strong></td>
+                            <td><strong>$8,000</strong></td>
+                            <td><strong>$7,000</strong></td>
+                            <td style="color: #10b981;"><strong>-$300</strong></td>
+                            <td><strong>88%</strong></td>
+                            <td></td>
+                        </tr>
+                        
+                        <tr style="background: #1e293b; color: white;">
+                            <td colspan="2"><strong>PROJECT TOTAL</strong></td>
+                            <td><strong>$45,000</strong></td>
+                            <td><strong>$28,750</strong></td>
+                            <td style="color: #6ee7b7;"><strong>-$7,250</strong></td>
+                            <td><strong>63.9%</strong></td>
+                            <td><span class="badge badge-success">On Track</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 32px;">
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;">Cost by Category</h3>
+                    <div class="metric-row">
+                        <span style="font-weight: 600;">Labor Costs</span>
+                        <div style="text-align: right;">
+                            <div style="font-weight: 600;">$15,400</div>
+                            <div style="font-size: 12px; color: #64748b;">53.6% of total</div>
+                        </div>
+                    </div>
+                    <div class="metric-row">
+                        <span style="font-weight: 600;">Materials</span>
+                        <div style="text-align: right;">
+                            <div style="font-weight: 600;">$11,000</div>
+                            <div style="font-size: 12px; color: #64748b;">38.3% of total</div>
+                        </div>
+                    </div>
+                    <div class="metric-row">
+                        <span style="font-weight: 600;">Equipment</span>
+                        <div style="text-align: right;">
+                            <div style="font-weight: 600;">$1,800</div>
+                            <div style="font-size: 12px; color: #64748b;">6.3% of total</div>
+                        </div>
+                    </div>
+                    <div class="metric-row">
+                        <span style="font-weight: 600;">Other</span>
+                        <div style="text-align: right;">
+                            <div style="font-weight: 600;">$550</div>
+                            <div style="font-size: 12px; color: #64748b;">1.9% of total</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;">Profit Analysis</h3>
+                    <div class="metric-row">
+                        <span style="font-weight: 600;">Total Revenue</span>
+                        <div style="text-align: right; font-weight: 600;">$50,000</div>
+                    </div>
+                    <div class="metric-row">
+                        <span style="font-weight: 600;">Total Costs (Actual)</span>
+                        <div style="text-align: right; font-weight: 600;">$28,750</div>
+                    </div>
+                    <div class="metric-row">
+                        <span style="font-weight: 600;">Projected Final Cost</span>
+                        <div style="text-align: right; font-weight: 600;">$43,800</div>
+                    </div>
+                    <div class="metric-row" style="border-top: 2px solid #e2e8f0; padding-top: 12px;">
+                        <span style="font-weight: 600; color: #10b981;">Projected Profit</span>
+                        <div style="text-align: right;">
+                            <div style="font-weight: 600; font-size: 18px; color: #10b981;">$6,200</div>
+                            <div style="font-size: 12px; color: #64748b;">12.4% margin</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 12px; padding: 12px; background: #f0fdf4; border-radius: 6px; font-size: 13px; color: #166534;">
+                        <strong>Above target!</strong> Original target was 10% ($5,000). Current projection: $1,200 additional profit.
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 24px; display: flex; gap: 12px; justify-content: center;">
+                <button class="btn btn-primary" onclick="alert('PDF report will be generated with all charts, tables, and analytics.')">
+                    <svg style="width: 16px; height: 16px; display: inline; margin-right: 4px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                    </svg>
+                    Download Complete Report (PDF)
+                </button>
+                <button class="btn btn-secondary" onclick="alert('Excel file will include all data tables for further analysis.')">
+                    <svg style="width: 16px; height: 16px; display: inline; margin-right: 4px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    Download Data (Excel)
+                </button>
+                <button class="btn btn-secondary" onclick="window.location.href='departments.html'">
+                    <svg style="width: 16px; height: 16px; display: inline; margin-right: 4px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    Back to Departments
+                </button>
+            </div>
+        </main>
+    </div>
+    
+    <script src="tutorial-system.js"></script>
+</body>
+</html>

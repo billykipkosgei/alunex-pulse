@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help & Tutorials - Alunex PM</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .help-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 48px 32px;
+            text-align: center;
+            border-radius: 12px;
+            margin-bottom: 32px;
+        }
+        .help-search {
+            max-width: 600px;
+            margin: 24px auto 0;
+            position: relative;
+        }
+        .help-search input {
+            width: 100%;
+            padding: 16px 48px 16px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        .help-search svg {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+        }
+        .help-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        .help-category {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .help-category:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        }
+        .help-icon {
+            width: 56px;
+            height: 56px;
+            background: #eff6ff;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+        .tutorial-list {
+            list-style: none;
+            padding: 0;
+        }
+        .tutorial-item {
+            padding: 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .tutorial-item:hover {
+            background: #f8fafc;
+            border-color: #2563eb;
+        }
+        .tutorial-icon {
+            width: 40px;
+            height: 40px;
+            background: #eff6ff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .video-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .video-thumbnail {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 48px;
+        }
+        .video-info {
+            padding: 16px;
+        }
+        .faq-item {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .faq-question {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .faq-answer {
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <div class="logo-icon">A</div>
+            <span>Alunex Project Management</span>
+        </div>
+        <div class="user-info">
+            <button class="btn btn-secondary" onclick="window.location.href='dashboard.html'" title="Back to Dashboard" style="padding: 8px 12px;">
+                <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+            </button>
+            <div class="user-avatar">JM</div>
+            <button class="btn btn-secondary" onclick="window.location.href='login.html'">Logout</button>
+        </div>
+    </nav>
+    
+    <div class="layout">
+        <aside class="sidebar">
+            <a href="dashboard.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                </svg>
+                <span>Dashboard</span>
+            </a>
+            
+            <a href="time-tracking.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span>Time Tracking</span>
+            </a>
+            
+            <a href="tasks.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                </svg>
+                <span>Task Management</span>
+            </a>
+            
+            <a href="departments.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                </svg>
+                <span>Departments & Budget</span>
+            </a>
+
+            <a href="department-analytics.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+                <span>Department Analytics</span>
+            </a>
+
+            <a href="chat.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                </svg>
+                <span>Team Chat</span>
+            </a>
+            
+            <a href="files.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
+                </svg>
+                <span>File Sharing</span>
+            </a>
+            
+            <a href="reports.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+                <span>Reports & Analytics</span>
+            </a>
+            
+            <a href="video.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                </svg>
+                <span>Video Calls</span>
+            </a>
+            
+            <a href="settings.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                <span>Settings</span>
+            </a>
+        </aside>
+        
+        <main class="main-content">
+            <div class="help-header">
+                <h1 style="margin-bottom: 12px; color: white;">Help & Tutorials</h1>
+                <p style="font-size: 18px; color: rgba(255,255,255,0.9);">Learn how to use Alunex Project Management System</p>
+                
+                <div class="help-search">
+                    <input type="text" placeholder="Search for help articles, tutorials, or features..." onkeyup="searchHelp(this.value)">
+                    <svg style="width: 24px; height: 24px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="help-categories">
+                <div class="help-category" onclick="showCategory('getting-started')">
+                    <div class="help-icon">
+                        <svg style="width: 28px; height: 28px; color: #2563eb;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                    </div>
+                    <h3 style="color: #1e293b; margin-bottom: 8px;">Getting Started</h3>
+                    <p style="color: #64748b; font-size: 14px;">Quick start guide and basic setup</p>
+                    <div style="margin-top: 12px; color: #2563eb; font-size: 13px; font-weight: 600;">5 articles →</div>
+                </div>
+                
+                <div class="help-category" onclick="showCategory('time-tracking')">
+                    <div class="help-icon">
+                        <svg style="width: 28px; height: 28px; color: #10b981;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <h3 style="color: #1e293b; margin-bottom: 8px;">Time Tracking</h3>
+                    <p style="color: #64748b; font-size: 14px;">Track time and manage logs</p>
+                    <div style="margin-top: 12px; color: #10b981; font-size: 13px; font-weight: 600;">4 articles →</div>
+                </div>
+                
+                <div class="help-category" onclick="showCategory('tasks')">
+                    <div class="help-icon">
+                        <svg style="width: 28px; height: 28px; color: #f59e0b;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                        </svg>
+                    </div>
+                    <h3 style="color: #1e293b; margin-bottom: 8px;">Task Management</h3>
+                    <p style="color: #64748b; font-size: 14px;">Create and manage tasks</p>
+                    <div style="margin-top: 12px; color: #f59e0b; font-size: 13px; font-weight: 600;">6 articles →</div>
+                </div>
+                
+                <div class="help-category" onclick="showCategory('departments')">
+                    <div class="help-icon">
+                        <svg style="width: 28px; height: 28px; color: #8b5cf6;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                        </svg>
+                    </div>
+                    <h3 style="color: #1e293b; margin-bottom: 8px;">Departments & Budget</h3>
+                    <p style="color: #64748b; font-size: 14px;">Manage budgets and departments</p>
+                    <div style="margin-top: 12px; color: #8b5cf6; font-size: 13px; font-weight: 600;">7 articles →</div>
+                </div>
+                
+                <div class="help-category" onclick="showCategory('collaboration')">
+                    <div class="help-icon">
+                        <svg style="width: 28px; height: 28px; color: #ec4899;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </div>
+                    <h3 style="color: #1e293b; margin-bottom: 8px;">Team Collaboration</h3>
+                    <p style="color: #64748b; font-size: 14px;">Chat, files, and video calls</p>
+                    <div style="margin-top: 12px; color: #ec4899; font-size: 13px; font-weight: 600;">5 articles →</div>
+                </div>
+                
+                <div class="help-category" onclick="showCategory('reports')">
+                    <div class="help-icon">
+                        <svg style="width: 28px; height: 28px; color: #06b6d4;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                        </svg>
+                    </div>
+                    <h3 style="color: #1e293b; margin-bottom: 8px;">Reports & Analytics</h3>
+                    <p style="color: #64748b; font-size: 14px;">Generate and export reports</p>
+                    <div style="margin-top: 12px; color: #06b6d4; font-size: 13px; font-weight: 600;">4 articles →</div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2>Video Tutorials</h2>
+                    <button class="btn btn-primary" onclick="startGuidedTour()">Start Guided Tour</button>
+                </div>
+                
+                <div class="video-grid">
+                    <div class="video-card">
+                        <div class="video-thumbnail">
+                            <svg style="width: 64px; height: 64px;" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div class="video-info">
+                            <h4 style="margin-bottom: 8px;">Getting Started (5:30)</h4>
+                            <p style="color: #64748b; font-size: 13px;">Learn the basics of Alunex PM in under 6 minutes</p>
+                        </div>
+                    </div>
+                    
+                    <div class="video-card">
+                        <div class="video-thumbnail">
+                            <svg style="width: 64px; height: 64px;" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div class="video-info">
+                            <h4 style="margin-bottom: 8px;">Department Budgets (8:15)</h4>
+                            <p style="color: #64748b; font-size: 13px;">Set up and manage department budgets</p>
+                        </div>
+                    </div>
+                    
+                    <div class="video-card">
+                        <div class="video-thumbnail">
+                            <svg style="width: 64px; height: 64px;" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div class="video-info">
+                            <h4 style="margin-bottom: 8px;">Time Tracking (4:45)</h4>
+                            <p style="color: #64748b; font-size: 13px;">Track time and generate timesheets</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2>Quick Start Tutorials</h2>
+                </div>
+                
+                <ul class="tutorial-list">
+                    <li class="tutorial-item">
+                        <div class="tutorial-icon">
+                            <svg style="width: 20px; height: 20px; color: #2563eb;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div style="flex: 1;">
+                            <strong style="display: block; margin-bottom: 4px;">How to create your first project</strong>
+                            <span style="color: #64748b; font-size: 13px;">Learn how to set up a new project with budget and departments</span>
+                        </div>
+                        <span class="badge badge-info">3 min read</span>
+                    </li>
+                    
+                    <li class="tutorial-item">
+                        <div class="tutorial-icon">
+                            <svg style="width: 20px; height: 20px; color: #10b981;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div style="flex: 1;">
+                            <strong style="display: block; margin-bottom: 4px;">Start tracking time on tasks</strong>
+                            <span style="color: #64748b; font-size: 13px;">Use the timer to log hours worked on specific tasks</span>
+                        </div>
+                        <span class="badge badge-success">2 min read</span>
+                    </li>
+                    
+                    <li class="tutorial-item">
+                        <div class="tutorial-icon">
+                            <svg style="width: 20px; height: 20px; color: #f59e0b;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                            </svg>
+                        </div>
+                        <div style="flex: 1;">
+                            <strong style="display: block; margin-bottom: 4px;">Invite team members</strong>
+                            <span style="color: #64748b; font-size: 13px;">Add your team with any email address (Gmail, Outlook, etc.)</span>
+                        </div>
+                        <span class="badge badge-warning">2 min read</span>
+                    </li>
+                    
+                    <li class="tutorial-item">
+                        <div class="tutorial-icon">
+                            <svg style="width: 20px; height: 20px; color: #8b5cf6;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                            </svg>
+                        </div>
+                        <div style="flex: 1;">
+                            <strong style="display: block; margin-bottom: 4px;">Set up department budgets</strong>
+                            <span style="color: #64748b; font-size: 13px;">Allocate budgets to Engineering, Procurement, Fabrication, Installation</span>
+                        </div>
+                        <span class="badge" style="background: #ede9fe; color: #6b21a8;">5 min read</span>
+                    </li>
+                    
+                    <li class="tutorial-item">
+                        <div class="tutorial-icon">
+                            <svg style="width: 20px; height: 20px; color: #ec4899;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                            </svg>
+                        </div>
+                        <div style="flex: 1;">
+                            <strong style="display: block; margin-bottom: 4px;">Generate project reports</strong>
+                            <span style="color: #64748b; font-size: 13px;">Create detailed reports and export to PDF or Excel</span>
+                        </div>
+                        <span class="badge" style="background: #fce7f3; color: #9f1239;">4 min read</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2>Frequently Asked Questions</h2>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <svg style="width: 20px; height: 20px; color: #2563eb;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        How do I invite external team members with Gmail or Outlook?
+                    </div>
+                    <div class="faq-answer">
+                        Go to Settings → Team Members → Click "Invite Member". You can invite ANY email address including Gmail (@gmail.com), Outlook (@outlook.com), Yahoo, or corporate emails. They'll receive an invitation link via email to create their account.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <svg style="width: 20px; height: 20px; color: #10b981;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        Does file storage use my server space?
+                    </div>
+                    <div class="faq-answer">
+                        No! Files are automatically synced with your Google Drive account, so you only use your Google Drive storage (15GB free). For large files stored elsewhere (OneDrive, Dropbox, CAD servers), use the "Add Link" feature to save links without using any storage.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <svg style="width: 20px; height: 20px; color: #f59e0b;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        How do I allocate budgets to different departments?
+                    </div>
+                    <div class="faq-answer">
+                        Go to Departments & Budget → Select your project → Click "Adjust Budgets". Enter your total project value and profit margin. The system calculates your working budget, then you can allocate specific amounts to Engineering, Procurement, Fabrication, and Installation departments.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <svg style="width: 20px; height: 20px; color: #8b5cf6;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        Can I filter the dashboard by specific projects?
+                    </div>
+                    <div class="faq-answer">
+                        Yes! At the top right of the Dashboard page, use the "View Projects" dropdown to select individual projects, all projects, or enable multi-select mode to view multiple projects at once. All metrics and task lists update based on your selection.
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background: #eff6ff; border: 1px solid #2563eb; padding: 24px; border-radius: 12px; text-align: center; margin-top: 32px;">
+                <h3 style="color: #1e40af; margin-bottom: 12px;">Need More Help?</h3>
+                <p style="color: #1e40af; margin-bottom: 20px;">Can't find what you're looking for? Contact our support team</p>
+                <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                    <button class="btn btn-primary">Contact Support</button>
+                    <button class="btn btn-secondary">Request a Feature</button>
+                    <button class="btn btn-secondary">Report a Bug</button>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        function searchHelp(query) {
+            console.log('Searching for:', query);
+            // In actual app, this would filter articles
+        }
+        
+        function showCategory(category) {
+            alert('Opening ' + category + ' help articles...');
+            // In actual app, this would navigate to category page
+        }
+        
+        function startGuidedTour() {
+            if(confirm('Start the interactive guided tour? This will walk you through all main features.')) {
+                window.location.href = 'dashboard.html';
+                // In actual app, this would start an interactive overlay tour
+            }
+        }
+    </script>
+</body>
+</html>

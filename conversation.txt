@@ -1,0 +1,1672 @@
+hi gud day 
+i  want to develop custom time tracking for projects assiging taks and and monitor and getting reports and logs and higlighting the wip of the work and the time involved . for remote and in house team and able to transfer files just like we transfer no need to take much space in backend server and chat if possible able to screen share and view videos and assign call like we can use from free plugins as a minium use time
+
+This message relates to:
+
+Related item image
+I will develop a custome time tracker with project and task management features
+
+B
+Profile Image
+Me
+
+Oct 15, 9:46 PM
+Hi there!
+
+Thank you for reaching out! I understand you need a custom time tracking system with the following features:
+
+Core Functionality:
+
+- Time tracking for projects
+- Task assignment and monitoring
+- Reports and logs generation
+- WIP (Work in Progress) tracking with time metrics
+- Support for both remote and in-house teams
+
+Additional Features:
+
+- File transfer system (optimized for minimal backend storage)
+- Chat functionality
+- Screen sharing capabilities
+- Video viewing
+- Call scheduling/assignment
+- Integration with free plugins where possible
+
+To provide you with an accurate quote and timeline, I have a few questions:
+
+1. User Scale: Approximately how many team members will be using this system?
+
+2. File Transfer: For the file transfer feature, are you looking for something like P2P transfer or integration with cloud storage (Google Drive, Dropbox)?
+
+3. Screen Share/Video: Would you prefer integration with existing services (Zoom, Google Meet) or a built-in solution?
+
+4. Tech Preferences: Do you have any preference for technologies (React, Vue, Node.js, etc.)?
+
+5. Budget & Timeline: What's your estimated budget and desired completion timeline?
+
+I can definitely build this system using a combination of custom code and free/open-source plugins to keep costs manageable. Looking forward to your response!
+
+Best regards
+
+B
+Profile Image
+benedictr
+
+Oct 16, 7:00 AM
+1.let it be scalable and for the teams member u can start with 15 people like 2 will be remote from diffrent countries & 1 will be inhouse . 2. file share which will be better in a long run as i dont want to pay for something more if i am not using it in full fledge and if its p2p what is meant to be and is it free . 3. which ever is perfect its ok because i dont want website to slow down if it can built in solution how it will be ca it be safe & secrured and can we achieve the flexiblity of zoom or google meet . I woud prefer the choice to urs as react and node js is better but for best in solution u can let me know . time line i can provide a 2 week to 3 week  of time and the budjet i want to know from ur end come up with ur analysis and let me know as per your above as i wont go more than 100 to 150 usd . FYI i have already domain and hosting
+
+B
+Profile Image
+benedictr
+
+Oct 16, 7:03 AM
+and if u feel the amount is more let me know or if its less also let me know but come up with ur quote to undestand better as its a new begining and i want the app to run with out any bugs and tested and scalble for long run .
+
+B
+Profile Image
+benedictr
+
+Oct 16, 7:04 AM
+971567113958 my mob num if u want to say hi its afor any quick clarification thanks
+
+B
+Profile Image
+Me
+
+Oct 16, 1:52 PM
+My Honest Recommendation:
+
+Go with Option 1 - it's the smartest use of your budget. You get a professional system quickly, it's tested and stable, and you only pay for what you build (the integration dashboard).
+
+Answering your specific questions:
+
+P2P file sharing: Peer-to-peer means files transfer directly between users' browsers without storing on your server. It's free but requires both users online simultaneously. Not ideal for your use case.
+
+Better solution: Integrate with Google Drive or Dropbox - you only pay for storage you actually use, starting free.
+
+Built-in video calls: Building Zoom-quality video is extremely complex and expensive. Using Jitsi Meet (free, secure, self-hosted option) gives you 90% of Zoom's features at zero cost.
+
+My Quote for Option 1: $120
+- Custom React + Node.js dashboard
+- API integrations with free tools
+- Basic setup and testing
+- 2 weeks delivery
+- 1 week of post-launch support for bug fixes
+
+This gives you a professional, scalable solution within budget. You can always upgrade specific features later as your business grows.
+
+What do you think? Should we go with Option 1, or would you prefer to discuss phased development for more custom features?
+
+Best regards
+
+B
+Profile Image
+Me
+
+Oct 16, 1:52 PM
+Hi again!
+
+Thanks for the detailed response. I really appreciate your transparency about the budget and timeline. Let me be upfront and honest with you, as I want this to be a successful partnership.
+
+The Reality Check:
+
+What you're asking for is essentially building a custom combination of:
+- Asana/Trello (project management)
+- Toggl (time tracking)  
+- Slack (chat)
+- Zoom (video/screen share)
+- WeTransfer (file sharing)
+
+All integrated into one application. A realistic estimate for this full system would be:
+- Development cost: $5,000-$8,000 minimum
+- Timeline: 6-8 weeks (for a proper, bug-free, scalable solution)
+
+I completely understand budget constraints for a new beginning, so here are realistic options within your $100-150 budget:
+
+
+OPTION 1: Smart Integration (RECOMMENDED - $120)
+- Use Clockify (free forever for unlimited users) - time tracking
+- Use Trello/ClickUp (free tier) - project & task management
+- Build a simple custom dashboard that pulls data from these tools via APIs
+- Add lightweight chat using Socket.io
+- File sharing via Google Drive API integration (uses your Drive storage)
+- For video calls: embed Jitsi Meet (free, open source)
+
+Timeline: 2-3 weeks  
+Result: 80% of your needs met, scalable, minimal maintenance
+
+
+OPTION 2: Basic MVP Custom Build ($150)
+- Time tracking + task assignment only
+- Basic reports/logs
+- Simple file upload (limited to your hosting storage)
+- NO video calls, NO screen share, NO chat (can add in Phase 2)
+
+Timeline: 3 weeks  
+Result: Core functionality only, you'll need to add more features later
+
+
+OPTION 3: Phased Development (Best Long-term)
+- Phase 1 ($150): Time tracking + project management + basic reports
+- Phase 2 ($200-300): Chat + file sharing  
+- Phase 3 ($300-400): Video calls + screen sharing
+
+B
+Profile Image
+benedictr
+
+Oct 16, 6:37 PM
+hi thanks first of your input ,Appricated . as u  recomened i will go with option 1 as i am new to this  .
+
+B
+Profile Image
+benedictr
+
+Oct 16, 6:38 PM
+please check the attachement i below all this avialble in usd 120 .
+
+
+image.png
+
+(38.96 kB)
+
+B
+Profile Image
+benedictr
+
+Oct 16, 6:40 PM
+1 File
+
+
+image.png
+
+(31.17 kB)
+
+B
+Profile Image
+benedictr
+
+Oct 16, 6:47 PM
+hosting i have own domain and hosting we will look into it no issues
+
+B
+Profile Image
+benedictr
+
+Oct 16, 6:51 PM
+for security
+
+
+image.png
+
+(86.82 kB)
+
+B
+Profile Image
+benedictr
+
+Oct 16, 6:56 PM
+i need a clickable ui interface is that is ok or even a simple skech how the interfcae will be
+
+B
+Profile Image
+benedictr
+
+Oct 16, 6:57 PM
+i am ready to proceed with u as i like the way of the process of work
+
+B
+Profile Image
+benedictr
+
+Oct 16, 6:58 PM
+advance 50 percent upon testing and onboard the website live and bug free
+
+B
+Profile Image
+benedictr
+
+Oct 16, 6:59 PM
+we can move forward with the work
+
+B
+Profile Image
+Me
+
+Oct 16, 7:59 PM
+Great! I'm glad we're moving forward with Option 1. 
+
+Looking at your attachments, I can confirm YES - all features in your checklist are included in the $120 quote:
+
+✅ Available Features:
+- Time tracking (Clockify)
+- Task assignment (Trello/ClickUp)
+- Reports/logs (Clockify + Custom Dashboard)
+- File transfer (Google Drive API)
+- Chat (Socket.io - real-time)
+- Screen sharing (Jitsi Meet)
+- Video viewing (Jitsi Meet or embed external links)
+- Free plugin integration (as shown)
+
+⚠️ Partial/Later Features:
+- WIP tracking - Requires setup in task boards (I'll configure this for you)
+- Call scheduling - Needs calendar integration (can be added in Phase 2, or we can use a simple booking link for now)
+
+Regarding the Stack Overview you shared:
+
+Your hosting requirements - I see you've noted \"Free or cheap\" for hosting. Here's what you need to know:
+
+Frontend (Dashboard): Can be deployed on:
+- Vercel (FREE)
+- Netlify (FREE)
+- Your existing hosting (if it supports Node.js)
+
+Backend (Node.js + Express): Requires:
+- Your current hosting (if it supports Node.js apps)
+- OR Railway.app (FREE tier: $5 credit/month)
+- OR Render.com (FREE tier available)
+
+Database (Optional):
+- MongoDB Atlas (FREE tier: 512MB)
+- Only needed if we store user preferences/custom data
+- For basic integration, we might not even need a database
+
+Important: Since you mentioned you already have a domain and hosting, please confirm:
+1. Does your hosting support Node.js applications? (Check with your hosting provider - need Node.js 18+ support)
+2. If not, we'll use the free options I mentioned above
+
+Next Steps:
+
+1. ✅ Confirm your hosting supports Node.js, OR you're okay with free hosting options
+2. ✅ I'll create a Fiverr gig for $120 (or we can do custom offer)
+3. ✅ Timeline: 2-3 weeks from project start
+4. ✅ I'll provide you with setup documentation and testing environment
+
+What's Included in Delivery:
+- Complete source code
+- Deployment instructions
+- API setup guides (Clockify, Google Drive, Jitsi)
+- Basic user manual
+- 1 week post-launch support for bugs
+
+Sound good? Once you confirm the hosting details, I'll send you the official Fiverr offer, and we can get started!
+
+Looking forward to building this with you!
+
+B
+Profile Image
+benedictr
+
+Oct 16, 8:45 PM
+i am using namecheap and its hosting
+
+B
+Profile Image
+benedictr
+
+Oct 16, 8:48 PM
+https://alunex.in/tools/ this is my website where i do all the work with chat gpt and some with devlopers who supports me as i am not a techie in codig . all the codes mostly in html css and js so i belive the website can run ur requirement . can we integrate also the same do we have user login and logiut in this
+
+B
+Profile Image
+benedictr
+
+Oct 16, 8:50 PM
+if anything u can add ok for me in the given price .please deploy everything .
+
+B
+Profile Image
+benedictr
+
+Oct 16, 8:51 PM
+let it be like50 usd i can provide now to start the work
+
+B
+Profile Image
+benedictr
+
+Oct 16, 8:54 PM
+u have to deploy the website if possible if not i will try with my collegue noramlly 3supports me in de
+
+B
+Profile Image
+benedictr
+
+Oct 16, 8:54 PM
+deploy
+
+B
+Profile Image
+benedictr
+
+Oct 16, 8:56 PM
+remaining as you wish ..upon progress and handover
+
+B
+Profile Image
+Me
+
+Oct 16, 9:07 PM
+11a
+
+B
+Profile Image
+Me
+
+Oct 16, 9:41 PM
+Here's your custom offer
+
+$120
+I will develop a custome time tracker with project and task management features
+- Project setup and environment configuration
+- User authentication system (login/logout)
+- Time tracking integration (Clockify API)
+- Task management integration (ClickUp/Trello API)
+- Basic dashboard UI development
+- Database schema setup
+- Real-time chat implementation (Socket.io)
+- File transfer system (Google Drive API)
+- Screen sharing & video calls (Jitsi Meet)
+- Reports and logs generation
+- WIP tracking configuration
+- Full testing (all features)
+- Deployment to your Namecheap hosting
+- Complete documentation (user manual + admin guide)
+- Handover and training
+
+Read more
+Your offer includes
+
+28 Days Delivery
+
+Include source code
+
+Responsive design
+
+Milestones
+Project Setup & Core Development1 Revision
+
+14 days
+$50
+Final Features, Testing & Full Deployment
+
+14 days
+$70
+28 days
+$120
+View order
+B
+Profile Image
+benedictr
+
+Oct 16, 10:51 PM
+hi i already place the order i need a simple wire frame or clickable how the ui looks FYI as this will help us , I will use this for aluminiun and gkass industry it will be use by professionals let it be neat clean and well organized structre to feel it and to use it with all features thank u
+
+B
+Profile Image
+Me
+
+Oct 17, 6:01 PM
+Whatbisbyour theme color
+
+B
+Profile Image
+Me
+
+Oct 17, 6:01 PM
+What theme color should we use
+
+B
+Profile Image
+benedictr
+
+Oct 17, 6:06 PM
+blue with white concept
+
+B
+Profile Image
+benedictr
+
+Oct 17, 6:07 PM
+let it have dark mode function is it possible to run offline also ..
+
+
+image.png
+
+(169.64 kB)
+
+B
+Profile Image
+benedictr
+
+Oct 17, 6:07 PM
+the attach image is only for color theme and wire frame choice is urs
+
+B
+Profile Image
+benedictr
+
+Oct 17, 6:08 PM
+blue with white this is the color theme
+
+B
+Profile Image
+Me
+
+Oct 18, 12:31 PM
+i sent you message check then get back to me
+
+
+1st milestone started!
+Nothing can stop you now! You can start working on the 1st milestone.
+Delivery is due by Oct 31, 2025, 11:53 PM.
+Your recent inbox conversations with benedictr
+billy_254s
+Me
+Oct 15, 2025, 9:46 PM
+Hi there!
+
+Thank you for reaching out! I understand you need a custom time tracking system with the following features:
+
+Core Functionality:
+
+- Time tracking for projects
+- Task assignment and monitoring
+- Reports and logs generation
+- WIP (Work in Progress) tracking with time metrics
+- Support for both remote and in-house teams
+
+Additional Features:
+
+- File transfer system (optimized for minimal backend storage)
+- Chat functionality
+- Screen sharing capabilities
+- Video viewing
+- Call scheduling/assignment
+- Integration with free plugins where possible
+
+To provide you with an accurate quote and timeline, I have a few questions:
+
+1. User Scale: Approximately how many team members will be using this system?
+
+2. File Transfer: For the file transfer feature, are you looking for something like P2P transfer or integration with cloud storage (Google Drive, Dropbox)?
+
+3. Screen Share/Video: Would you prefer integration with existing services (Zoom, Google Meet) or a built-in solution?
+
+4. Tech Preferences: Do you have any preference for technologies (React, Vue, Node.js, etc.)?
+
+5. Budget & Timeline: What's your estimated budget and desired completion timeline?
+
+I can definitely build this system using a combination of custom code and free/open-source plugins to keep costs manageable. Looking forward to your response!
+
+Best regards
+
+
+benedictr
+benedictr
+Oct 16, 2025, 7:00 AM
+1.let it be scalable and for the teams member u can start with 15 people like 2 will be remote from diffrent countries & 1 will be inhouse . 2. file share which will be better in a long run as i dont want to pay for something more if i am not using it in full fledge and if its p2p what is meant to be and is it free . 3. which ever is perfect its ok because i dont want website to slow down if it can built in solution how it will be ca it be safe & secrured and can we achieve the flexiblity of zoom or google meet . I woud prefer the choice to urs as react and node js is better but for best in solution u can let me know . time line i can provide a 2 week to 3 week of time and the budjet i want to know from ur end come up with ur analysis and let me know as per your above as i wont go more than 100 to 150 usd . FYI i have already domain and hosting
+
+
+benedictr
+benedictr
+Oct 16, 2025, 7:03 AM
+and if u feel the amount is more let me know or if its less also let me know but come up with ur quote to undestand better as its a new begining and i want the app to run with out any bugs and tested and scalble for long run .
+
+
+benedictr
+benedictr
+Oct 16, 2025, 7:04 AM
+971567113958 my mob num if u want to say hi its afor any quick clarification thanks
+
+
+billy_254s
+Me
+Oct 16, 2025, 1:52 PM
+My Honest Recommendation:
+
+Go with Option 1 - it's the smartest use of your budget. You get a professional system quickly, it's tested and stable, and you only pay for what you build (the integration dashboard).
+
+Answering your specific questions:
+
+P2P file sharing: Peer-to-peer means files transfer directly between users' browsers without storing on your server. It's free but requires both users online simultaneously. Not ideal for your use case.
+
+Better solution: Integrate with Google Drive or Dropbox - you only pay for storage you actually use, starting free.
+
+Built-in video calls: Building Zoom-quality video is extremely complex and expensive. Using Jitsi Meet (free, secure, self-hosted option) gives you 90% of Zoom's features at zero cost.
+
+My Quote for Option 1: $120
+- Custom React + Node.js dashboard
+- API integrations with free tools
+- Basic setup and testing
+- 2 weeks delivery
+- 1 week of post-launch support for bug fixes
+
+This gives you a professional, scalable solution within budget. You can always upgrade specific features later as your business grows.
+
+What do you think? Should we go with Option 1, or would you prefer to discuss phased development for more custom features?
+
+Best regards
+
+
+billy_254s
+Me
+Oct 16, 2025, 1:52 PM
+Hi again!
+
+Thanks for the detailed response. I really appreciate your transparency about the budget and timeline. Let me be upfront and honest with you, as I want this to be a successful partnership.
+
+The Reality Check:
+
+What you're asking for is essentially building a custom combination of:
+- Asana/Trello (project management)
+- Toggl (time tracking)
+- Slack (chat)
+- Zoom (video/screen share)
+- WeTransfer (file sharing)
+
+All integrated into one application. A realistic estimate for this full system would be:
+- Development cost: $5,000-$8,000 minimum
+- Timeline: 6-8 weeks (for a proper, bug-free, scalable solution)
+
+I completely understand budget constraints for a new beginning, so here are realistic options within your $100-150 budget:
+
+
+OPTION 1: Smart Integration (RECOMMENDED - $120)
+- Use Clockify (free forever for unlimited users) - time tracking
+- Use Trello/ClickUp (free tier) - project & task management
+- Build a simple custom dashboard that pulls data from these tools via APIs
+- Add lightweight chat using Socket.io
+- File sharing via Google Drive API integration (uses your Drive storage)
+- For video calls: embed Jitsi Meet (free, open source)
+
+Timeline: 2-3 weeks
+Result: 80% of your needs met, scalable, minimal maintenance
+
+
+OPTION 2: Basic MVP Custom Build ($150)
+- Time tracking + task assignment only
+- Basic reports/logs
+- Simple file upload (limited to your hosting storage)
+- NO video calls, NO screen share, NO chat (can add in Phase 2)
+
+Timeline: 3 weeks
+Result: Core functionality only, you'll need to add more features later
+
+
+OPTION 3: Phased Development (Best Long-term)
+- Phase 1 ($150): Time tracking + project management + basic reports
+- Phase 2 ($200-300): Chat + file sharing
+- Phase 3 ($300-400): Video calls + screen sharing
+
+
+benedictr
+benedictr
+Oct 16, 2025, 6:37 PM
+hi thanks first of your input ,Appricated . as u recomened i will go with option 1 as i am new to this .
+
+
+benedictr
+benedictr
+Oct 16, 2025, 6:38 PM
+please check the attachement i below all this avialble in usd 120 .
+
+
+benedictr
+benedictr
+Oct 16, 2025, 6:40 PM
+1 File
+
+
+benedictr
+benedictr
+Oct 16, 2025, 6:47 PM
+hosting i have own domain and hosting we will look into it no issues
+
+
+benedictr
+benedictr
+Oct 16, 2025, 6:51 PM
+for security
+
+
+benedictr
+benedictr
+Oct 16, 2025, 6:56 PM
+i need a clickable ui interface is that is ok or even a simple skech how the interfcae will be
+
+
+benedictr
+benedictr
+Oct 16, 2025, 6:57 PM
+i am ready to proceed with u as i like the way of the process of work
+
+
+benedictr
+benedictr
+Oct 16, 2025, 6:58 PM
+advance 50 percent upon testing and onboard the website live and bug free
+
+
+benedictr
+benedictr
+Oct 16, 2025, 6:59 PM
+we can move forward with the work
+
+
+billy_254s
+Me
+Oct 16, 2025, 7:59 PM
+Great! I'm glad we're moving forward with Option 1.
+
+Looking at your attachments, I can confirm YES - all features in your checklist are included in the $120 quote:
+
+✅ Available Features:
+- Time tracking (Clockify)
+- Task assignment (Trello/ClickUp)
+- Reports/logs (Clockify + Custom Dashboard)
+- File transfer (Google Drive API)
+- Chat (Socket.io - real-time)
+- Screen sharing (Jitsi Meet)
+- Video viewing (Jitsi Meet or embed external links)
+- Free plugin integration (as shown)
+
+⚠️ Partial/Later Features:
+- WIP tracking - Requires setup in task boards (I'll configure this for you)
+- Call scheduling - Needs calendar integration (can be added in Phase 2, or we can use a simple booking link for now)
+
+Regarding the Stack Overview you shared:
+
+Your hosting requirements - I see you've noted \"Free or cheap\" for hosting. Here's what you need to know:
+
+Frontend (Dashboard): Can be deployed on:
+- Vercel (FREE)
+- Netlify (FREE)
+- Your existing hosting (if it supports Node.js)
+
+Backend (Node.js + Express): Requires:
+- Your current hosting (if it supports Node.js apps)
+- OR Railway.app (FREE tier: $5 credit/month)
+- OR Render.com (FREE tier available)
+
+Database (Optional):
+- MongoDB Atlas (FREE tier: 512MB)
+- Only needed if we store user preferences/custom data
+- For basic integration, we might not even need a database
+
+Important: Since you mentioned you already have a domain and hosting, please confirm:
+1. Does your hosting support Node.js applications? (Check with your hosting provider - need Node.js 18+ support)
+2. If not, we'll use the free options I mentioned above
+
+Next Steps:
+
+1. ✅ Confirm your hosting supports Node.js, OR you're okay with free hosting options
+2. ✅ I'll create a Fiverr gig for $120 (or we can do custom offer)
+3. ✅ Timeline: 2-3 weeks from project start
+4. ✅ I'll provide you with setup documentation and testing environment
+
+What's Included in Delivery:
+- Complete source code
+- Deployment instructions
+- API setup guides (Clockify, Google Drive, Jitsi)
+- Basic user manual
+- 1 week post-launch support for bugs
+
+Sound good? Once you confirm the hosting details, I'll send you the official Fiverr offer, and we can get started!
+
+Looking forward to building this with you!
+
+
+benedictr
+benedictr
+Oct 16, 2025, 8:45 PM
+i am using namecheap and its hosting
+
+
+benedictr
+benedictr
+Oct 16, 2025, 8:48 PM
+https://alunex.in/tools/ this is my website where i do all the work with chat gpt and some with devlopers who supports me as i am not a techie in codig . all the codes mostly in html css and js so i belive the website can run ur requirement . can we integrate also the same do we have user login and logiut in this
+
+
+benedictr
+benedictr
+Oct 16, 2025, 8:50 PM
+if anything u can add ok for me in the given price .please deploy everything .
+
+
+benedictr
+benedictr
+Oct 16, 2025, 8:51 PM
+let it be like50 usd i can provide now to start the work
+
+
+benedictr
+benedictr
+Oct 16, 2025, 8:54 PM
+u have to deploy the website if possible if not i will try with my collegue noramlly 3supports me in de
+
+
+benedictr
+benedictr
+Oct 16, 2025, 8:54 PM
+deploy
+
+
+benedictr
+benedictr
+Oct 16, 2025, 8:56 PM
+remaining as you wish ..upon progress and handover
+
+
+billy_254s
+Me
+Oct 16, 2025, 9:07 PM
+11a
+
+
+benedictr
+benedictr
+Oct 16, 2025, 10:51 PM
+hi i already place the order i need a simple wire frame or clickable how the ui looks FYI as this will help us , I will use this for aluminiun and gkass industry it will be use by professionals let it be neat clean and well organized structre to feel it and to use it with all features thank u
+
+
+billy_254s
+Me
+Oct 17, 2025, 6:01 PM
+Whatbisbyour theme color
+
+
+billy_254s
+Me
+Oct 17, 2025, 6:01 PM
+What theme color should we use
+
+
+benedictr
+benedictr
+Oct 17, 2025, 6:06 PM
+blue with white concept
+
+
+benedictr
+benedictr
+Oct 17, 2025, 6:07 PM
+let it have dark mode function is it possible to run offline also ..
+
+
+benedictr
+benedictr
+Oct 17, 2025, 6:07 PM
+the attach image is only for color theme and wire frame choice is urs
+
+
+benedictr
+benedictr
+Oct 17, 2025, 6:08 PM
+blue with white this is the color theme
+
+
+billy_254s
+Me
+Oct 18, 2025, 12:31 PM
+i sent you message check then get back to me
+
+
+See All Inbox Messages
+Your order details
+
+Ordered by benedictr (view history)
+
+Date ordered Oct 16, 2025, 10:22 PM
+
+- Project setup and environment configuration
+- User authentication system (login/logout)
+- Time tracking integration (Clockify API)
+- Task management integration (ClickUp/Trello API)
+- Basic dashboard UI development
+- Database schema setup
+- Real-time chat implementation (Socket.io)
+- File transfer system (Google Drive API)
+- Screen sharing & video calls (Jitsi Meet)
+- Reports and logs generation
+- WIP tracking configuration
+- Full testing (all features)
+- Deployment to your Namecheap hosting
+- Complete documentation (user manual + admin guide)
+- Handover and training
+Item
+Qty.
+Duration
+Price
+Milestone 1: Project Setup & Core Development
+
+14 days
+
+$50
+Milestone 2: Final Features, Testing & Full Deployment
+
+14 days
+
+$70
+Milestone 1: Project Setup & Core Development
+Started on: Oct 17, 2025, 11:53 PM
+
+$50
+Item
+Qty.
+Duration
+Price
+develop a custome time tracker with project and task management features
+
+- Project setup and environment configuration - User authentication system (login/logout) - Time tracking integration (Clockify API) - Task management integration (ClickUp/Trello API) - Basic dashboard UI development - Database schema setup - Real-time chat implementation (Socket.io) - File transfer system (Google Drive API) - Screen sharing & video calls (Jitsi Meet) - Reports and logs generation - WIP tracking configuration - Full testing (all features) - Deployment to your Namecheap hosting - Complete documentation (user manual + admin guide) - Handover and training
+
+Source code
+
+Responsive design
+
+1
+14 days
+
+$50
+Total
+$50
+Milestone 2: Final Features, Testing & Full Deployment
+Not started
+
+$70
+Oct 16
+benedictr placed the order
+Oct 16, 2025, 10:22 PM
+
+Oct 17
+billy_254s
+You sent a message
+Oct 17, 2025, 8:09 AM
+
+Reminder: Please fill out the required information by clicking Provide Requirements above. If you have any questions, I will be happy to help.
+
+billy_254s
+You sent a message
+Oct 17, 2025, 8:09 AM
+
+What is your preferred theme color?
+
+benedictr sent the requirements
+Oct 17, 2025, 11:53 PM
+
+Requirements
+1. If you’re ordering for a business, what’s your industry?(Optional)
+Software Development
+
+2. Is this order part of a bigger project you're working on?(Optional)
+Website building
+
+3. Do you have a web hosting provider for this project?(Optional)
+Not answered
+
+4. What specific features do you want in the time tracker?
+Core Modules & Functions
+
+Responsive web-based dashboard (desktop + tablet)
+
+Role-based access (Admin, Manager, Team Member, Client)
+
+Clockify API integration – manual + live timer
+
+ClickUp/Trello API – task sync, status updates, attachments
+
+WIP Tracker – auto-calculates progress % from task status/time spent
+
+Real-time chat (Socket.io) + mention system (@user)
+
+File system (Google Drive API) with upload/preview + project folders
+
+Video calls (Jitsi Meet) with screen share
+
+Reports + Logs – daily/weekly by user/project/client
+
+Visual Analytics Charts – time usage, productivity ratio, WIP graph
+
+Notifications + Reminders (deadlines, new tasks, chat pings)
+
+Audit Trail for all user actions (login/edit/upload/delete)
+
+Data Export (CSV/Excel/PDF)
+
+Project templates for repetitive workflows
+
+Admin Settings: manage users, API keys, roles, project categories
+
+Dark/Light mode toggle
+
+Mobile-responsive PWA-ready build
+
+Deployment to Namecheap hosting + SSL setup
+
+Documentation: User Manual + Admin Guide + Setup Steps   
+Yes — Use the Alunex Pulse branding.
+
+Primary Color: Blue #1976D2
+
+Accent: Light Blue #42A5F5
+
+Background: White #FFFFFF
+
+Fonts: Clean Sans (Inter/Roboto)
+
+Include logo and favicon in login page + dashboard header/footer.
+
+Web-Based
+
+Must run on Chrome + Edge (smooth desktop and mobile)
+
+Preferably built with React/Node.js or Vue.js stack for future scalability.
+✅ My Team
+✅ Clients
+(Admin monitors performance; team logs time; clients view progress and shared files.)
+
+5. Do you need the software branded with your logo, business name, or colors?
+Yes
+
+6. What platform should the software run on?
+Web-Based
+
+Some information is shown in English language. 
+Translate
+7. Do you have any example tools or screenshots that show what you have in mind?
+Clockify – for timer and report layout
+
+ClickUp – for task board and color coding
+
+Slack – for chat UI concept
+
+Asana – for project overview cards
+(Visual references can be shared after kick-off.)
+
+8. Who will be using this software (just you, your team, your clients)?
+Just Me, My team, Clients.
+
+The order started
+Oct 17, 2025, 11:53 PM
+
+1st milestone startedOct 17, 2025, 11:53 PM
+Project Setup & Core Development |14 days |$50
+
+Oct 18
+benedictr
+benedictr sent you a message
+Oct 18, 2025, 12:04 AM
+
+I have submitted the form with the final details for Alunex Pulse – our time & project management system.
+Please confirm these points before starting the first milestone:
+
+1. Tech Stack: Which framework will you use (React/Node.js preferred)?
+2. Modularity: Will APIs and DB be structured for future expansion?
+3. Authentication: Confirm secure JWT/OAuth based login and role control.
+4. Integrations: Can API keys be configured through admin panel?
+5. Design: Use the blue/white concept as noted above.
+6. Deployment: Ensure Namecheap SSL setup and GitHub handover and source code.
+7. Testing: Please test Clockify, ClickUp/Trello, Drive, and Jitsi integration before final delivery.
+8. Support: If possible, extend post-launch support to 2 weeks (we can discuss extra if needed
+
+benedictr
+benedictr sent you a message
+Oct 18, 2025, 1:03 AM
+
+https://chatgpt.com/canvas/shared/68f2bc680be881919303377d074b1f56 please check the link i tried the possible way to reach into a shape how the ui frame will be look alike as a protype it will be helpfull for u and based on this u can continue further expanding to the product unique and usefull any clarification feel free too mssg to finalize thank u
+
+billy_254s
+You sent a message
+Oct 18, 2025, 11:55 AM
+
+Hello there, I have already developed the wireframe prototype, and I am about to complete i will send you the zip file and open it with VS Code or any other coding tool, and view it with a live server, then see and compare if there will be any customization you would like. We changed compared with what you made with ChatGPT
+
+billy_254s
+You sent a message
+Oct 18, 2025, 12:22 PM
+
+Hi!
+
+Great news! Your UI wireframe is ready for review.
+
+I've created a COMPLETE, FULLY NAVIGABLE wireframe prototype of the entire system. This isn't just mockups - you can actually click through and experience the full user journey.
+
+WHAT'S INCLUDED:
+
+9 Complete Pages - All Navigable:
+1. Login & Authentication
+2. Dashboard (with metrics and overview)
+3. Time Tracking (timer, logs, weekly summary)
+4. Task Management (Kanban board with WIP tracking)
+5. Team Chat (real-time messaging interface)
+6. File Sharing (Google Drive integration)
+7. Reports & Analytics (charts and exports)
+8. Video Calls & Screen Share (Jitsi Meet)
+9. Settings (user profiles, API integrations, team management)
+
+
+HOW TO VIEW:
+
+1. Download the ZIP file I've attached
+2. Extract all files to a folder
+3. Open "index.html" in your browser (Chrome, Firefox, Safari, etc.)
+4. Click the "View Wireframe" button
+5. Explore all pages using the sidebar navigation
+
+WHAT TO REVIEW:
+
+Please check:
+1. Overall layout and navigation flow
+2. Is the information organized well?
+3. Are all the features you need visible?
+4. Do you like the color scheme? (Professional blue/gray)
+5. Any changes or additions you'd like?
+
+WHAT MAKES THIS SPECIAL:
+
+- All 9 pages are complete and linked
+- Professional SVG icons throughout
+- Industry-appropriate design
+- Shows exact layout and navigation
+- Demonstrates all integrations (Clockify, Google Drive, Jitsi, etc.)
+
+NEXT STEPS:
+
+Once you review and approve (or provide feedback):
+- I'll make any adjustments you need
+- Then start actual development
+- Deliver a fully functional system as discussed
+
+YOUR FEEDBACK:
+
+Please take 10-15 minutes to click through all the pages and let me know:
+- ✅ Approved - looks great, proceed with development
+- 🔄 Changes needed - specify what you'd like different
+
+Looking forward to your feedback! This will ensure we build exactly what you envision for your aluminum and glass business.
+
+Best regards
+
+ATTACHMENTS
+alunex-wireframe-prototype.
+
+zip
+
+(29 KB)
+benedictr
+benedictr sent you a message
+Oct 18, 2025, 2:16 PM
+
+really its gud and i am going through it let me get back too u by end of today as i am in office now ..and appricate your efforts i belive u have did some home work thank u
+
+billy_254s
+You sent a message
+Oct 18, 2025, 2:17 PM
+
+Alright, thank you for the response. I will wait for your feedback, thanks!
+
+Oct 21
+billy_254s
+You sent a message
+Oct 21, 2025, 1:27 PM
+
+Hello, I am still waiting for your feedback
+
+Oct 22
+benedictr
+benedictr sent you a message
+Oct 22, 2025, 10:33 PM
+
+hi bro sorry for the delay in responce as india its Celebrations time .. let the login page have the below details so who ever want to sign in they can use there own email and login .
+
+in Dash board just add suitable place to view project based dashboard as currently i c there is no option to c individual or selection of multiple project based when selecting a particular project .
+
+rest everything seems to be ok
+
+in the settings as marked below i c alunex team only i belive i can invite external team also like from gmail and outlook mail id please advice .
+final one can we generate any income in this ur suggestion to use our services as futre expansion currently let it be like this . and i need customer or client suggestion to while working to improvise the product and i dont c help option to make the client and user to learn about the tools on his own . apart from saving the files option can we have an option to have link only saved this will allow people to save link only and when they click the link it will deviates to other website where its is stored for large file like how one drive functions
+i c rest everything is ok ..
+
+ATTACHMENTS
+image.png
+image.
+
+png
+
+(402 KB)
+image.png
+image.
+
+png
+
+(104 KB)
+image.png
+image.
+
+png
+
+(33 KB)
+Oct 23
+billy_254s
+You sent a message
+Oct 23, 2025, 6:48 AM
+
+Hi! No worries about the delay - Happy Diwali celebrations!
+Thank you for the detailed feedback! I've understood all your points and I'm happy to make these improvements.
+
+billy_254s
+You sent a message
+Oct 23, 2025, 6:54 AM
+
+Let me address each one
+
+1. LOGIN PAGE
+- I'll update it so users can enter their own email/password
+- No pre-filled credentials
+- Clean, professional login form
+
+2. DASHBOARD - PROJECT SELECTOR
+- I'll add a dropdown to filter by:
+- All Projects (default view)
+- Individual project selection
+- Multiple project selection with checkboxes
+- This will update all metrics and task lists based on selected projects
+- Very similar to how Clockify/ClickUp works
+
+3. SETTINGS - EXTERNAL TEAM INVITES
+- YES! You can definitely invite external team members
+- Works with ANY email:
+- Gmail (@gmail.com)
+- Outlook (@outlook.com, @hotmail.com)
+- Corporate emails (@company.com)
+- Any email address
+- They'll receive an invitation link via email
+- They create their own account and join your workspace
+
+4. HELP & TUTORIALS - GREAT IDEA!
+I'll add:
+- "?" Help icon in top navigation bar
+- Guided tours for new users (step-by-step)
+- Tooltip hints on hover (small "i" icons explaining features)
+- Help documentation/FAQ section
+- Video tutorials (you can record later)
+- This helps users learn independently!
+
+5. LINK-ONLY FILE SAVING - EXCELLENT SUGGESTION!
+Two options for files:
+- Upload Files - Store in Google Drive (existing feature)
+- Add Link - Save the URL/link (NEW!)
+- Perfect for large files stored elsewhere
+- Works like: OneDrive links, Dropbox links, external websites
+- Click link → Opens in new tab
+- No storage used on your system
+- Great for CAD files, large videos, etc.
+
+6. CLIENT/CUSTOMER FEEDBACK - SMART!
+I'll add a "Feedback" feature:
+- Clients can submit suggestions while using the system
+- Rating system (1-5 stars)
+- Comment box for improvements
+- Stored in the database for your review
+- Helps you improve the product based on real usage
+
+billy_254s
+You sent a message
+Oct 23, 2025, 6:56 AM
+
+7. REVENUE GENERATION IDEAS
+For future expansion, here are some monetization options:
+
+Option A: SaaS Model (Subscription)
+- Free plan: 1 project, 5 users
+- Pro plan: $19/month - unlimited projects, 15 users
+- Business plan: $49/month - unlimited everything + priority support
+
+Option B: Per-User Pricing
+- Charge per team member: $5/user/month
+- Suitable for construction/installation companies
+
+Option C: White-Label Solution
+- Sell this system to other aluminum/glass companies
+- They pay a one-time fee ($500-2000) or a monthly subscription
+- You customize with their branding
+
+Option D: Premium Features
+- Basic system free
+- Charge for: Advanced reports, API access, custom integrations
+
+My Recommendation for YOU:
+Start with FREE for your internal team (15 users). Later:
+- Offer to other aluminum/glass companies ($29/month per company)
+- Or charge per additional user beyond 15 users
+- This industry needs better project management tools!
+
+UPDATED WIREFRAME:
+I'll create updated mockups showing:
+1. ✅ New login page (blank email/password fields)
+2. ✅ Dashboard with project selector dropdown
+3. ✅ Settings showing external email invite option
+4. ✅ Help icon in navigation
+5. ✅ File page with "Add Link" button option
+6. ✅ Feedback feature section
+
+QUESTION FOR YOU:
+1. For the project selector - do you want it as a dropdown or a sidebar filter panel?
+2. Where would you like the Help icon - top right corner next to your profile?
+3. For the feedback feature - should clients submit anonymously or with their name?
+
+Let me know, and I'll create the updated mockups
+
+Oct 24
+benedictr
+benedictr sent you a message
+Oct 24, 2025, 7:03 AM
+
+hi bro just a day need today i am thinking to add one more in the side bar like deparment phases
+like budjet & planning will be allocated to each department like for example 50000 usd is the project value in this the profit marjin is 10 percent , once the project awarded the budjet is distrbuted to the diffrent department like engineering department will do all this Task category like Design ; Material submital ; Strucural analysis ; RFI; Material take off ; JOB order ; Coordinates like this i can able to add category and this will be in the task list based on the department and category the same way Procurment department ; fabrication department ; project department ;
+each department will be allocated with budjet and the time time based on the project finish . I belive since our tag refres toproject management adding this will be a better to have a good startup for the health launch of our app .. please advice i will be avilable in night ur suggestion is highlight appricated
+
+billy_254s
+You sent a message
+Oct 24, 2025, 9:26 AM
+
+Hi there,
+WOW! This is an EXCELLENT suggestion! adding Department & Budget Management will make this a COMPLETE project management system specifically for the aluminum & glass industry. This is a game-changing feature!
+
+I have 3 options for you:
+
+OPTION 1: Add Basic Version Now (+$30 = $150 total)
+- Add Departments section
+- Budget allocation
+- Basic tracking
+- Timeline: +3-4 days
+
+OPTION 2: Full Advanced Module (+$80 = $200 total)
+- Complete department management
+- Advanced analytics
+- Cost breakdown reports
+- Timeline: +1 week
+
+billy_254s
+You sent a message
+Oct 24, 2025, 9:27 AM
+
+2 Option*
+
+billy_254s
+You sent a message
+Oct 24, 2025, 9:28 AM
+
+What are the typical departments in your company?
+- Engineering
+- Procurement
+- Fabrication
+- Installation
+- (Any others?)
+
+Do you want to track:
+- Labor costs per department?
+- Material costs per department?
+- Equipment costs?
+
+Should department managers see only their department or all?
+
+benedictr
+benedictr sent you a message
+Oct 24, 2025, 6:34 PM
+
+yes will go with 2nd option make it 180 usd bro and i will try to add 20 up on launching time
+
+Oct 26
+billy_254s
+You sent a message
+Oct 26, 2025, 7:37 PM
+
+Hello Benedictr, For the Department & Budget Module (+$60), please, Send me a custom offer for $60 USD on Fiverr for Department & Budget Management Add-on once I receive it, I'll start immediately!
+
+-UPDATED TOTAL
+- Original order: $120 ($50 paid, $70 on completion)
+- Department module: $60
+- Launch bonus: $20
+Total: $200 USD
+
+I'm currently creating the updated wireframe with Department pages now. You'll see it shortly
+
+Best regards
+
+billy_254s
+You sent a message
+Oct 26, 2025, 9:51 PM
+
+Hi there again, I uploaded the new updated wireframe, you can now check it here https://billyk.online/alunex
+
+Yesterday
+benedictr
+benedictr sent you a message
+Oct 27, 2025, 7:00 AM
+
+its good appricated , please maintain the same theme and i would like to add the additional departments and additional phases information in the side bar can u check the attachment and let me know ur input . thats it once we are done we are moving forward for further . rest everything seems to be ok in the in the time zone can we have an option of selecting country and set the time zone as some time time zone varies based on the team working like india uae qatar america canada so where ever country the project is running i can able to understand the overall projects happening and the budget allocated and the progress , if the ceo want to c all at once in the dash board then country name also needed to c refer example this is my suggestion but its your choice how to get it done proper how it helps for the app development i hope u got my point please look in to it .. and the over all budget and profit status can been seend only to the people where the perimissiong is granted . and deparment budget can be seen by department head and the permission given by department head .
+
+ATTACHMENTS
+untitled (2).
+
+zip
+
+(80 KB)
+image.png
+image.
+
+png
+
+(21 KB)
+image.png
+image.
+
+png
+
+(26 KB)
+image.png
+image.
+
+png
+
+(41 KB)
+billy_254s
+You sent a message
+Oct 27, 2025, 12:30 PM
+
+hello there, are you available?
+
+billy_254s
+You sent a message
+Oct 27, 2025, 12:31 PM
+
+i have a couple of question that needs an immediate answer so that I can implement right now,
+
+Q1: Should I create a completely new integrated version that combines:
+- Your current project's visual theme and color scheme
+- The untitled folder's comprehensive sidebar structure
+- New features (country/timezone, permissions)
+
+Q2: For the permission system, how should users be assigned roles?
+- Through a settings page where you manually assign roles?
+- Automatic based on job title?
+- Should there be a "Permissions" section under Admin/Settings?
+
+Q3: Budget visibility - should department heads be able to see:
+- Only their allocated budget? OR
+- Also see how much other departments have (without details)?
+
+Q4: For the country/timezone feature, do you want:
+- Each project assigned to ONE country? OR
+- Projects can span multiple countries?
+
+Q5: Priority - What would you like me to implement FIRST?
+- A) New enhanced sidebar with all departments and phases
+- B) Country/timezone selection feature
+- C) Permission system for budget visibility
+- D) All of the above in one go
+
+benedictr
+benedictr sent you a message
+Oct 27, 2025, 6:15 PM
+
+✅ Q1: Create a completely new integrated version?
+
+YES — 100% - i like your color theme mainatain the theme and add the items .
+
+We should merge everything into a single unified professional system:
+
+✔ Current UI theme (dark/light — premium look)
+✔ Full sidebar modules (Estimation → Handover → Execution → Close-Out)
+✔ Standard façade industry workflow terminology
+✔ Cross-project + multi-region portfolio analytics
+✔ Full RBAC (role based access)
+✔ Future scalability for subscription SaaS business
+
+✅ Q2: Permission system — How to assign roles?
+
+✔ Manual assignment by Admin / PM inside Users & Roles module
+
+Default roles template auto-applied based on job title
+✅ Best security + scalability practice
+
+We will also include:
+
+Role-based Dashboard visibility
+
+Sensitive financial data restricted by role
+
+Restriction on editing tasks outside controlled permission
+
+✅ Permission section inside Admin → Roles & Permissions
+
+✅ Q3: Budget visibility?
+
+Role Budget Visibility
+CEO / Director Full financial visibility
+Project Manager Whole project budget but not commercial details of other projects
+Department Head ONLY department’s own budget & performance
+Site Engineers & staff No budget visibility
+
+✅ So: Department heads → Only their allocated budget
+✅ Q4: Country / Timezone structure?
+
+✅ Each project will have Primary Country / Timezone for reporting
+but we must support multi-country involvement because:
+
+Façade projects often run like:
+
+Stage Country
+Engineering India / UAE
+Procurement China / UAE
+Fabrication China / Oman
+Site Installation UAE
+
+✅ Solution:
+
+✔ Primary Country for Financial
+✔ Multi-Country for resource allocation + currency + timezone.
+
+✅ Q5: Implementation Priority
+
+Phase Priority Module
+Phase 1 ✅ A New enhanced sidebar + modular navigation
+Phase 2 ✅ B Multi-country + timezone assignments
+Phase 3 ✅ C Permission & budget access control
+Phase 4 👑 Advanced dashboards, charts, EV analytics
+
+✅ D (all of the above) — but in structured rollout
+→ We start with A → B → C for clean development
+
+
+benedictr
+benedictr sent you a message
+Oct 27, 2025, 6:18 PM
+
+Final Sidebar Structure (Confirm ✅)
+
+MAIN
+
+Dashboard (Portfolio / Project)
+
+ESTIMATION
+
+Tender List
+
+BOQ & Pricing
+
+Quote Progress
+
+Under Finalization
+
+Awarded / Lost 🔹(Handover Trigger)
+
+PROJECT SPACE
+
+Project Overview
+
+Engineering
+
+Procurement
+
+Fabrication
+
+Logistics
+
+Installation
+
+QA/QC
+
+HSE & Site Safety
+
+Variations & Claims
+
+Close-Out & Snag
+
+Documents & Drawings (DMS)
+
+Communication (Chat /video/ RFI)
+
+MONITORING & CONTROL
+
+WBS & CBS Structure
+
+Budget Tracking
+
+Man-Hour Tracking
+
+Earned Value Dashboard
+
+Cost Control (CPI / SPI)
+
+Manpower Utilization
+
+INVENTORY
+
+Material Tracking
+
+Consumables
+
+Tools & Equipment
+
+ADMIN
+
+Users & Roles
+
+Departments & Capacity
+
+Rate Cards
+
+Settings
+
+✅ This is now world-class façade & construction PM SaaS structure
+
+benedictr
+benedictr sent you a message
+Oct 27, 2025, 6:19 PM
+
+i really like the way u developed stick with ur color theme and UI ,just need to add the additions which i said above
+
+benedictr
+benedictr sent you a message
+Oct 27, 2025, 7:14 PM
+
+i hope everything is clear with u
+
+Today
+benedictr
+benedictr sent you a message
+Oct 28, 2025, 6:45 AM
+
+hi billy i like the entire concept of ur design ui and the content placements , so maintain the same and add on the additional requirements only requested so that the app will be structured properley
+
+ATTACHMENTS
+image.png
+image.
+
+png
+
+(135 KB)
+image.png
+image.
+
+png
+
+(52 KB)
+image.png
+image.
+
+png
+
+(350 KB)
+benedictr
+benedictr sent you a message
+Oct 28, 2025, 6:46 AM
+
+once its ready or if any thing to be urgently discussed text me in whatsapp thank u
+
+billy_254s
+You sent a message
+Oct 28, 2025, 9:44 AM
+
+Okay, I'm updating the wireframe, if you will approve i will strart working on it
+
+billy_254s
+You sent a message
+Oct 28, 2025, 7:47 PM
+
+Hello there, are you available?,
+
+benedictr
+benedictr sent you a message
+Oct 28, 2025, 8:25 PM
+
+hi yes
+
+Some information is shown in English language. 
+Translate
+billy_254s
+You sent a message
+Oct 28, 2025, 8:31 PM
+
+ok, i am uploading the changes then you will see and give the feedback just a few minutes
+
+benedictr
+benedictr sent you a message
+Oct 28, 2025, 8:42 PM
+
+ok
+sure, is it the same link
+I am exited feeling that the app is getting to shape
+
+benedictr
+benedictr sent you a message
+Oct 28, 2025, 9:45 PM
+
+just let me know once u r done as i click the link to check its show like these in the screen shot
+
+ATTACHMENTS
+image.png
+image.
+
+png
+
+(46 KB)
+billy_254s
+You sent a message
+Oct 28, 2025, 9:53 PM
+
+hello there please visit https://billyk.online/alunex then on your keybord do CTRL + SHIFT + R
+
+
+Thank you so much for the detailed information yes absolutely going with Option B: Build Version 1 as functional system (Original $120 order - $70 remaining) is agreed please proceed . https://billyk.online/alunex-agreed/ https://billyk.online/alunex-agreed/help.html
+
+benedictr
+benedictr sent you a message
+Oct 29, 2025, 7:39 PM
+
+payment has been done thank u for the detailed analysis as i am facing lot of issues with internal and external teams for task assign and no proper budget has been recorded which affects the project health and financial burdens . hope the option B can be functional can be done soon and it can be launched offically we need to test throughly everything inorder to make the app to full fill what is designed for thank u
+
+

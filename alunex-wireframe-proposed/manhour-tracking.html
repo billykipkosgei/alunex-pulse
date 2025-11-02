@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Man-Hour Tracking - Alunex PM</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <div class="logo-icon">A</div>
+            <span>Alunex Project Management</span>
+        </div>
+        <div class="user-info">
+            <button class="btn btn-secondary" onclick="showHelpMenu(event)" title="Help & Tutorials" style="padding: 8px 12px;">
+                <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </button>
+            <div class="user-avatar">JM</div>
+            <button class="btn btn-secondary" onclick="window.location.href='login.html'">Logout</button>
+        </div>
+    </nav>
+
+    <div class="layout">
+        <aside class="sidebar">
+            <!-- MAIN SECTION -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-header">
+                    <span>MAIN</span>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </div>
+                <div class="sidebar-section-content">
+                    <a href="dashboard.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                        </svg>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- ESTIMATION SECTION -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-header">
+                    <span>ESTIMATION</span>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </div>
+                <div class="sidebar-section-content">
+                    <a href="tender-list.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        <span>Tender List</span>
+                    </a>
+                    <a href="boq-pricing.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                        </svg>
+                        <span>BOQ & Pricing</span>
+                    </a>
+                    <a href="quote-progress.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                        </svg>
+                        <span>Quote Progress</span>
+                    </a>
+                    <a href="under-finalization.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span>Under Finalization</span>
+                    </a>
+                    <a href="awarded-lost.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span>Awarded / Lost</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- PROJECT SPACE SECTION -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-header">
+                    <span>PROJECT SPACE</span>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </div>
+                <div class="sidebar-section-content">
+                    <a href="project-overview.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/>
+                        </svg>
+                        <span>Project Overview</span>
+                    </a>
+                    <a href="engineering.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>
+                        </svg>
+                        <span>Engineering</span>
+                    </a>
+                    <a href="procurement.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                        <span>Procurement</span>
+                    </a>
+                    <a href="fabrication.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+                        </svg>
+                        <span>Fabrication</span>
+                    </a>
+                    <a href="logistics.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/>
+                        </svg>
+                        <span>Logistics</span>
+                    </a>
+                    <a href="installation.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                        </svg>
+                        <span>Installation</span>
+                    </a>
+                    <a href="qa-qc.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                        <span>QA/QC</span>
+                    </a>
+                    <a href="hse-safety.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                        </svg>
+                        <span>HSE & Site Safety</span>
+                    </a>
+                    <a href="variations-claims.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+                        </svg>
+                        <span>Variations & Claims</span>
+                    </a>
+                    <a href="closeout-snag.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                        </svg>
+                        <span>Close-Out & Snag</span>
+                    </a>
+                    <a href="documents-drawings.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
+                        </svg>
+                        <span>Documents & Drawings</span>
+                    </a>
+                    <a href="communication.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                        </svg>
+                        <span>Communication</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- MONITORING & CONTROL SECTION -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-header">
+                    <span>MONITORING & CONTROL</span>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </div>
+                <div class="sidebar-section-content">
+                    <a href="wbs-cbs.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-3zM14 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1h-4a1 1 0 01-1-1v-3z"/>
+                        </svg>
+                        <span>WBS & CBS Structure</span>
+                    </a>
+                    <a href="budget-tracking.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span>Budget Tracking</span>
+                    </a>
+                    <a href="manhour-tracking.html" class="sidebar-item active">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span>Man-Hour Tracking</span>
+                    </a>
+                    <a href="earned-value.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                        </svg>
+                        <span>Earned Value Dashboard</span>
+                    </a>
+                    <a href="cost-control.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                        </svg>
+                        <span>Cost Control (CPI/SPI)</span>
+                    </a>
+                    <a href="manpower-utilization.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                        <span>Manpower Utilization</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- INVENTORY SECTION -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-header">
+                    <span>INVENTORY</span>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </div>
+                <div class="sidebar-section-content">
+                    <a href="material-tracking.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                        </svg>
+                        <span>Material Tracking</span>
+                    </a>
+                    <a href="consumables.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
+                        </svg>
+                        <span>Consumables</span>
+                    </a>
+                    <a href="tools-equipment.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                        </svg>
+                        <span>Tools & Equipment</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- ADMIN SECTION -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-header">
+                    <span>ADMIN</span>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </div>
+                <div class="sidebar-section-content">
+                    <a href="users-roles.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                        </svg>
+                        <span>Users & Roles</span>
+                    </a>
+                    <a href="departments-capacity.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                        </svg>
+                        <span>Departments & Capacity</span>
+                    </a>
+                    <a href="rate-cards.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                        </svg>
+                        <span>Rate Cards</span>
+                    </a>
+                    <a href="settings.html" class="sidebar-item ">
+                        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                        <span>Settings</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-header">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h1>Man-Hour Tracking</h1>
+                        <p>Labor hours tracking and productivity analysis (Enhanced Time Tracking)</p>
+                    </div>
+                    <button class="btn btn-primary">
+                        <svg style="width: 16px; height: 16px; display: inline; margin-right: 4px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        Log Time Entry
+                    </button>
+                </div>
+            </div>
+
+            <!-- Today's Summary -->
+            <div class="stats-grid" style="margin-bottom: 24px;">
+                <div class="stat-card">
+                    <h3>Today's Hours</h3>
+                    <div class="value">6.5h</div>
+                    <div class="change">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+                        </svg>
+                        0.5h more than yesterday
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <h3>This Week</h3>
+                    <div class="value">32.5h</div>
+                    <div class="change" style="color: #10b981;">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        On track for 40h
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Billable Hours</h3>
+                    <div class="value">28.0h</div>
+                    <div class="change">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        86% billable rate
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Active Projects</h3>
+                    <div class="value">3</div>
+                    <div class="change">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/>
+                        </svg>
+                        Projects worked today
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Time Entry -->
+            <div class="card" style="margin-bottom: 24px;">
+                <div class="card-header">
+                    <h2>Quick Time Entry</h2>
+                    <button class="btn btn-secondary">
+                        <svg style="width: 16px; height: 16px; display: inline; margin-right: 4px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        Start Timer
+                    </button>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                    <div class="form-group">
+                        <label>Project</label>
+                        <select class="form-control">
+                            <option selected>Dubai Marina Tower</option>
+                            <option>Abu Dhabi Financial Center</option>
+                            <option>Sharjah Innovation Hub</option>
+                            <option>RAK Waterfront Resort</option>
+                            <option>Ajman City Mall</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Work Phase</label>
+                        <select class="form-control">
+                            <option>Engineering & Design</option>
+                            <option selected>Procurement</option>
+                            <option>Fabrication</option>
+                            <option>Installation</option>
+                            <option>QA/QC</option>
+                            <option>Site Safety</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" class="form-control" value="2025-10-28">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Hours</label>
+                        <input type="number" class="form-control" value="2.0" step="0.5" min="0" max="24">
+                    </div>
+
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>Description</label>
+                        <textarea class="form-control" rows="2" placeholder="What did you work on?">Reviewed shop drawings for aluminum curtain wall panels - Phase 2</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" checked style="width: 20px; height: 20px;">
+                            <span>Billable</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary">Save Time Entry</button>
+            </div>
+
+            <!-- Recent Time Entries -->
+            <div class="card" style="margin-bottom: 24px;">
+                <div class="card-header">
+                    <h2>Recent Time Entries</h2>
+                    <div style="display: flex; gap: 8px;">
+                        <select class="form-control" style="width: 180px;">
+                            <option selected>This Week</option>
+                            <option>Last Week</option>
+                            <option>This Month</option>
+                            <option>Last Month</option>
+                            <option>Custom Range</option>
+                        </select>
+                        <button class="btn btn-secondary">Export</button>
+                    </div>
+                </div>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Project</th>
+                            <th>Phase</th>
+                            <th>Description</th>
+                            <th>Hours</th>
+                            <th>Type</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Oct 28, 2025</strong><br><span style="font-size: 12px; color: #64748b;">Today</span></td>
+                            <td>Dubai Marina Tower</td>
+                            <td>Procurement</td>
+                            <td>Reviewed shop drawings for aluminum curtain wall panels</td>
+                            <td><strong>2.5h</strong></td>
+                            <td><span class="badge badge-success">Billable</span></td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 4px 12px; font-size: 13px;">Edit</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Oct 28, 2025</strong><br><span style="font-size: 12px; color: #64748b;">Today</span></td>
+                            <td>Dubai Marina Tower</td>
+                            <td>Engineering</td>
+                            <td>Design coordination meeting with structural team</td>
+                            <td><strong>1.5h</strong></td>
+                            <td><span class="badge badge-success">Billable</span></td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 4px 12px; font-size: 13px;">Edit</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Oct 28, 2025</strong><br><span style="font-size: 12px; color: #64748b;">Today</span></td>
+                            <td>Sharjah Innovation Hub</td>
+                            <td>Installation</td>
+                            <td>Site inspection and progress documentation</td>
+                            <td><strong>2.5h</strong></td>
+                            <td><span class="badge badge-success">Billable</span></td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 4px 12px; font-size: 13px;">Edit</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Oct 27, 2025</strong><br><span style="font-size: 12px; color: #64748b;">Yesterday</span></td>
+                            <td>Abu Dhabi Financial Center</td>
+                            <td>QA/QC</td>
+                            <td>Quality inspection of glass panel installation - Floor 12-15</td>
+                            <td><strong>4.0h</strong></td>
+                            <td><span class="badge badge-success">Billable</span></td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 4px 12px; font-size: 13px;">Edit</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Oct 27, 2025</strong><br><span style="font-size: 12px; color: #64748b;">Yesterday</span></td>
+                            <td>Internal</td>
+                            <td>Admin</td>
+                            <td>Team meeting and weekly planning</td>
+                            <td><strong>1.5h</strong></td>
+                            <td><span class="badge" style="background: #e2e8f0; color: #475569;">Non-Billable</span></td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 4px 12px; font-size: 13px;">Edit</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Oct 27, 2025</strong><br><span style="font-size: 12px; color: #64748b;">Yesterday</span></td>
+                            <td>Dubai Marina Tower</td>
+                            <td>Fabrication</td>
+                            <td>Factory visit and production quality review in China</td>
+                            <td><strong>6.0h</strong></td>
+                            <td><span class="badge badge-success">Billable</span></td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 4px 12px; font-size: 13px;">Edit</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Oct 26, 2025</strong><br><span style="font-size: 12px; color: #64748b;">2 days ago</span></td>
+                            <td>RAK Waterfront Resort</td>
+                            <td>Engineering</td>
+                            <td>Detailed engineering drawings review and approval</td>
+                            <td><strong>5.5h</strong></td>
+                            <td><span class="badge badge-success">Billable</span></td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 4px 12px; font-size: 13px;">Edit</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Weekly Time Breakdown -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 24px; margin-bottom: 24px;">
+                <!-- By Project -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Time by Project (This Week)</h2>
+                    </div>
+
+                    <div style="padding: 20px 0;">
+                        <div style="margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-size: 14px; font-weight: 600;">Dubai Marina Tower</span>
+                                <span style="font-size: 14px; font-weight: 600; color: #2563eb;">14.5h</span>
+                            </div>
+                            <div style="height: 24px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                                <div style="height: 100%; width: 45%; background: linear-gradient(90deg, #2563eb 0%, #1e40af 100%); display: flex; align-items: center; padding: 0 8px;">
+                                    <span style="color: white; font-size: 11px; font-weight: 600;">45%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-size: 14px; font-weight: 600;">Abu Dhabi Financial Center</span>
+                                <span style="font-size: 14px; font-weight: 600; color: #10b981;">9.0h</span>
+                            </div>
+                            <div style="height: 24px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                                <div style="height: 100%; width: 28%; background: linear-gradient(90deg, #10b981 0%, #059669 100%); display: flex; align-items: center; padding: 0 8px;">
+                                    <span style="color: white; font-size: 11px; font-weight: 600;">28%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-size: 14px; font-weight: 600;">Sharjah Innovation Hub</span>
+                                <span style="font-size: 14px; font-weight: 600; color: #f59e0b;">5.5h</span>
+                            </div>
+                            <div style="height: 24px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                                <div style="height: 100%; width: 17%; background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%); display: flex; align-items: center; padding: 0 8px;">
+                                    <span style="color: white; font-size: 11px; font-weight: 600;">17%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-size: 14px; font-weight: 600;">RAK Waterfront Resort</span>
+                                <span style="font-size: 14px; font-weight: 600; color: #8b5cf6;">3.5h</span>
+                            </div>
+                            <div style="height: 24px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                                <div style="height: 100%; width: 10%; background: linear-gradient(90deg, #8b5cf6 0%, #7c3aed 100%); display: flex; align-items: center; padding: 0 8px;">
+                                    <span style="color: white; font-size: 11px; font-weight: 600;">10%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- By Phase -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Time by Work Phase (This Week)</h2>
+                    </div>
+
+                    <div style="padding: 20px 0;">
+                        <div style="margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-size: 14px; font-weight: 600;">Engineering & Design</span>
+                                <span style="font-size: 14px; font-weight: 600; color: #2563eb;">10.5h</span>
+                            </div>
+                            <div style="height: 24px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                                <div style="height: 100%; width: 32%; background: linear-gradient(90deg, #2563eb 0%, #1e40af 100%); display: flex; align-items: center; padding: 0 8px;">
+                                    <span style="color: white; font-size: 11px; font-weight: 600;">32%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-size: 14px; font-weight: 600;">Installation</span>
+                                <span style="font-size: 14px; font-weight: 600; color: #10b981;">8.0h</span>
+                            </div>
+                            <div style="height: 24px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                                <div style="height: 100%; width: 25%; background: linear-gradient(90deg, #10b981 0%, #059669 100%); display: flex; align-items: center; padding: 0 8px;">
+                                    <span style="color: white; font-size: 11px; font-weight: 600;">25%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-size: 14px; font-weight: 600;">QA/QC</span>
+                                <span style="font-size: 14px; font-weight: 600; color: #f59e0b;">6.5h</span>
+                            </div>
+                            <div style="height: 24px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                                <div style="height: 100%; width: 20%; background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%); display: flex; align-items: center; padding: 0 8px;">
+                                    <span style="color: white; font-size: 11px; font-weight: 600;">20%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-size: 14px; font-weight: 600;">Procurement</span>
+                                <span style="font-size: 14px; font-weight: 600; color: #8b5cf6;">7.5h</span>
+                            </div>
+                            <div style="height: 24px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                                <div style="height: 100%; width: 23%; background: linear-gradient(90deg, #8b5cf6 0%, #7c3aed 100%); display: flex; align-items: center; padding: 0 8px;">
+                                    <span style="color: white; font-size: 11px; font-weight: 600;">23%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Info Note -->
+            <div class="card" style="background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%); border: 1px solid #3b82f6;">
+                <div style="display: flex; align-items: start; gap: 12px;">
+                    <svg style="width: 24px; height: 24px; color: #2563eb; flex-shrink: 0; margin-top: 2px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <div>
+                        <div style="font-weight: 600; color: #1e40af; margin-bottom: 4px;">Enhanced Time Tracking for Construction</div>
+                        <div style="font-size: 14px; color: #1e40af;">
+                            <strong>Man-Hour Tracking</strong> is the industry-standard term for time tracking in construction and façade projects.
+                            This enhanced module replaces the generic "Time Tracking" page with features specific to construction project management:
+                            <ul style="margin: 8px 0 0 20px; padding: 0;">
+                                <li>Track hours by project phase (Engineering, Procurement, Fabrication, Installation, etc.)</li>
+                                <li>Separate billable vs non-billable hours for accurate project costing</li>
+                                <li>Integration with Budget Tracking and Cost Control modules</li>
+                                <li>Multi-project time allocation for portfolio management</li>
+                                <li>Supports multi-country teams with different timezones</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="sidebar.js"></script>
+</body>
+</html>

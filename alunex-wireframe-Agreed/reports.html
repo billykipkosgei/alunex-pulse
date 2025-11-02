@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports & Analytics - Alunex PM</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <div class="logo-icon">A</div>
+            <span>Alunex Project Management</span>
+        </div>
+        <div class="user-info">
+            <div class="user-avatar">JM</div>
+            <button class="btn btn-secondary" onclick="window.location.href='login.html'">Logout</button>
+        </div>
+    </nav>
+    
+    <div class="layout">
+        <aside class="sidebar">
+            <a href="dashboard.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                </svg>
+                <span>Dashboard</span>
+            </a>
+            
+            <a href="time-tracking.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span>Time Tracking</span>
+            </a>
+            
+            <a href="tasks.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                </svg>
+                <span>Task Management</span>
+            </a>
+            
+            <a href="departments.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                </svg>
+                <span>Departments & Budget</span>
+            </a>
+
+            <a href="department-analytics.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+                <span>Department Analytics</span>
+            </a>
+
+            <a href="chat.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                </svg>
+                <span>Team Chat</span>
+            </a>
+            
+            <a href="files.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
+                </svg>
+                <span>File Sharing</span>
+            </a>
+            
+            <a href="reports.html" class="sidebar-item active">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+                <span>Reports & Analytics</span>
+            </a>
+            
+            <a href="video.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                </svg>
+                <span>Video Calls</span>
+            </a>
+            
+            <a href="settings.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                <span>Settings</span>
+            </a>
+        </aside>
+        
+        <main class="main-content">
+            <div class="page-header">
+                <h1>Reports & Analytics</h1>
+                <p>Generate detailed reports and track project progress with analytics</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2>Generate Report</h2>
+                    <button class="btn btn-primary">
+                        <svg style="width: 16px; height: 16px; display: inline; margin-right: 4px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                        </svg>
+                        Export PDF
+                    </button>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
+                    <div class="form-group">
+                        <label>Date Range</label>
+                        <select class="form-control">
+                            <option>Last 7 Days</option>
+                            <option>Last 30 Days</option>
+                            <option selected>This Month</option>
+                            <option>Last Month</option>
+                            <option>Custom Range</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Project</label>
+                        <select class="form-control">
+                            <option selected>All Projects</option>
+                            <option>City Center Construction</option>
+                            <option>Office Complex</option>
+                            <option>Corporate Tower</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Team Member</label>
+                        <select class="form-control">
+                            <option selected>All Team Members</option>
+                            <option>Mike Johnson</option>
+                            <option>Sarah Chen</option>
+                            <option>David Kumar</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2>Time by Project (This Month)</h2>
+                </div>
+                
+                <div style="padding: 40px; background: #f8fafc; border-radius: 6px; text-align: center;">
+                    <svg viewBox="0 0 400 300" style="max-width: 100%; height: auto;">
+                        <rect x="50" y="220" width="60" height="80" fill="#2563eb"/>
+                        <rect x="130" y="150" width="60" height="150" fill="#10b981"/>
+                        <rect x="210" y="180" width="60" height="120" fill="#f59e0b"/>
+                        <rect x="290" y="190" width="60" height="110" fill="#8b5cf6"/>
+                        
+                        <text x="80" y="250" font-size="12" fill="white" text-anchor="middle">40h</text>
+                        <text x="160" y="220" font-size="12" fill="white" text-anchor="middle">75h</text>
+                        <text x="240" y="240" font-size="12" fill="white" text-anchor="middle">60h</text>
+                        <text x="320" y="250" font-size="12" fill="white" text-anchor="middle">55h</text>
+                        
+                        <text x="80" y="320" font-size="11" fill="#64748b" text-anchor="middle">Building A</text>
+                        <text x="160" y="320" font-size="11" fill="#64748b" text-anchor="middle">Office</text>
+                        <text x="240" y="320" font-size="11" fill="#64748b" text-anchor="middle">Tower</text>
+                        <text x="320" y="320" font-size="11" fill="#64748b" text-anchor="middle">Residential</text>
+                    </svg>
+                    
+                    <div style="margin-top: 24px; display: flex; justify-content: center; gap: 24px; flex-wrap: wrap;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <div style="width: 16px; height: 16px; background: #2563eb; border-radius: 3px;"></div>
+                            <span style="font-size: 14px; color: #64748b;">Building A</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <div style="width: 16px; height: 16px; background: #10b981; border-radius: 3px;"></div>
+                            <span style="font-size: 14px; color: #64748b;">Office Complex</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <div style="width: 16px; height: 16px; background: #f59e0b; border-radius: 3px;"></div>
+                            <span style="font-size: 14px; color: #64748b;">Corporate Tower</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <div style="width: 16px; height: 16px; background: #8b5cf6; border-radius: 3px;"></div>
+                            <span style="font-size: 14px; color: #64748b;">Residential</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2>Team Performance (This Month)</h2>
+                </div>
+                
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Team Member</th>
+                            <th>Total Hours</th>
+                            <th>Tasks Completed</th>
+                            <th>Efficiency</th>
+                            <th>Projects</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <div style="width: 32px; height: 32px; background: #8b5cf6; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;">MJ</div>
+                                    <strong>Mike Johnson</strong>
+                                </div>
+                            </td>
+                            <td><strong>136.5h</strong></td>
+                            <td>24</td>
+                            <td><span class="badge badge-success">98%</span></td>
+                            <td>3</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <div style="width: 32px; height: 32px; background: #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;">SC</div>
+                                    <strong>Sarah Chen</strong>
+                                </div>
+                            </td>
+                            <td><strong>128.3h</strong></td>
+                            <td>31</td>
+                            <td><span class="badge badge-success">95%</span></td>
+                            <td>4</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <div style="width: 32px; height: 32px; background: #06b6d4; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;">DK</div>
+                                    <strong>David Kumar</strong>
+                                </div>
+                            </td>
+                            <td><strong>142.7h</strong></td>
+                            <td>18</td>
+                            <td><span class="badge badge-success">92%</span></td>
+                            <td>2</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <div style="width: 32px; height: 32px; background: #fbbf24; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;">JR</div>
+                                    <strong>James Rodriguez</strong>
+                                </div>
+                            </td>
+                            <td><strong>115.2h</strong></td>
+                            <td>22</td>
+                            <td><span class="badge badge-warning">88%</span></td>
+                            <td>3</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2>WIP (Work in Progress) Summary</h2>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                    <div style="text-align: center; padding: 24px; background: #eff6ff; border-radius: 8px;">
+                        <div style="font-size: 36px; font-weight: bold; color: #2563eb; margin-bottom: 8px;">12</div>
+                        <div style="font-size: 14px; color: #1e40af;">Tasks In Progress</div>
+                    </div>
+                    
+                    <div style="text-align: center; padding: 24px; background: #fef3c7; border-radius: 8px;">
+                        <div style="font-size: 36px; font-weight: bold; color: #f59e0b; margin-bottom: 8px;">64.5h</div>
+                        <div style="font-size: 14px; color: #92400e;">Active Work Hours</div>
+                    </div>
+                    
+                    <div style="text-align: center; padding: 24px; background: #d1fae5; border-radius: 8px;">
+                        <div style="font-size: 36px; font-weight: bold; color: #10b981; margin-bottom: 8px;">8/15</div>
+                        <div style="font-size: 14px; color: #065f46;">Team Members Active</div>
+                    </div>
+                    
+                    <div style="text-align: center; padding: 24px; background: #f3e8ff; border-radius: 8px;">
+                        <div style="font-size: 36px; font-weight: bold; color: #8b5cf6; margin-bottom: 8px;">72%</div>
+                        <div style="font-size: 14px; color: #6b21a8;">Overall Progress</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

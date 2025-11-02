@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Management - Alunex PM</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <div class="logo-icon">A</div>
+            <span>Alunex Project Management</span>
+        </div>
+        <div class="user-info">
+            <div class="user-avatar">JM</div>
+            <button class="btn btn-secondary" onclick="window.location.href='login.html'">Logout</button>
+        </div>
+    </nav>
+    
+    <div class="layout">
+        <aside class="sidebar">
+            <a href="dashboard.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                </svg>
+                <span>Dashboard</span>
+            </a>
+            
+            <a href="time-tracking.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span>Time Tracking</span>
+            </a>
+            
+            <a href="tasks.html" class="sidebar-item active">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                </svg>
+                <span>Task Management</span>
+            </a>
+
+            <a href="departments.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                </svg>
+                <span>Departments & Budget</span>
+            </a>
+
+            <a href="department-analytics.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+                <span>Department Analytics</span>
+            </a>
+
+            <a href="chat.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                </svg>
+                <span>Team Chat</span>
+            </a>
+            
+            <a href="files.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
+                </svg>
+                <span>File Sharing</span>
+            </a>
+            
+            <a href="reports.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+                <span>Reports & Analytics</span>
+            </a>
+            
+            <a href="video.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                </svg>
+                <span>Video Calls</span>
+            </a>
+            
+            <a href="settings.html" class="sidebar-item">
+                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                <span>Settings</span>
+            </a>
+        </aside>
+        
+        <main class="main-content">
+            <div class="page-header">
+                <h1>Task Management</h1>
+                <p>Manage and track tasks with Kanban board view - Integrated with ClickUp/Trello</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h2>Project Tasks Board</h2>
+                    </div>
+                    <div style="display: flex; gap: 12px;">
+                        <select class="form-control" style="width: auto;">
+                            <option>All Projects</option>
+                            <option selected>City Center Construction</option>
+                            <option>Office Complex Renovation</option>
+                            <option>Corporate Tower</option>
+                        </select>
+                        <button class="btn btn-primary">
+                            <svg style="width: 16px; height: 16px; display: inline; margin-right: 4px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                            </svg>
+                            New Task
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="kanban-board">
+                    <!-- To Do Column -->
+                    <div class="kanban-column">
+                        <div class="kanban-header">
+                            <h3>TO DO</h3>
+                            <span class="kanban-count">4</span>
+                        </div>
+                        
+                        <div class="kanban-card">
+                            <h4>Material Order - Aluminum Sheets</h4>
+                            <p>Order 200 aluminum sheets for Building A facade</p>
+                            <div class="kanban-footer">
+                                <div style="display: flex; align-items: center; gap: 4px;">
+                                    <div style="width: 24px; height: 24px; background: #fbbf24; border-radius: 50%; font-size: 11px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">JR</div>
+                                    <span>James Rodriguez</span>
+                                </div>
+                                <span>Due: Oct 21</span>
+                            </div>
+                        </div>
+                        
+                        <div class="kanban-card">
+                            <h4>Safety Inspection - Site B</h4>
+                            <p>Conduct safety inspection before installation begins</p>
+                            <div class="kanban-footer">
+                                <div style="display: flex; align-items: center; gap: 4px;">
+                                    <div style="width: 24px; height: 24px; background: #ec4899; border-radius: 50%; font-size: 11px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">EW</div>
+                                    <span>Emma Wilson</span>
+                                </div>
+                                <span>Due: Oct 19</span>
+                            </div>
+                        </div>
+                        
+                        <div class="kanban-card">
+                            <h4>Blueprint Review - Building C</h4>
+                            <p>Review and approve updated blueprints</p>
+                            <div class="kanban-footer">
+                                <div style="display: flex; align-items: center; gap: 4px;">
+                                    <div style="width: 24px; height: 24px; background: #8b5cf6; border-radius: 50%; font-size: 11px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">MJ</div>
+                                    <span>Mike Johnson</span>
+                                </div>
+                                <span>Due: Oct 20</span>
+                            </div>
+                        </div>
+                        
+                        <div class="kanban-card">
+                            <h4>Team Meeting Preparation</h4>
+                            <p>Prepare materials for weekly team sync</p>
+                            <div class="kanban-footer">
+                                <div style="display: flex; align-items: center; gap: 4px;">
+                                    <div style="width: 24px; height: 24px; background: #2563eb; border-radius: 50%; font-size: 11px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">JM</div>
+                                    <span>You</span>
+                                </div>
+                                <span>Due: Oct 18</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- In Progress Column -->
+                    <div class="kanban-column">
+                        <div class="kanban-header">
+                            <h3>IN PROGRESS</h3>
+                            <span class="kanban-count">3</span>
+                        </div>
+                        
+                        <div class="kanban-card" style="border-left: 3px solid #f59e0b;">
+                            <h4>Aluminum Frame Installation - Building A</h4>
+                            <p>Installing aluminum frames on the south facade</p>
+                            <div style="margin: 12px 0;">
+                                <div style="font-size: 11px; color: #64748b; margin-bottom: 4px;">Progress: 65%</div>
+                                <div style="width: 100%; height: 6px; background: #f1f5f9; border-radius: 3px;">
+                                    <div style="width: 65%; height: 100%; background: #f59e0b; border-radius: 3px;"></div>
+                                </div>
+                            </div>
+                            <div class="kanban-footer">
+                                <div style="display: flex; align-items: center; gap: 4px;">
+                                    <div style="width: 24px; height: 24px; background: #8b5cf6; border-radius: 50%; font-size: 11px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">MJ</div>
+                                    <span>Mike Johnson</span>
+                                </div>
+                                <span>
+                                    <svg style="width: 14px; height: 14px; display: inline; color: #10b981;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    4.5h logged
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="kanban-card" style="border-left: 3px solid #f59e0b;">
+                            <h4>Window Installation - Office Complex</h4>
+                            <p>Installing tempered glass windows on floors 3-5</p>
+                            <div style="margin: 12px 0;">
+                                <div style="font-size: 11px; color: #64748b; margin-bottom: 4px;">Progress: 40%</div>
+                                <div style="width: 100%; height: 6px; background: #f1f5f9; border-radius: 3px;">
+                                    <div style="width: 40%; height: 100%; background: #f59e0b; border-radius: 3px;"></div>
+                                </div>
+                            </div>
+                            <div class="kanban-footer">
+                                <div style="display: flex; align-items: center; gap: 4px;">
+                                    <div style="width: 24px; height: 24px; background: #06b6d4; border-radius: 50%; font-size: 11px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">DK</div>
+                                    <span>David Kumar</span>
+                                </div>
+                                <span>
+                                    <svg style="width: 14px; height: 14px; display: inline; color: #10b981;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    6.2h logged
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="kanban-card" style="border-left: 3px solid #f59e0b;">
+                            <h4>Quality Control Check - Panels</h4>
+                            <p>Inspecting glass panels for defects</p>
+                            <div style="margin: 12px 0;">
+                                <div style="font-size: 11px; color: #64748b; margin-bottom: 4px;">Progress: 80%</div>
+                                <div style="width: 100%; height: 6px; background: #f1f5f9; border-radius: 3px;">
+                                    <div style="width: 80%; height: 100%; background: #f59e0b; border-radius: 3px;"></div>
+                                </div>
+                            </div>
+                            <div class="kanban-footer">
+                                <div style="display: flex; align-items: center; gap: 4px;">
+                                    <div style="width: 24px; height: 24px; background: #10b981; border-radius: 50%; font-size: 11px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">SC</div>
+                                    <span>Sarah Chen</span>
+                                </div>
+                                <span>
+                                    <svg style="width: 14px; height: 14px; display: inline; color: #10b981;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    3.2h logged
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Completed Column -->
+                    <div class="kanban-column">
+                        <div class="kanban-header">
+                            <h3>COMPLETED</h3>
+                            <span class="kanban-count">5</span>
+                        </div>
+                        
+                        <div class="kanban-card" style="opacity: 0.7; background: #f0fdf4;">
+                            <h4>Glass Panel Quality Check</h4>
+                            <p>Completed inspection of all panels</p>
+                            <div class="kanban-footer">
+                                <div style="display: flex; align-items: center; gap: 4px;">
+                                    <div style="width: 24px; height: 24px; background: #10b981; border-radius: 50%; font-size: 11px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">SC</div>
+                                    <span>Sarah Chen</span>
+                                </div>
+                                <span style="color: #10b981;">
+                                    <svg style="width: 14px; height: 14px; display: inline;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    Oct 18
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="kanban-card" style="opacity: 0.7; background: #f0fdf4;">
+                            <h4>Site Preparation - Building A</h4>
+                            <p>Completed site cleanup and preparation</p>
+                            <div class="kanban-footer">
+                                <div style="display: flex; align-items: center; gap: 4px;">
+                                    <div style="width: 24px; height: 24px; background: #fbbf24; border-radius: 50%; font-size: 11px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">JR</div>
+                                    <span>James Rodriguez</span>
+                                </div>
+                                <span style="color: #10b981;">
+                                    <svg style="width: 14px; height: 14px; display: inline;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    Oct 17
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="kanban-card" style="opacity: 0.7; background: #f0fdf4;">
+                            <h4>Equipment Maintenance</h4>
+                            <p>Serviced all installation equipment</p>
+                            <div class="kanban-footer">
+                                <div style="display: flex; align-items: center; gap: 4px;">
+                                    <div style="width: 24px; height: 24px; background: #ec4899; border-radius: 50%; font-size: 11px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">EW</div>
+                                    <span>Emma Wilson</span>
+                                </div>
+                                <span style="color: #10b981;">
+                                    <svg style="width: 14px; height: 14px; display: inline;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    Oct 16
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="tutorial-system.js"></script>
+</body>
+</html>
