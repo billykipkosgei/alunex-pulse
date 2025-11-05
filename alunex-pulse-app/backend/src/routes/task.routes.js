@@ -21,6 +21,40 @@ router.get('/', protect, async (req, res) => {
     }
 });
 
+// Get user's assigned tasks by project (for time tracking)
+router.get('/my-tasks/:projectId', protect, async (req, res) => {
+    try {
+        const SubTask = require('../models/SubTask.model');
+        
+        // Find tasks assigned to logged-in user for the specific project
+        const tasks = await Task.find({
+            project: req.params.projectId,
+            assignedTo: req.user.id
+        })
+        .populate('project', 'name')
+        .select('_id title description status priority dueDate startDate');
+
+        // For each task, fetch its sub-tasks
+        const tasksWithSubTasks = await Promise.all(
+            tasks.map(async (task) => {
+                const subTasks = await SubTask.find({ parentTask: task._id })
+                    .populate('assignedTo', 'name email')
+                    .select('_id title status assignedTo');
+                
+                return {
+                    ...task.toObject(),
+                    subTasks: subTasks || []
+                };
+            })
+        );
+
+        res.json({ success: true, tasks: tasksWithSubTasks });
+    } catch (error) {
+        console.error('Error fetching user tasks:', error);
+        res.status(500).json({ message: error.message });
+    }
+});
+
 // Create task
 router.post('/', protect, async (req, res) => {
     try {

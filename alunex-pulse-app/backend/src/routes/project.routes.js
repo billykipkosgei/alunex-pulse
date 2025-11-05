@@ -1,7 +1,42 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 const { protect } = require('../middleware/auth.middleware');
 const Project = require('../models/Project.model');
+const File = require('../models/File.model');
+
+// Configure multer for spend documentation uploads
+const uploadsDir = path.join(__dirname, '../../uploads');
+if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, uploadsDir);
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, 'spend-doc-' + uniqueSuffix + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 100 * 1024 * 1024 }, // 100MB limit
+    fileFilter: function (req, file, cb) {
+        // Accept Excel files and other common document formats
+        const allowedTypes = /xlsx|xls|csv|pdf|doc|docx/;
+        const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+        const mimetype = allowedTypes.test(file.mimetype);
+        if (extname && mimetype) {
+            return cb(null, true);
+        }
+        cb(new Error('Only Excel, CSV, PDF, and Word documents are allowed'));
+    }
+});
 
 // Get all projects
 router.get('/', protect, async (req, res) => {
@@ -9,7 +44,9 @@ router.get('/', protect, async (req, res) => {
         const projects = await Project.find()
             .populate('manager', 'name email')
             .populate('team.user', 'name email')
-            .populate('client', 'name email');
+            .populate('client', 'name email')
+            .populate('spendDocumentation.excelFile')
+            .populate('spendDocumentation.uploadedBy', 'name email');
         res.json({ success: true, projects });
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -32,7 +69,9 @@ router.get('/:id', protect, async (req, res) => {
         const project = await Project.findById(req.params.id)
             .populate('manager', 'name email')
             .populate('team.user', 'name email')
-            .populate('client', 'name email');
+            .populate('client', 'name email')
+            .populate('spendDocumentation.excelFile')
+            .populate('spendDocumentation.uploadedBy', 'name email');
         if (!project) {
             return res.status(404).json({ message: 'Project not found' });
         }
@@ -54,6 +93,142 @@ router.put('/:id', protect, async (req, res) => {
         }
         res.json({ success: true, project });
     } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Upload spend documentation (Excel file)
+router.post('/:id/spend-documentation/upload', protect, upload.single('file'), async (req, res) => {
+    try {
+        const project = await Project.findById(req.params.id);
+        if (!project) {
+            // Delete uploaded file if project not found
+            if (req.file) {
+                fs.unlinkSync(req.file.path);
+            }
+            return res.status(404).json({ message: 'Project not found' });
+        }
+
+        if (!req.file) {
+            return res.status(400).json({ message: 'No file uploaded' });
+        }
+
+        // Create file record
+        const fileRecord = await File.create({
+            name: req.file.filename,
+            originalName: req.file.originalname,
+            mimeType: req.file.mimetype,
+            size: req.file.size,
+            path: req.file.path,
+            url: `/api/files/download/${req.file.filename}`,
+            project: project._id,
+            uploadedBy: req.user.id,
+            description: 'Spend documentation',
+            tags: ['spend', 'budget', 'documentation']
+        });
+
+        // Update project with spend documentation
+        project.spendDocumentation = {
+            excelFile: fileRecord._id,
+            documentLink: req.body.documentLink || project.spendDocumentation?.documentLink || '',
+            uploadedBy: req.user.id,
+            uploadedAt: new Date(),
+            notes: req.body.notes || ''
+        };
+
+        await project.save();
+
+        const updatedProject = await Project.findById(project._id)
+            .populate('spendDocumentation.excelFile')
+            .populate('spendDocumentation.uploadedBy', 'name email');
+
+        res.json({ success: true, project: updatedProject });
+    } catch (error) {
+        console.error('Error uploading spend documentation:', error);
+        // Delete uploaded file if database save fails
+        if (req.file) {
+            fs.unlinkSync(req.file.path);
+        }
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Update spend documentation link (without file upload)
+router.put('/:id/spend-documentation/link', protect, async (req, res) => {
+    try {
+        const project = await Project.findById(req.params.id);
+        if (!project) {
+            return res.status(404).json({ message: 'Project not found' });
+        }
+
+        const { documentLink, notes } = req.body;
+
+        // Update or create spend documentation
+        project.spendDocumentation = {
+            excelFile: project.spendDocumentation?.excelFile || null,
+            documentLink: documentLink || '',
+            uploadedBy: req.user.id,
+            uploadedAt: new Date(),
+            notes: notes || ''
+        };
+
+        await project.save();
+
+        const updatedProject = await Project.findById(project._id)
+            .populate('spendDocumentation.excelFile')
+            .populate('spendDocumentation.uploadedBy', 'name email');
+
+        res.json({ success: true, project: updatedProject });
+    } catch (error) {
+        console.error('Error updating spend documentation link:', error);
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Get spend documentation
+router.get('/:id/spend-documentation', protect, async (req, res) => {
+    try {
+        const project = await Project.findById(req.params.id)
+            .populate('spendDocumentation.excelFile')
+            .populate('spendDocumentation.uploadedBy', 'name email');
+
+        if (!project) {
+            return res.status(404).json({ message: 'Project not found' });
+        }
+
+        res.json({ success: true, spendDocumentation: project.spendDocumentation || null });
+    } catch (error) {
+        console.error('Error fetching spend documentation:', error);
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Delete spend documentation
+router.delete('/:id/spend-documentation', protect, async (req, res) => {
+    try {
+        const project = await Project.findById(req.params.id).populate('spendDocumentation.excelFile');
+        if (!project) {
+            return res.status(404).json({ message: 'Project not found' });
+        }
+
+        // Delete file from disk if exists
+        if (project.spendDocumentation?.excelFile) {
+            const file = project.spendDocumentation.excelFile;
+            const filePath = path.join(uploadsDir, file.name);
+            if (fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath);
+            }
+            // Delete file record from database
+            await File.findByIdAndDelete(file._id);
+        }
+
+        // Clear spend documentation
+        project.spendDocumentation = undefined;
+        await project.save();
+
+        res.json({ success: true, message: 'Spend documentation deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting spend documentation:', error);
         res.status(500).json({ message: error.message });
     }
 });

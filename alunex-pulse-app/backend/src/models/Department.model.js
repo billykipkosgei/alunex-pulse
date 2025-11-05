@@ -23,6 +23,27 @@ const departmentSchema = new mongoose.Schema({
         spent: { type: Number, default: 0 },
         currency: { type: String, default: 'USD' }
     },
+    spendDocumentation: {
+        excelFile: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'File'
+        },
+        documentLink: {
+            type: String,
+            trim: true
+        },
+        uploadedBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        uploadedAt: {
+            type: Date
+        },
+        notes: {
+            type: String,
+            trim: true
+        }
+    },
     categories: [{
         name: String,
         description: String

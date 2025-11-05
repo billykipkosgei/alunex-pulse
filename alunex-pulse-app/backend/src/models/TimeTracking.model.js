@@ -15,6 +15,10 @@ const timeTrackingSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Task'
     },
+    subTask: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'SubTask'
+    },
     description: {
         type: String,
         required: true
@@ -27,12 +31,16 @@ const timeTrackingSchema = new mongoose.Schema({
         type: Date
     },
     duration: {
-        type: Number, // Duration in seconds
+        type: Number,
         default: 0
     },
     isRunning: {
         type: Boolean,
         default: false
+    },
+    billable: {
+        type: Boolean,
+        default: true
     }
 }, {
     timestamps: true

@@ -82,9 +82,28 @@ const taskSchema = new mongoose.Schema({
     timestamps: true
 });
 
-// Calculate task completion percentage
+// Calculate if task is overdue
 taskSchema.methods.isOverdue = function() {
     return this.dueDate && this.dueDate < new Date() && this.status !== 'completed';
+};
+
+// Calculate task progress based on sub-tasks completion
+taskSchema.methods.calculateProgress = async function() {
+    const SubTask = mongoose.model('SubTask');
+    const subTasks = await SubTask.find({ parentTask: this._id });
+
+    if (subTasks.length === 0) {
+        return this.progress; // Return manual progress if no sub-tasks
+    }
+
+    const completedSubTasks = subTasks.filter(st => st.status === 'done').length;
+    const calculatedProgress = Math.round((completedSubTasks / subTasks.length) * 100);
+
+    // Update and save the progress
+    this.progress = calculatedProgress;
+    await this.save();
+
+    return calculatedProgress;
 };
 
 module.exports = mongoose.model('Task', taskSchema);

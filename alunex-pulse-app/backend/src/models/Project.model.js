@@ -6,6 +6,12 @@ const projectSchema = new mongoose.Schema({
         required: [true, 'Project name is required'],
         trim: true
     },
+    code: {
+        type: String,
+        unique: true,
+        sparse: true,
+        trim: true
+    },
     description: {
         type: String,
         default: ''
@@ -24,6 +30,27 @@ const projectSchema = new mongoose.Schema({
         allocated: { type: Number, default: 0 },
         spent: { type: Number, default: 0 },
         currency: { type: String, default: 'USD' }
+    },
+    spendDocumentation: {
+        excelFile: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'File'
+        },
+        documentLink: {
+            type: String,
+            trim: true
+        },
+        uploadedBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        uploadedAt: {
+            type: Date
+        },
+        notes: {
+            type: String,
+            trim: true
+        }
     },
     profitMargin: {
         type: Number,
@@ -57,6 +84,10 @@ const projectSchema = new mongoose.Schema({
     client: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
+    },
+    clientName: {
+        type: String,
+        trim: true
     },
     progress: {
         type: Number,

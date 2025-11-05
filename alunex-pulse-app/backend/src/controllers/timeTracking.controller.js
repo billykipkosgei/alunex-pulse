@@ -5,7 +5,7 @@ const Project = require('../models/Project.model');
 exports.startTimer = async (req, res) => {
     try {
         const userId = req.user.id;
-        const { projectId, description } = req.body;
+        const { projectId, description, taskId, subTaskId, billable } = req.body;
 
         if (!projectId || !description) {
             return res.status(400).json({
@@ -28,16 +28,24 @@ exports.startTimer = async (req, res) => {
         }
 
         // Create new timer
-        const timer = await TimeTracking.create({
+        const timerData = {
             user: userId,
             project: projectId,
             description,
             startTime: new Date(),
-            isRunning: true
-        });
+            isRunning: true,
+            billable: billable !== undefined ? billable : true
+        };
+
+        if (taskId) timerData.task = taskId;
+        if (subTaskId) timerData.subTask = subTaskId;
+
+        const timer = await TimeTracking.create(timerData);
 
         const populatedTimer = await TimeTracking.findById(timer._id)
             .populate('project', 'name')
+            .populate('task', 'title')
+            .populate('subTask', 'title')
             .populate('user', 'name email');
 
         res.status(201).json({
@@ -103,6 +111,8 @@ exports.getActiveTimer = async (req, res) => {
             isRunning: true
         })
             .populate('project', 'name')
+            .populate('task', 'title')
+            .populate('subTask', 'title')
             .populate('user', 'name email');
 
         res.status(200).json({
@@ -149,6 +159,8 @@ exports.getTimeLogs = async (req, res) => {
 
         const timeLogs = await TimeTracking.find(query)
             .populate('project', 'name')
+            .populate('task', 'title')
+            .populate('subTask', 'title')
             .populate('user', 'name email')
             .sort({ startTime: -1 });
 
@@ -206,8 +218,17 @@ exports.getWeeklySummary = async (req, res) => {
                 return logDate.toDateString() === currentDay.toDateString();
             });
 
-            const totalSeconds = dayLogs.reduce((sum, log) => sum + log.duration, 0);
+            const billableSeconds = dayLogs
+                .filter(log => log.billable)
+                .reduce((sum, log) => sum + log.duration, 0);
+            const nonBillableSeconds = dayLogs
+                .filter(log => !log.billable)
+                .reduce((sum, log) => sum + log.duration, 0);
+            const totalSeconds = billableSeconds + nonBillableSeconds;
+
             const hours = totalSeconds > 0 ? (totalSeconds / 3600).toFixed(1) + 'h' : '-';
+            const billableHours = (billableSeconds / 3600).toFixed(1);
+            const nonBillableHours = (nonBillableSeconds / 3600).toFixed(1);
 
             const isToday = currentDay.toDateString() === today.toDateString();
             const dayName = daysOfWeek[(currentDay.getDay())];
@@ -215,19 +236,32 @@ exports.getWeeklySummary = async (req, res) => {
             weeklyData.push({
                 day: dayName,
                 hours,
+                billableHours: parseFloat(billableHours),
+                nonBillableHours: parseFloat(nonBillableHours),
                 isToday,
                 date: currentDay.toISOString()
             });
         }
 
-        // Calculate total for the week
-        const weekTotal = weekLogs.reduce((sum, log) => sum + log.duration, 0);
+        // Calculate totals for the week
+        const billableTotalSeconds = weekLogs
+            .filter(log => log.billable)
+            .reduce((sum, log) => sum + log.duration, 0);
+        const nonBillableTotalSeconds = weekLogs
+            .filter(log => !log.billable)
+            .reduce((sum, log) => sum + log.duration, 0);
+        const weekTotal = billableTotalSeconds + nonBillableTotalSeconds;
+
         const weekTotalHours = (weekTotal / 3600).toFixed(1);
+        const billableTotalHours = (billableTotalSeconds / 3600).toFixed(1);
+        const nonBillableTotalHours = (nonBillableTotalSeconds / 3600).toFixed(1);
 
         res.status(200).json({
             success: true,
             weeklyData,
-            weekTotal: weekTotalHours
+            weekTotal: weekTotalHours,
+            billableTotal: billableTotalHours,
+            nonBillableTotal: nonBillableTotalHours
         });
     } catch (error) {
         console.error('Error fetching weekly summary:', error);

@@ -9,6 +9,7 @@ const http = require('http');
 const { Server } = require('socket.io');
 const connectDB = require('./config/database');
 const initializeAdmin = require('./scripts/initializeAdmin');
+const initializeGeneralWork = require('./scripts/initializeGeneralWork');
 
 const app = express();
 const server = http.createServer(app);
@@ -29,8 +30,9 @@ const io = new Server(server, {
 
 // Connect to MongoDB and initialize admin
 connectDB().then(() => {
-    // Initialize admin user after database connection
+    // Initialize admin user and General Work project after database connection
     initializeAdmin();
+    initializeGeneralWork();
 });
 
 // Make io accessible in routes
@@ -66,6 +68,7 @@ app.use('/api/auth', require('./routes/auth.routes'));
 app.use('/api/users', require('./routes/user.routes'));
 app.use('/api/projects', require('./routes/project.routes'));
 app.use('/api/tasks', require('./routes/task.routes'));
+app.use('/api/subtasks', require('./routes/subtask.routes'));
 app.use('/api/departments', require('./routes/department.routes'));
 app.use('/api/timetracking', require('./routes/timeTracking.routes'));
 app.use('/api/files', require('./routes/file.routes'));
