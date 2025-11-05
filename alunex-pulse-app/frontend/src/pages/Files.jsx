@@ -10,6 +10,7 @@ const Files = () => {
     const [selectedProject, setSelectedProject] = useState('all');
     const [projects, setProjects] = useState([]);
     const fileInputRef = useRef(null);
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         fetchFiles();
@@ -120,9 +121,11 @@ const Files = () => {
         });
     };
 
-    const filteredFiles = selectedProject === 'all'
-        ? files
-        : files.filter(f => f.project?._id === selectedProject);
+    const filteredFiles = files.filter(f => {
+        const matchesProject = selectedProject === 'all' ? true : f.project?._id === selectedProject;
+        const matchesSearch = f.originalName.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchesProject && matchesSearch;
+    });
 
     if (loading) {
         return (
@@ -143,7 +146,7 @@ const Files = () => {
             <div className="card">
                 <div className="card-header">
                     <h2>Project Files</h2>
-                    <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                    <div className="file-filters" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
                         <select
                             className="form-control"
                             style={{ width: 'auto' }}
@@ -156,6 +159,14 @@ const Files = () => {
                                 </option>
                             ))}
                         </select>
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Search files..."
+                            style={{ width: '200px' }}
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
                         <input
                             ref={fileInputRef}
                             type="file"

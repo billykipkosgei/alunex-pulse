@@ -376,12 +376,13 @@ const Chat = () => {
                 <p>Communicate with your team in real-time</p>
             </div>
 
-            <div className="card" style={{ height: 'calc(100vh - 250px)', display: 'flex', flexDirection: 'row', overflow: 'hidden' }}>
+            <div className="card chat-container" style={{ height: 'calc(100vh - 250px)', display: 'flex', flexDirection: 'row', overflow: 'hidden' }}>
                 {/* Channels Sidebar */}
-                <div style={{ width: '250px', borderRight: '1px solid var(--border-color)', padding: '20px' }}>
+                <div className="channels-sidebar" style={{ width: '250px', borderRight: '1px solid var(--border-color)', padding: '20px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                         <h3 style={{ fontSize: '14px', margin: 0, color: 'var(--text-muted)' }}>CHANNELS</h3>
                         <button
+                            className="create-channel-btn"
                             onClick={() => setShowChannelModal(true)}
                             style={{
                                 background: 'var(--primary-blue)',
@@ -554,12 +555,13 @@ const Chat = () => {
                                 padding: '24px',
                                 overflowY: 'auto',
                                 background: '#f9fafb'
-                            }}>
+                            }} className="chat-messages">
                                 {messages.length > 0 ? messages.map(msg => {
                                     const isOwnMessage = (msg.sender._id || msg.sender.id) === (user._id || user.id);
                                     return (
                                         <div
                                             key={msg._id}
+                                            className="message-item"
                                             style={{
                                                 marginBottom: '16px',
                                                 display: 'flex',
@@ -944,7 +946,7 @@ const Chat = () => {
                                     <div style={{ display: 'flex', gap: '12px' }}>
                                         <input
                                             type="text"
-                                            className="form-control"
+                                            className="form-control message-input"
                                             placeholder={replyingTo ? "Type your reply..." : "Type a message..."}
                                             value={message}
                                             onChange={handleMessageInputChange}
