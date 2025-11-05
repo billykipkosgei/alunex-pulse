@@ -1,8 +1,8 @@
-/* Custom styles for driver.js interactive guide */
+/* Custom styles for driver.js interactive guide - Using app theme colors */
 
 /* Override driver.js default styles */
 .driver-popover {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
     color: white;
     border-radius: 12px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
@@ -58,7 +58,7 @@
 
 .driver-popover-next-btn {
     background: white;
-    color: #667eea;
+    color: #2563eb;
 }
 
 .driver-popover-next-btn:hover {
@@ -84,27 +84,27 @@
 
 /* Highlighted element */
 .driver-active-element {
-    outline: 3px solid #667eea !important;
+    outline: 3px solid #2563eb !important;
     outline-offset: 4px;
 }
 
 /* Arrow */
 .driver-popover-arrow {
-    border-color: #667eea;
+    border-color: #2563eb;
 }
 
 .driver-popover-arrow-side-top {
-    border-top-color: #667eea;
+    border-top-color: #2563eb;
 }
 
 .driver-popover-arrow-side-bottom {
-    border-bottom-color: #667eea;
+    border-bottom-color: #2563eb;
 }
 
 .driver-popover-arrow-side-left {
-    border-left-color: #667eea;
+    border-left-color: #2563eb;
 }
 
 .driver-popover-arrow-side-right {
-    border-right-color: #667eea;
+    border-right-color: #2563eb;
 }

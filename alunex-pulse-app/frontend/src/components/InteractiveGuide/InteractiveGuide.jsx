@@ -9,42 +9,48 @@ const InteractiveGuide = {
             showProgress: true,
             steps: [
                 {
-                    element: '.dashboard',
                     popover: {
                         title: 'Welcome to Dashboard',
-                        description: 'This is your command center where you can see all your projects at a glance.',
+                        description: 'This is your command center where you can see all your projects at a glance. Let\'s explore the key features!',
+                    }
+                },
+                {
+                    element: '.project-selector-group',
+                    popover: {
+                        title: 'Project Filter',
+                        description: 'Use this dropdown to filter dashboard data by specific projects. Select a project to see its stats, tasks, and team activity.',
                         position: 'bottom'
                     }
                 },
                 {
-                    element: '.create-project-btn',
+                    element: '.stats-grid',
                     popover: {
-                        title: 'Create New Project',
-                        description: 'Click here to create a new project. You can add project details, assign team members, and set budgets.',
-                        position: 'left'
+                        title: 'Quick Statistics',
+                        description: 'View key metrics at a glance: hours logged today, active tasks, team members online, and active projects.',
+                        position: 'bottom'
                     }
                 },
                 {
-                    element: '.project-card',
+                    element: '.stats-grid .stat-card:first-child',
                     popover: {
-                        title: 'Project Cards',
-                        description: 'Each card shows project information including status, progress, budget, and team members.',
+                        title: 'Hours Logged Today',
+                        description: 'See total hours logged today and how it compares to yesterday.',
+                        position: 'bottom'
+                    }
+                },
+                {
+                    element: '.card:has(.table)',
+                    popover: {
+                        title: 'Recent Tasks',
+                        description: 'View your most recent tasks with their status, priority, and due dates.',
                         position: 'top'
                     }
                 },
                 {
-                    element: '.project-status',
+                    element: '.team-activity-grid',
                     popover: {
-                        title: 'Project Status',
-                        description: 'Status indicators show whether a project is Planning, Active, On Hold, Completed, or Cancelled.',
-                        position: 'top'
-                    }
-                },
-                {
-                    element: '.progress-bar',
-                    popover: {
-                        title: 'Progress Tracking',
-                        description: 'Visual progress bars show how much of the project is completed (0-100%).',
+                        title: 'Team Activity',
+                        description: 'Monitor what your team members are currently working on and their hours logged today.',
                         position: 'top'
                     }
                 }
@@ -63,55 +69,55 @@ const InteractiveGuide = {
             steps: [
                 {
                     popover: {
-                        title: 'Tasks Management',
-                        description: 'This page helps you manage all your tasks and sub-tasks. Let\'s explore the features!',
+                        title: 'Task Management',
+                        description: 'Manage all your tasks using a Kanban board view. Let\'s explore the features!',
                     }
                 },
                 {
-                    element: '.create-task-btn',
+                    element: '.project-select',
                     popover: {
-                        title: 'Create a Task',
-                        description: 'Click here to create a new task. You can assign it to a project, set priority, due date, and assign team members.',
+                        title: 'Filter by Project',
+                        description: 'Select a project to view only tasks related to that project.',
+                        position: 'bottom'
+                    }
+                },
+                {
+                    element: '.btn-primary:has(svg)',
+                    popover: {
+                        title: 'Create New Task',
+                        description: 'Click here to create a new task. You can assign it to team members, set priority, due date, and more.',
                         position: 'left'
                     }
                 },
                 {
-                    element: '.filter-section',
+                    element: '.kanban-board',
                     popover: {
-                        title: 'Filter Tasks',
-                        description: 'Use these filters to view tasks by status (Todo, In Progress, In Review, Done) or priority level.',
-                        position: 'bottom'
-                    }
-                },
-                {
-                    element: '.search-bar',
-                    popover: {
-                        title: 'Search Tasks',
-                        description: 'Quickly find tasks by typing keywords in the search bar.',
-                        position: 'bottom'
-                    }
-                },
-                {
-                    element: '.task-item',
-                    popover: {
-                        title: 'Task Details',
-                        description: 'Each task shows title, description, assigned members, status, priority, and progress.',
+                        title: 'Kanban Board',
+                        description: 'Tasks are organized in three columns: TO DO, IN PROGRESS, and COMPLETED. Drag and drop tasks between columns to update their status.',
                         position: 'top'
                     }
                 },
                 {
-                    element: '.subtask-section',
+                    element: '.kanban-column:first-child',
                     popover: {
-                        title: 'Sub-Tasks',
-                        description: 'Break down complex tasks into smaller sub-tasks. Progress is automatically calculated based on sub-task completion.',
+                        title: 'TO DO Column',
+                        description: 'Tasks that haven\'t been started yet appear here.',
+                        position: 'right'
+                    }
+                },
+                {
+                    element: '.kanban-column:nth-child(2)',
+                    popover: {
+                        title: 'IN PROGRESS Column',
+                        description: 'Tasks currently being worked on appear here.',
                         position: 'top'
                     }
                 },
                 {
-                    element: '.add-subtask-btn',
+                    element: '.kanban-column:last-child',
                     popover: {
-                        title: 'Add Sub-Task',
-                        description: 'Click here to add a sub-task to break down the work into manageable pieces.',
+                        title: 'COMPLETED Column',
+                        description: 'Finished tasks appear here. You can review completed work and track progress.',
                         position: 'left'
                     }
                 }
@@ -135,43 +141,43 @@ const InteractiveGuide = {
                     }
                 },
                 {
-                    element: '.start-timer-btn',
+                    element: '.timer-container',
+                    popover: {
+                        title: 'Active Timer',
+                        description: 'Start and stop timers to track time on projects and tasks in real-time.',
+                        position: 'bottom'
+                    }
+                },
+                {
+                    element: '.form-control:has(option)',
+                    popover: {
+                        title: 'Select Project',
+                        description: 'Choose which project you\'re working on before starting the timer.',
+                        position: 'bottom'
+                    }
+                },
+                {
+                    element: '.btn-success',
                     popover: {
                         title: 'Start Timer',
-                        description: 'Click here to start tracking time. Select a project and task, then start the timer.',
-                        position: 'left'
+                        description: 'Click to start tracking time for the selected project and task.',
+                        position: 'bottom'
                     }
                 },
                 {
-                    element: '.manual-entry-btn',
+                    element: '.time-log-actions',
                     popover: {
-                        title: 'Manual Entry',
-                        description: 'Add time entries manually by specifying start and end times.',
-                        position: 'left'
+                        title: 'Export Time Logs',
+                        description: 'Use the date picker to select a date, then click Export to download time logs as CSV.',
+                        position: 'bottom'
                     }
                 },
                 {
-                    element: '.time-entry-list',
+                    element: '.table',
                     popover: {
                         title: 'Time Entries',
-                        description: 'View all your time entries here. You can see what you worked on, for how long, and whether it\'s billable.',
+                        description: 'View all your time entries with project, description, start/end times, and duration.',
                         position: 'top'
-                    }
-                },
-                {
-                    element: '.billable-toggle',
-                    popover: {
-                        title: 'Billable Hours',
-                        description: 'Mark time as billable if it should be charged to a client.',
-                        position: 'top'
-                    }
-                },
-                {
-                    element: '.time-summary',
-                    popover: {
-                        title: 'Time Summary',
-                        description: 'See total hours tracked today, this week, and by project.',
-                        position: 'bottom'
                     }
                 }
             ],
@@ -194,51 +200,35 @@ const InteractiveGuide = {
                     }
                 },
                 {
-                    element: '.budget-dashboard',
+                    element: '.budget-summary-grid',
                     popover: {
                         title: 'Budget Overview',
-                        description: 'This shows total budget across all departments, total spent, and remaining budget.',
+                        description: 'See total budget across all departments, total spent, remaining budget, and overall utilization percentage.',
                         position: 'bottom'
                     }
                 },
                 {
-                    element: '.add-department-btn',
+                    element: '.btn-primary',
                     popover: {
                         title: 'Create Department',
-                        description: 'Click here to create a new department. You\'ll assign a budget and track spending.',
+                        description: 'Click here to create a new department and assign a budget.',
                         position: 'left'
                     }
                 },
                 {
-                    element: '.department-table',
+                    element: '.table',
                     popover: {
                         title: 'Departments Table',
-                        description: 'View all departments with their allocated budgets, spent amounts, and utilization percentages.',
+                        description: 'View all departments with their allocated budgets, spent amounts, remaining budgets, and utilization percentages.',
                         position: 'top'
                     }
                 },
                 {
-                    element: '.edit-department-btn',
+                    element: '.table tbody tr:first-child',
                     popover: {
-                        title: 'Edit Department',
-                        description: 'Click the edit button to update department details, budget, or spending.',
+                        title: 'Department Actions',
+                        description: 'Each department has Edit, Upload Documentation, Download, and Delete buttons for management.',
                         position: 'left'
-                    }
-                },
-                {
-                    element: '.upload-docs-btn',
-                    popover: {
-                        title: 'Upload Documentation',
-                        description: 'IMPORTANT: Upload spend breakdown files (Excel) or links (Google Sheets) to document how the spent amount was calculated.',
-                        position: 'left'
-                    }
-                },
-                {
-                    element: '.budget-utilization',
-                    popover: {
-                        title: 'Budget Utilization',
-                        description: 'Color-coded bars show budget usage: Red = over budget (&gt;100%), Orange = high usage (75-100%), Blue = normal usage (&lt;75%).',
-                        position: 'top'
                     }
                 }
             ],
@@ -261,18 +251,10 @@ const InteractiveGuide = {
                     }
                 },
                 {
-                    element: '.channel-list',
+                    element: '.channels-sidebar',
                     popover: {
-                        title: 'Channels',
+                        title: 'Channels List',
                         description: 'Select a channel to view and participate in conversations. Channels can be project-specific or general.',
-                        position: 'right'
-                    }
-                },
-                {
-                    element: '.create-channel-btn',
-                    popover: {
-                        title: 'Create Channel',
-                        description: 'Click here to create a new channel for team discussions.',
                         position: 'right'
                     }
                 },
@@ -280,7 +262,7 @@ const InteractiveGuide = {
                     element: '.chat-messages',
                     popover: {
                         title: 'Messages',
-                        description: 'View all messages in the selected channel. Messages appear in real-time.',
+                        description: 'View all messages in the selected channel. Messages appear in real-time as team members send them.',
                         position: 'left'
                     }
                 },
@@ -288,15 +270,7 @@ const InteractiveGuide = {
                     element: '.message-input',
                     popover: {
                         title: 'Send Messages',
-                        description: 'Type your message here and press Enter or click Send.',
-                        position: 'top'
-                    }
-                },
-                {
-                    element: '.attach-file-btn',
-                    popover: {
-                        title: 'Share Files',
-                        description: 'Attach files to your messages to share with team members.',
+                        description: 'Type your message here and press Enter or click Send to share with the channel.',
                         position: 'top'
                     }
                 }
@@ -320,7 +294,7 @@ const InteractiveGuide = {
                     }
                 },
                 {
-                    element: '.upload-file-btn',
+                    element: '.btn-primary',
                     popover: {
                         title: 'Upload Files',
                         description: 'Click here to upload documents, images, or other files to the system.',
@@ -336,19 +310,11 @@ const InteractiveGuide = {
                     }
                 },
                 {
-                    element: '.file-list',
+                    element: '.table',
                     popover: {
                         title: 'File List',
                         description: 'View all uploaded files with details like name, size, upload date, and associated project.',
                         position: 'top'
-                    }
-                },
-                {
-                    element: '.download-file-btn',
-                    popover: {
-                        title: 'Download Files',
-                        description: 'Click the download button to get a copy of the file.',
-                        position: 'left'
                     }
                 }
             ],
@@ -392,38 +358,6 @@ const InteractiveGuide = {
                         title: 'Help & Guides',
                         description: 'Click here anytime to access help documentation or start an interactive guide for any section.',
                         position: 'bottom'
-                    }
-                },
-                {
-                    element: '.dashboard-link',
-                    popover: {
-                        title: 'Dashboard',
-                        description: 'Your control center - view all projects, recent activity, and quick stats.',
-                        position: 'right'
-                    }
-                },
-                {
-                    element: '.tasks-link',
-                    popover: {
-                        title: 'Tasks',
-                        description: 'Create and manage tasks and sub-tasks, assign team members, and track progress.',
-                        position: 'right'
-                    }
-                },
-                {
-                    element: '.time-tracking-link',
-                    popover: {
-                        title: 'Time Tracking',
-                        description: 'Track time spent on projects and tasks using timers or manual entries.',
-                        position: 'right'
-                    }
-                },
-                {
-                    element: '.departments-link',
-                    popover: {
-                        title: 'Departments',
-                        description: 'Manage department budgets, track spending, and upload spend documentation.',
-                        position: 'right'
                     }
                 },
                 {
