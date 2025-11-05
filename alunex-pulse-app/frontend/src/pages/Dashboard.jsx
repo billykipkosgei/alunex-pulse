@@ -16,6 +16,12 @@ const Dashboard = () => {
         fetchDashboardData();
     }, []);
 
+    useEffect(() => {
+        if (selectedProject && projects.length > 0) {
+            fetchFilteredData();
+        }
+    }, [selectedProject]);
+
     const fetchDashboardData = async () => {
         try {
             setLoading(true);
@@ -39,6 +45,25 @@ const Dashboard = () => {
             console.error('Error fetching dashboard data:', error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const fetchFilteredData = async () => {
+        try {
+            const headers = { Authorization: `Bearer ${token}` };
+            const projectParam = selectedProject !== 'all' ? `?projectId=${selectedProject}` : '';
+
+            const [statsRes, tasksRes, activityRes] = await Promise.all([
+                axios.get(`${API_URL}/dashboard/stats${projectParam}`, { headers }),
+                axios.get(`${API_URL}/dashboard/recent-tasks${projectParam}`, { headers }),
+                axios.get(`${API_URL}/dashboard/team-activity${projectParam}`, { headers })
+            ]);
+
+            setStats(statsRes.data.stats);
+            setRecentTasks(tasksRes.data.tasks);
+            setTeamActivity(activityRes.data.activity);
+        } catch (error) {
+            console.error('Error fetching filtered data:', error);
         }
     };
 

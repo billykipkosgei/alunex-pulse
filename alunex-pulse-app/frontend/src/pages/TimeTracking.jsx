@@ -11,6 +11,11 @@ const TimeTracking = () => {
     const [taskDescription, setTaskDescription] = useState('');
     const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
     const [projects, setProjects] = useState([]);
+    const [tasks, setTasks] = useState([]);
+    const [subTasks, setSubTasks] = useState([]);
+    const [selectedTask, setSelectedTask] = useState('');
+    const [selectedSubTask, setSelectedSubTask] = useState('');
+    const [isGeneralWork, setIsGeneralWork] = useState(false);
     const [timeLogs, setTimeLogs] = useState([]);
     const [weeklyData, setWeeklyData] = useState([]);
     const [activeTimerId, setActiveTimerId] = useState(null);
@@ -18,6 +23,8 @@ const TimeTracking = () => {
     const [loading, setLoading] = useState(true);
     const [totalDuration, setTotalDuration] = useState(0);
     const [weekTotal, setWeekTotal] = useState('0');
+    const [billableTotal, setBillableTotal] = useState('0');
+    const [nonBillableTotal, setNonBillableTotal] = useState('0');
 
     useEffect(() => {
         fetchInitialData();
@@ -69,6 +76,8 @@ const TimeTracking = () => {
 
             setWeeklyData(weeklySummaryRes.data.weeklyData);
             setWeekTotal(weeklySummaryRes.data.weekTotal);
+            setBillableTotal(weeklySummaryRes.data.billableTotal || '0');
+            setNonBillableTotal(weeklySummaryRes.data.nonBillableTotal || '0');
 
             await fetchTimeLogs();
         } catch (error) {
@@ -97,8 +106,64 @@ const TimeTracking = () => {
 
             setWeeklyData(response.data.weeklyData);
             setWeekTotal(response.data.weekTotal);
+            setBillableTotal(response.data.billableTotal || '0');
+            setNonBillableTotal(response.data.nonBillableTotal || '0');
         } catch (error) {
             console.error('Error fetching weekly summary:', error);
+        }
+    };
+
+    const fetchTasks = async (projectId) => {
+        if (!projectId || isGeneralWork) {
+            setTasks([]);
+            setSubTasks([]);
+            setSelectedTask('');
+            setSelectedSubTask('');
+            return;
+        }
+
+        try {
+            const headers = { Authorization: `Bearer ${token}` };
+            const response = await axios.get(`${API_URL}/tasks/my-tasks/${projectId}`, { headers });
+            setTasks(response.data.tasks || []);
+            setSelectedTask('');
+            setSelectedSubTask('');
+            setSubTasks([]);
+        } catch (error) {
+            console.error('Error fetching tasks:', error);
+            setTasks([]);
+        }
+    };
+
+    const handleProjectChange = (projectId) => {
+        setSelectedProject(projectId);
+        
+        // Check if General Work is selected
+        const project = projects.find(p => p._id === projectId);
+        const isGeneral = project?.name === 'General Work';
+        setIsGeneralWork(isGeneral);
+        
+        if (!isGeneral && projectId) {
+            fetchTasks(projectId);
+        } else {
+            setTasks([]);
+            setSubTasks([]);
+            setSelectedTask('');
+            setSelectedSubTask('');
+        }
+    };
+
+    const handleTaskChange = (taskId) => {
+        setSelectedTask(taskId);
+        setSelectedSubTask('');
+        
+        if (taskId) {
+            const task = tasks.find(t => t._id === taskId);
+            setSubTasks(task?.subTasks || []);
+            setTaskDescription(task?.title || '');
+        } else {
+            setSubTasks([]);
+            setTaskDescription('');
         }
     };
 
@@ -128,17 +193,33 @@ const TimeTracking = () => {
     };
 
     const handleStartTimer = async () => {
-        if (!selectedProject || !taskDescription) {
-            alert('Please select a project and enter a task description');
+        if (!selectedProject) {
+            alert('Please select a project');
+            return;
+        }
+
+        if (!isGeneralWork && !selectedTask) {
+            alert('Please select a task from the dropdown');
+            return;
+        }
+
+        if (isGeneralWork && !taskDescription) {
+            alert('Please enter a description for general work');
             return;
         }
 
         try {
             const headers = { Authorization: `Bearer ${token}` };
-            const response = await axios.post(`${API_URL}/timetracking/start`, {
+            const payload = {
                 projectId: selectedProject,
-                description: taskDescription
-            }, { headers });
+                description: taskDescription,
+                billable: !isGeneralWork
+            };
+
+            if (selectedTask) payload.taskId = selectedTask;
+            if (selectedSubTask) payload.subTaskId = selectedSubTask;
+
+            const response = await axios.post(`${API_URL}/timetracking/start`, payload, { headers });
 
             setActiveTimerId(response.data.timer._id);
             setTimerStartTime(new Date(response.data.timer.startTime));
@@ -163,6 +244,11 @@ const TimeTracking = () => {
             setTimeElapsed(0);
             setSelectedProject('');
             setTaskDescription('');
+            setSelectedTask('');
+            setSelectedSubTask('');
+            setTasks([]);
+            setSubTasks([]);
+            setIsGeneralWork(false);
             setActiveTimerId(null);
             setTimerStartTime(null);
 
@@ -180,6 +266,11 @@ const TimeTracking = () => {
         setTimeElapsed(0);
         setSelectedProject('');
         setTaskDescription('');
+        setSelectedTask('');
+        setSelectedSubTask('');
+        setTasks([]);
+        setSubTasks([]);
+        setIsGeneralWork(false);
         setActiveTimerId(null);
         setTimerStartTime(null);
     };
@@ -197,6 +288,38 @@ const TimeTracking = () => {
             console.error('Error deleting time log:', error);
             alert('Error deleting time log');
         }
+    };
+
+    const handleExport = () => {
+        if (timeLogs.length === 0) {
+            alert('No time logs to export');
+            return;
+        }
+
+        const headers = ['Project', 'Task Description', 'Start Time', 'End Time', 'Duration', 'Billable'];
+        const rows = timeLogs.map(log => [
+            log.project?.name || 'N/A',
+            log.description || 'N/A',
+            new Date(log.startTime).toLocaleString(),
+            log.endTime ? new Date(log.endTime).toLocaleString() : 'In Progress',
+            formatDuration(log.duration),
+            log.billable ? 'Yes' : 'No'
+        ]);
+
+        const csvContent = [
+            headers.join(','),
+            ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+        ].join('\n');
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', `time_logs_${selectedDate}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     };
 
     if (loading) {
@@ -228,7 +351,7 @@ const TimeTracking = () => {
                             <select
                                 className="form-control"
                                 value={selectedProject}
-                                onChange={(e) => setSelectedProject(e.target.value)}
+                                onChange={(e) => handleProjectChange(e.target.value)}
                                 disabled={isTimerRunning}
                             >
                                 {projects.map(project => (
@@ -239,16 +362,54 @@ const TimeTracking = () => {
                             </select>
                         </div>
 
-                        <div className="form-group timer-form-group">
-                            <input
-                                type="text"
-                                className="form-control"
-                                placeholder="What are you working on?"
-                                value={taskDescription}
-                                onChange={(e) => setTaskDescription(e.target.value)}
-                                disabled={isTimerRunning}
-                            />
-                        </div>
+                        {!isGeneralWork ? (
+                            <>
+                                <div className="form-group timer-form-group">
+                                    <select
+                                        className="form-control"
+                                        value={selectedTask}
+                                        onChange={(e) => handleTaskChange(e.target.value)}
+                                        disabled={isTimerRunning}
+                                    >
+                                        <option value="">Select Task</option>
+                                        {tasks.map(task => (
+                                            <option key={task._id} value={task._id}>
+                                                {task.title}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                {subTasks.length > 0 && (
+                                    <div className="form-group timer-form-group">
+                                        <select
+                                            className="form-control"
+                                            value={selectedSubTask}
+                                            onChange={(e) => setSelectedSubTask(e.target.value)}
+                                            disabled={isTimerRunning}
+                                        >
+                                            <option value="">Select Sub-Task (Optional)</option>
+                                            {subTasks.map(subTask => (
+                                                <option key={subTask._id} value={subTask._id}>
+                                                    {subTask.title}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                )}
+                            </>
+                        ) : (
+                            <div className="form-group timer-form-group">
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="What are you working on? (Meeting, Training, etc.)"
+                                    value={taskDescription}
+                                    onChange={(e) => setTaskDescription(e.target.value)}
+                                    disabled={isTimerRunning}
+                                />
+                            </div>
+                        )}
                     </div>
 
                     <div className="timer-actions">
@@ -297,7 +458,7 @@ const TimeTracking = () => {
                             value={selectedDate}
                             onChange={(e) => setSelectedDate(e.target.value)}
                         />
-                        <button className="btn btn-primary">Export</button>
+                        <button className="btn btn-primary" onClick={handleExport}>Export</button>
                     </div>
                 </div>
 
