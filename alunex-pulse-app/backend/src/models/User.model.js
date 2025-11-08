@@ -16,9 +16,17 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: [true, 'Password is required'],
         minlength: 6,
         select: false
+    },
+    authProvider: {
+        type: String,
+        enum: ['local', 'google', 'microsoft'],
+        default: 'local'
+    },
+    providerId: {
+        type: String,
+        default: null
     },
     role: {
         type: String,
@@ -69,7 +77,8 @@ const userSchema = new mongoose.Schema({
 
 // Hash password before saving
 userSchema.pre('save', async function(next) {
-    if (!this.isModified('password')) {
+    // Skip password hashing if password is not provided or not modified
+    if (!this.password || !this.isModified('password')) {
         return next();
     }
 

@@ -64,6 +64,49 @@
     --navbar-height: 66px;
 }
 
+/* Dark Theme */
+[data-theme="dark"] {
+    /* Primary Colors */
+    --primary-blue: #3b82f6;
+    --primary-blue-dark: #2563eb;
+    --primary-blue-light: #1e3a8a;
+    --primary-blue-lighter: #1e40af;
+
+    /* Background Colors */
+    --bg-main: #0f172a;
+    --bg-white: #1e293b;
+    --bg-gray: #334155;
+
+    /* Text Colors */
+    --text-dark: #f1f5f9;
+    --text-medium: #cbd5e1;
+    --text-muted: #94a3b8;
+    --text-light: #64748b;
+
+    /* Status Colors */
+    --success-bg: #064e3b;
+    --success-text: #86efac;
+    --success: #10b981;
+
+    --warning-bg: #78350f;
+    --warning-text: #fcd34d;
+    --warning: #f59e0b;
+
+    --info-bg: #1e3a8a;
+    --info-text: #93c5fd;
+
+    --danger-bg: #7f1d1d;
+    --danger-text: #fca5a5;
+    --danger: #dc2626;
+
+    /* Border & Shadow */
+    --border-color: #334155;
+    --border-light: #475569;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+    --shadow-md: 0 4px 8px rgba(0,0,0,0.3);
+    --shadow-lg: 0 20px 60px rgba(0,0,0,0.5);
+}
+
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
     background: var(--bg-main);

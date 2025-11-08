@@ -7,6 +7,7 @@ const express = require('express');
 const cors = require('cors');
 const http = require('http');
 const { Server } = require('socket.io');
+const passport = require('./config/passport');
 const connectDB = require('./config/database');
 const initializeAdmin = require('./scripts/initializeAdmin');
 const initializeGeneralWork = require('./scripts/initializeGeneralWork');
@@ -67,6 +68,9 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Initialize Passport
+app.use(passport.initialize());
 
 // Routes
 app.use('/api/auth', require('./routes/auth.routes'));

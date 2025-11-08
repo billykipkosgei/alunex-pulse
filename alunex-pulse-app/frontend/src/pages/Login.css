@@ -4,6 +4,8 @@
     align-items: center;
     justify-content: center;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 20px;
+    overflow-y: auto;
 }
 
 .login-card {
@@ -13,6 +15,7 @@
     box-shadow: 0 20px 60px rgba(0,0,0,0.3);
     width: 100%;
     max-width: 420px;
+    margin: auto;
 }
 
 .login-header {
@@ -121,9 +124,15 @@
     z-index: 0;
 }
 
+.oauth-buttons-container {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
 .btn-google,
 .btn-microsoft {
-    width: 100%;
+    flex: 1;
     padding: 12px;
     border: 1px solid var(--border-color);
     background: white;
@@ -132,16 +141,25 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
+    gap: 8px;
     font-size: 14px;
     font-weight: 500;
     transition: all 0.2s;
-    margin-bottom: 12px;
 }
 
 .btn-google:hover,
 .btn-microsoft:hover {
     background: var(--bg-gray);
+}
+
+@media (max-width: 500px) {
+    .oauth-buttons-container {
+        flex-direction: column;
+    }
+
+    .login-card {
+        padding: 32px 24px;
+    }
 }
 
 .login-footer {

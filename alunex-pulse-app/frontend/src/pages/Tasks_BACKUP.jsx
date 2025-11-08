@@ -10,10 +10,8 @@ const Tasks = () => {
     const [tasks, setTasks] = useState({ todo: [], inProgress: [], completed: [] });
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
-    const [showProjectModal, setShowProjectModal] = useState(false);
     const [editingTask, setEditingTask] = useState(null);
     const [teamMembers, setTeamMembers] = useState([]);
-    const [subTasks, setSubTasks] = useState([]);
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -21,15 +19,7 @@ const Tasks = () => {
         assignedTo: '',
         priority: 'medium',
         dueDate: '',
-        startDate: '',
         status: 'todo'
-    });
-    const [projectFormData, setProjectFormData] = useState({
-        name: '',
-        code: '',
-        clientName: '',
-        startDate: '',
-        endDate: ''
     });
 
     useEffect(() => {
@@ -67,18 +57,7 @@ const Tasks = () => {
         }
     };
 
-    const fetchSubTasks = async (taskId) => {
-        try {
-            const headers = { Authorization: `Bearer ${token}` };
-            const response = await axios.get(`${API_URL}/subtasks/task/${taskId}`, { headers });
-            setSubTasks(response.data.subTasks || []);
-        } catch (error) {
-            console.error('Error fetching sub-tasks:', error);
-            setSubTasks([]);
-        }
-    };
-
-        const updateTaskStatus = async (taskId, newStatus) => {
+    const updateTaskStatus = async (taskId, newStatus) => {
         try {
             const headers = { Authorization: `Bearer ${token}` };
             await axios.put(`${API_URL}/tasks/${taskId}`, { status: newStatus }, { headers });
@@ -103,7 +82,7 @@ const Tasks = () => {
         return new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     };
 
-    const handleOpenModal = async (task = null) => {
+    const handleOpenModal = (task = null) => {
         if (task) {
             setEditingTask(task);
             setFormData({
@@ -113,10 +92,8 @@ const Tasks = () => {
                 assignedTo: (Array.isArray(task.assignedTo) ? task.assignedTo[0]?._id : task.assignedTo?._id) || '',
                 priority: task.priority,
                 dueDate: task.dueDate ? new Date(task.dueDate).toISOString().split('T')[0] : '',
-                startDate: task.startDate ? new Date(task.startDate).toISOString().split('T')[0] : '',
                 status: task.status
             });
-            await fetchSubTasks(task._id);
         } else {
             setEditingTask(null);
             setFormData({
@@ -126,10 +103,8 @@ const Tasks = () => {
                 assignedTo: '',
                 priority: 'medium',
                 dueDate: '',
-                startDate: '',
                 status: 'todo'
             });
-            setSubTasks([]);
         }
         setShowModal(true);
     };
@@ -144,10 +119,8 @@ const Tasks = () => {
             assignedTo: '',
             priority: 'medium',
             dueDate: '',
-            startDate: '',
             status: 'todo'
         });
-        setSubTasks([]);
     };
 
     const handleInputChange = (e) => {
@@ -158,87 +131,11 @@ const Tasks = () => {
         }));
     };
 
-    const handleProjectFormChange = (e) => {
-        const { name, value } = e.target;
-        setProjectFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-    };
-
-    const handleAddSubTask = () => {
-        setSubTasks([...subTasks, {
-            title: '',
-            assignedTo: '',
-            startDate: '',
-            endDate: '',
-            estimatedHours: 0,
-            status: 'todo',
-            isNew: true
-        }]);
-    };
-
-    const handleSubTaskChange = (index, field, value) => {
-        const updated = [...subTasks];
-        updated[index][field] = value;
-        setSubTasks(updated);
-    };
-
-    const handleDeleteSubTask = async (index) => {
-        const subTask = subTasks[index];
-        if (subTask._id) {
-            try {
-                const headers = { Authorization: `Bearer ${token}` };
-                await axios.delete(`${API_URL}/subtasks/${subTask._id}`, { headers });
-            } catch (error) {
-                console.error('Error deleting sub-task:', error);
-                alert('Error deleting sub-task');
-                return;
-            }
-        }
-        const updated = subTasks.filter((_, i) => i !== index);
-        setSubTasks(updated);
-    };
-
-    const validateDates = () => {
-        if (formData.startDate && formData.dueDate) {
-            if (new Date(formData.startDate) > new Date(formData.dueDate)) {
-                alert('Start Date must be before or equal to Due Date');
-                return false;
-            }
-        }
-
-        for (let i = 0; i < subTasks.length; i++) {
-            const subTask = subTasks[i];
-            if (subTask.startDate && subTask.endDate) {
-                if (new Date(subTask.startDate) > new Date(subTask.endDate)) {
-                    alert(`Sub-task ${i + 1}: Start Date must be before or equal to End Date`);
-                    return false;
-                }
-            }
-
-            if (formData.startDate && subTask.startDate && new Date(subTask.startDate) < new Date(formData.startDate)) {
-                alert(`Sub-task ${i + 1}: Start Date cannot be before parent task Start Date`);
-                return false;
-            }
-            if (formData.dueDate && subTask.endDate && new Date(subTask.endDate) > new Date(formData.dueDate)) {
-                alert(`Sub-task ${i + 1}: End Date cannot be after parent task Due Date`);
-                return false;
-            }
-        }
-
-        return true;
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!formData.title || !formData.project) {
-            alert('Please fill in Task and Project fields');
-            return;
-        }
-
-        if (!validateDates()) {
+            alert('Please fill in title and project');
             return;
         }
 
@@ -249,33 +146,10 @@ const Tasks = () => {
                 assignedTo: formData.assignedTo ? [formData.assignedTo] : []
             };
 
-            let taskId;
             if (editingTask) {
                 await axios.put(`${API_URL}/tasks/${editingTask._id}`, payload, { headers });
-                taskId = editingTask._id;
             } else {
-                const response = await axios.post(`${API_URL}/tasks`, payload, { headers });
-                taskId = response.data.task._id;
-            }
-
-            // Save sub-tasks
-            for (const subTask of subTasks) {
-                const subTaskPayload = {
-                    title: subTask.title,
-                    parentTask: taskId,
-                    assignedTo: subTask.assignedTo || null,
-                    startDate: subTask.startDate || null,
-                    endDate: subTask.endDate || null,
-                    estimatedHours: subTask.estimatedHours || 0,
-                    status: subTask.status,
-                    order: subTasks.indexOf(subTask)
-                };
-
-                if (subTask._id) {
-                    await axios.put(`${API_URL}/subtasks/${subTask._id}`, subTaskPayload, { headers });
-                } else if (subTask.title) {
-                    await axios.post(`${API_URL}/subtasks`, subTaskPayload, { headers });
-                }
+                await axios.post(`${API_URL}/tasks`, payload, { headers });
             }
 
             handleCloseModal();
@@ -296,53 +170,6 @@ const Tasks = () => {
         } catch (error) {
             console.error('Error deleting task:', error);
             alert('Error deleting task');
-        }
-    };
-
-    const handleCreateProject = async (e) => {
-        e.preventDefault();
-
-        if (!projectFormData.name) {
-            alert('Please enter Project Name');
-            return;
-        }
-
-        if (projectFormData.startDate && projectFormData.endDate) {
-            if (new Date(projectFormData.startDate) > new Date(projectFormData.endDate)) {
-                alert('Start Date must be before or equal to End Date');
-                return;
-            }
-        }
-
-        try {
-            const headers = { Authorization: `Bearer ${token}` };
-            const payload = {
-                name: projectFormData.name,
-                code: projectFormData.code || undefined,
-                clientName: projectFormData.clientName || undefined,
-                startDate: projectFormData.startDate || undefined,
-                endDate: projectFormData.endDate || undefined
-            };
-
-            const response = await axios.post(`${API_URL}/projects`, payload, { headers });
-            
-            const newProject = response.data.project;
-            setProjects(prev => [...prev, newProject]);
-            setFormData(prev => ({ ...prev, project: newProject._id }));
-            
-            setProjectFormData({
-                name: '',
-                code: '',
-                clientName: '',
-                startDate: '',
-                endDate: ''
-            });
-            setShowProjectModal(false);
-            
-            alert('Project created successfully!');
-        } catch (error) {
-            console.error('Error creating project:', error);
-            alert('Error creating project: ' + (error.response?.data?.message || error.message));
         }
     };
 
@@ -582,18 +409,17 @@ const Tasks = () => {
                         padding: '30px',
                         borderRadius: '8px',
                         width: '90%',
-                        maxWidth: '700px',
+                        maxWidth: '500px',
                         maxHeight: '90vh',
                         overflow: 'auto'
                     }}>
                         <h2 style={{ marginTop: 0 }}>{editingTask ? 'Edit Task' : 'New Task'}</h2>
                         <form onSubmit={handleSubmit}>
                             <div style={{ marginBottom: '16px' }}>
-                                <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Task *</label>
+                                <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Title *</label>
                                 <input
                                     type="text"
                                     name="title"
-                                    placeholder="Enter task name"
                                     className="form-control"
                                     value={formData.title}
                                     onChange={handleInputChange}
@@ -612,40 +438,20 @@ const Tasks = () => {
                                 />
                             </div>
 
-                            {/* Project Field with Add Button */}
                             <div style={{ marginBottom: '16px' }}>
                                 <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Project *</label>
-                                <div style={{ display: 'flex', gap: '8px' }}>
-                                    <select
-                                        name="project"
-                                        className="form-control"
-                                        style={{ flex: 1 }}
-                                        value={formData.project}
-                                        onChange={handleInputChange}
-                                        required
-                                    >
-                                        <option value="">Select Project</option>
-                                        {projects.filter(p => p._id !== 'all').map(project => (
-                                            <option key={project._id} value={project._id}>{project.name}</option>
-                                        ))}
-                                    </select>
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowProjectModal(true)}
-                                        style={{
-                                            padding: '8px 16px',
-                                            background: '#10b981',
-                                            color: 'white',
-                                            border: 'none',
-                                            borderRadius: '4px',
-                                            cursor: 'pointer',
-                                            whiteSpace: 'nowrap',
-                                            fontWeight: '600'
-                                        }}
-                                    >
-                                        + Add Project
-                                    </button>
-                                </div>
+                                <select
+                                    name="project"
+                                    className="form-control"
+                                    value={formData.project}
+                                    onChange={handleInputChange}
+                                    required
+                                >
+                                    <option value="">Select Project</option>
+                                    {projects.filter(p => p._id !== 'all').map(project => (
+                                        <option key={project._id} value={project._id}>{project.name}</option>
+                                    ))}
+                                </select>
                             </div>
 
                             <div style={{ marginBottom: '16px' }}>
@@ -658,9 +464,7 @@ const Tasks = () => {
                                 >
                                     <option value="">Unassigned</option>
                                     {teamMembers.map(member => (
-                                        <option key={member._id} value={member._id}>
-                                            {member.name} {member.role === 'admin' ? '(Admin)' : ''}
-                                        </option>
+                                        <option key={member._id} value={member._id}>{member.name}</option>
                                     ))}
                                 </select>
                             </div>
@@ -677,7 +481,6 @@ const Tasks = () => {
                                         <option value="low">Low</option>
                                         <option value="medium">Medium</option>
                                         <option value="high">High</option>
-                                        <option value="critical">Critical</option>
                                     </select>
                                 </div>
 
@@ -697,28 +500,15 @@ const Tasks = () => {
                                 </div>
                             </div>
 
-                            {/* Start Date and Due Date */}
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
-                                <div>
-                                    <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Start Date</label>
-                                    <input
-                                        type="date"
-                                        name="startDate"
-                                        className="form-control"
-                                        value={formData.startDate}
-                                        onChange={handleInputChange}
-                                    />
-                                </div>
-                                <div>
-                                    <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Due Date</label>
-                                    <input
-                                        type="date"
-                                        name="dueDate"
-                                        className="form-control"
-                                        value={formData.dueDate}
-                                        onChange={handleInputChange}
-                                    />
-                                </div>
+                            <div style={{ marginBottom: '20px' }}>
+                                <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Due Date</label>
+                                <input
+                                    type="date"
+                                    name="dueDate"
+                                    className="form-control"
+                                    value={formData.dueDate}
+                                    onChange={handleInputChange}
+                                />
                             </div>
 
                             <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
@@ -737,29 +527,6 @@ const Tasks = () => {
                     </div>
                 </div>
             )}
-            {/* Project Creation Modal */}
-            {showProjectModal && (
-                <div className="modal-overlay" onClick={() => setShowProjectModal(false)} style={{
-                    position: "fixed",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    background: "rgba(0,0,0,0.6)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    zIndex: 1100
-                }}>
-                    <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{
-                        background: "white",
-                        width: "90%",
-                        maxWidth: "500px",
-                        padding: "24px",
-                        borderRadius: "8px",
-                        maxHeight: "90vh",
-                        overflow: "auto"
-                    }}>                        <h2 style={{ marginTop: 0 }}>Create New Project</h2>                        <form onSubmit={handleCreateProject}>                            <div style={{ marginBottom: "16px" }}>                                <label style={{ display: "block", marginBottom: "4px", fontWeight: "600" }}>Project Name *</label>                                <input                                    type="text"                                    className="form-control"                                    value={projectFormData.name}                                    onChange={(e) => setProjectFormData(prev => ({ ...prev, name: e.target.value }))}                                    required                                    placeholder="Enter project name"                                />                            </div>                            <div style={{ marginBottom: "16px" }}>                                <label style={{ display: "block", marginBottom: "4px", fontWeight: "600" }}>Project Code</label>                                <input                                    type="text"                                    className="form-control"                                    value={projectFormData.code}                                    onChange={(e) => setProjectFormData(prev => ({ ...prev, code: e.target.value }))}                                    placeholder="Optional project code"                                />                            </div>                            <div style={{ marginBottom: "16px" }}>                                <label style={{ display: "block", marginBottom: "4px", fontWeight: "600" }}>Client Name</label>                                <input                                    type="text"                                    className="form-control"                                    value={projectFormData.clientName}                                    onChange={(e) => setProjectFormData(prev => ({ ...prev, clientName: e.target.value }))}                                    placeholder="Optional client name"                                />                            </div>                            <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end" }}>                                <button                                    type="button"                                    className="btn btn-secondary"                                    onClick={() => setShowProjectModal(false)}                                >                                    Cancel                                </button>                                <button type="submit" className="btn btn-primary">                                    Create Project                                </button>                            </div>                        </form>                    </div>                </div>            )}
         </div>
     );
 };

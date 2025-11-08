@@ -1,0 +1,107 @@
+
+                {activeTab === 'preferences' && (
+                    <div style={{ padding: '24px' }} className="preferences-tab">
+                        <h3 style={{ marginBottom: '20px' }}>Preferences</h3>
+
+                        {/* Theme Section */}
+                        <div style={{ marginBottom: '32px', maxWidth: '600px' }} className="theme-section">
+                            <h4 style={{ marginBottom: '12px', fontSize: '16px', fontWeight: '600' }}>Appearance</h4>
+                            <p style={{ color: 'var(--text-muted)', marginBottom: '16px', fontSize: '14px' }}>Choose your preferred theme</p>
+                            <div style={{ display: 'flex', gap: '12px' }}>
+                                <button
+                                    className={`btn ${theme === 'light' ? 'btn-primary' : 'btn-secondary'}`}
+                                    onClick={() => handleThemeChange('light')}
+                                    style={{ flex: 1, padding: '12px' }}
+                                >
+                                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20" style={{ marginRight: '8px', verticalAlign: 'middle' }}>
+                                        <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" />
+                                    </svg>
+                                    Light Mode
+                                </button>
+                                <button
+                                    className={`btn ${theme === 'dark' ? 'btn-primary' : 'btn-secondary'}`}
+                                    onClick={() => handleThemeChange('dark')}
+                                    style={{ flex: 1, padding: '12px' }}
+                                >
+                                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20" style={{ marginRight: '8px', verticalAlign: 'middle' }}>
+                                        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+                                    </svg>
+                                    Dark Mode
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Notifications Section */}
+                        <div style={{ maxWidth: '600px' }} className="notifications-section">
+                            <h4 style={{ marginBottom: '12px', fontSize: '16px', fontWeight: '600' }}>Notifications</h4>
+                            <p style={{ color: 'var(--text-muted)', marginBottom: '16px', fontSize: '14px' }}>Manage your notification preferences</p>
+
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                                <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px', background: 'var(--primary-blue-light)', borderRadius: '8px', cursor: 'pointer' }}>
+                                    <div>
+                                        <div style={{ fontWeight: '600', marginBottom: '4px' }}>Email Notifications</div>
+                                        <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Receive email notifications for all updates</div>
+                                    </div>
+                                    <input
+                                        type="checkbox"
+                                        checked={notifications.email}
+                                        onChange={() => handleNotificationChange('email')}
+                                        style={{ width: '20px', height: '20px', cursor: 'pointer' }}
+                                    />
+                                </label>
+
+                                <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px', background: 'var(--primary-blue-light)', borderRadius: '8px', cursor: 'pointer' }}>
+                                    <div>
+                                        <div style={{ fontWeight: '600', marginBottom: '4px' }}>Task Assignments</div>
+                                        <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Get notified when tasks are assigned to you</div>
+                                    </div>
+                                    <input
+                                        type="checkbox"
+                                        checked={notifications.taskAssignments}
+                                        onChange={() => handleNotificationChange('taskAssignments')}
+                                        style={{ width: '20px', height: '20px', cursor: 'pointer' }}
+                                    />
+                                </label>
+
+                                <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px', background: 'var(--primary-blue-light)', borderRadius: '8px', cursor: 'pointer' }}>
+                                    <div>
+                                        <div style={{ fontWeight: '600', marginBottom: '4px' }}>Project Updates</div>
+                                        <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Receive updates about project changes</div>
+                                    </div>
+                                    <input
+                                        type="checkbox"
+                                        checked={notifications.projectUpdates}
+                                        onChange={() => handleNotificationChange('projectUpdates')}
+                                        style={{ width: '20px', height: '20px', cursor: 'pointer' }}
+                                    />
+                                </label>
+
+                                <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px', background: 'var(--primary-blue-light)', borderRadius: '8px', cursor: 'pointer' }}>
+                                    <div>
+                                        <div style={{ fontWeight: '600', marginBottom: '4px' }}>Chat Messages</div>
+                                        <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Get notified about new chat messages</div>
+                                    </div>
+                                    <input
+                                        type="checkbox"
+                                        checked={notifications.chatMessages}
+                                        onChange={() => handleNotificationChange('chatMessages')}
+                                        style={{ width: '20px', height: '20px', cursor: 'pointer' }}
+                                    />
+                                </label>
+
+                                <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px', background: 'var(--primary-blue-light)', borderRadius: '8px', cursor: 'pointer' }}>
+                                    <div>
+                                        <div style={{ fontWeight: '600', marginBottom: '4px' }}>Budget Alerts</div>
+                                        <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Receive alerts when budgets exceed thresholds</div>
+                                    </div>
+                                    <input
+                                        type="checkbox"
+                                        checked={notifications.budgetAlerts}
+                                        onChange={() => handleNotificationChange('budgetAlerts')}
+                                        style={{ width: '20px', height: '20px', cursor: 'pointer' }}
+                                    />
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                )}
