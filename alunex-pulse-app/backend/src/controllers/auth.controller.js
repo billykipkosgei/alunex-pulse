@@ -41,12 +41,20 @@ exports.register = async (req, res) => {
         });
 
         // If this is an admin invitation, send welcome email
+        let emailSent = false;
         if (req.user && req.user.role === 'admin') {
-            try {
-                await sendInvitationEmail(email, name, password, req.user.name);
-            } catch (emailError) {
-                console.error('Failed to send invitation email:', emailError);
-                // Don't fail the registration if email fails
+            // Only attempt to send email if SMTP is configured
+            if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
+                try {
+                    await sendInvitationEmail(email, name, password, req.user.name);
+                    emailSent = true;
+                    console.log(`Invitation email sent to ${email}`);
+                } catch (emailError) {
+                    console.error('Failed to send invitation email:', emailError.message);
+                    // Don't fail the registration if email fails
+                }
+            } else {
+                console.log('SMTP not configured, skipping email notification');
             }
         }
 
@@ -66,7 +74,7 @@ exports.register = async (req, res) => {
                 department: populatedUser.department,
                 initials: populatedUser.getInitials()
             },
-            emailSent: req.user && req.user.role === 'admin' // Indicate if email was sent
+            emailSent // Indicate if email was actually sent
         });
     } catch (error) {
         res.status(500).json({ message: error.message });
