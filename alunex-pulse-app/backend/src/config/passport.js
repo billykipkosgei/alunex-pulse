@@ -74,6 +74,7 @@ if (process.env.MICROSOFT_CLIENT_ID && process.env.MICROSOFT_CLIENT_SECRET) {
                 clientID: process.env.MICROSOFT_CLIENT_ID,
                 clientSecret: process.env.MICROSOFT_CLIENT_SECRET,
                 callbackURL: process.env.MICROSOFT_CALLBACK_URL || '/api/auth/microsoft/callback',
+                tenant: 'consumers', // Use 'consumers' for personal Microsoft accounts
                 scope: ['user.read']
             },
             async (accessToken, refreshToken, profile, done) => {
