@@ -190,11 +190,10 @@ const Settings = () => {
         try {
             setLoading(true);
             const headers = { Authorization: `Bearer ${token}` };
-            const tempPassword = inviteData.password; // Store password before clearing
             const tempEmail = inviteData.email;
             const tempName = inviteData.name;
 
-            await axios.post(`${API_URL}/auth/register`, inviteData, { headers });
+            const response = await axios.post(`${API_URL}/auth/register`, inviteData, { headers });
 
             setShowInviteModal(false);
             setInviteData({
@@ -206,14 +205,20 @@ const Settings = () => {
             });
             fetchTeamMembers();
 
-            // Show credentials that need to be shared with the user
-            alert(
-                `Team member invited successfully!\n\n` +
-                `Please share these credentials with ${tempName}:\n\n` +
-                `Email: ${tempEmail}\n` +
-                `Password: ${tempPassword}\n\n` +
-                `They can change their password after first login in Settings.`
-            );
+            // Show success message based on email delivery status
+            if (response.data.emailSent) {
+                alert(
+                    `Team member invited successfully!\n\n` +
+                    `An email with login credentials has been sent to ${tempEmail}.\n\n` +
+                    `${tempName} can now log in and should change their password after first login.`
+                );
+            } else {
+                alert(
+                    `Team member account created successfully!\n\n` +
+                    `Note: Email notification could not be sent.\n` +
+                    `Please inform ${tempName} at ${tempEmail} directly about their account.`
+                );
+            }
         } catch (error) {
             console.error('Error inviting member:', error);
             alert(error.response?.data?.message || 'Error inviting member');

@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User.model');
+const { sendInvitationEmail } = require('../utils/emailService');
 
 // Generate JWT Token
 const generateToken = (id) => {
@@ -39,6 +40,16 @@ exports.register = async (req, res) => {
             department: department || null
         });
 
+        // If this is an admin invitation, send welcome email
+        if (req.user && req.user.role === 'admin') {
+            try {
+                await sendInvitationEmail(email, name, password, req.user.name);
+            } catch (emailError) {
+                console.error('Failed to send invitation email:', emailError);
+                // Don't fail the registration if email fails
+            }
+        }
+
         // Generate token
         const token = generateToken(user._id);
 
@@ -54,7 +65,8 @@ exports.register = async (req, res) => {
                 role: populatedUser.role,
                 department: populatedUser.department,
                 initials: populatedUser.getInitials()
-            }
+            },
+            emailSent: req.user && req.user.role === 'admin' // Indicate if email was sent
         });
     } catch (error) {
         res.status(500).json({ message: error.message });
