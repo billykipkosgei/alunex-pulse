@@ -43,8 +43,11 @@ exports.register = async (req, res) => {
         // If this is an admin invitation, send welcome email
         let emailSent = false;
         if (req.user && req.user.role === 'admin') {
-            // Only attempt to send email if SMTP is configured
-            if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
+            // Check if email service is configured (Resend or SMTP)
+            const hasEmailService = process.env.RESEND_API_KEY ||
+                                   (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS);
+
+            if (hasEmailService) {
                 try {
                     await sendInvitationEmail(email, name, password, req.user.name);
                     emailSent = true;
@@ -54,7 +57,7 @@ exports.register = async (req, res) => {
                     // Don't fail the registration if email fails
                 }
             } else {
-                console.log('SMTP not configured, skipping email notification');
+                console.log('No email service configured (Resend or SMTP), skipping email notification');
             }
         }
 
