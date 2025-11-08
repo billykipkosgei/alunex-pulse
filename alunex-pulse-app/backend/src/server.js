@@ -230,6 +230,20 @@ app.get('/api/health', (req, res) => {
     res.json({ status: 'OK', message: 'Server is running' });
 });
 
+// Debug route to check OAuth env variables (temporary)
+app.get('/api/debug/oauth-env', (req, res) => {
+    res.json({
+        hasGoogleClientId: !!process.env.GOOGLE_CLIENT_ID,
+        hasGoogleClientSecret: !!process.env.GOOGLE_CLIENT_SECRET,
+        hasGoogleCallbackUrl: !!process.env.GOOGLE_CALLBACK_URL,
+        hasMicrosoftClientId: !!process.env.MICROSOFT_CLIENT_ID,
+        hasMicrosoftClientSecret: !!process.env.MICROSOFT_CLIENT_SECRET,
+        hasMicrosoftCallbackUrl: !!process.env.MICROSOFT_CALLBACK_URL,
+        googleClientIdPreview: process.env.GOOGLE_CLIENT_ID ? process.env.GOOGLE_CLIENT_ID.substring(0, 20) + '...' : 'not set',
+        nodeEnv: process.env.NODE_ENV
+    });
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error(err.stack);
