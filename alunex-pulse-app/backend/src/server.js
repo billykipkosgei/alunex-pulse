@@ -244,6 +244,20 @@ app.get('/api/debug/oauth-env', (req, res) => {
     });
 });
 
+// Debug route to check SMTP env variables (temporary)
+app.get('/api/debug/smtp-env', (req, res) => {
+    res.json({
+        hasSmtpHost: !!process.env.SMTP_HOST,
+        hasSmtpPort: !!process.env.SMTP_PORT,
+        hasSmtpUser: !!process.env.SMTP_USER,
+        hasSmtpPass: !!process.env.SMTP_PASS,
+        smtpHost: process.env.SMTP_HOST || 'not set',
+        smtpPort: process.env.SMTP_PORT || 'not set',
+        smtpUser: process.env.SMTP_USER || 'not set',
+        frontendUrl: process.env.FRONTEND_URL || 'not set'
+    });
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error(err.stack);
