@@ -162,15 +162,25 @@ exports.sendInvitationEmail = async (recipientEmail, recipientName, temporaryPas
     try {
         // Try Resend first if API key is available
         if (resend) {
-            const data = await resend.emails.send({
+            const result = await resend.emails.send({
                 from: `${fromName} <${fromEmail}>`,
                 to: recipientEmail,
                 subject: 'Welcome to Alunex Project Management',
                 html: htmlContent
             });
 
-            console.log('Invitation email sent via Resend:', data.id);
-            return { success: true, messageId: data.id, provider: 'resend' };
+            console.log('Resend API Response:', JSON.stringify(result, null, 2));
+
+            // Check if there was an error
+            if (result.error) {
+                console.error('Resend API Error:', result.error);
+                throw new Error(`Resend API Error: ${JSON.stringify(result.error)}`);
+            }
+
+            // Resend returns { data: { id: '...' }, error: null } on success
+            const messageId = result.data?.id || result.id;
+            console.log('Invitation email sent via Resend:', messageId);
+            return { success: true, messageId, provider: 'resend' };
         }
 
         // Fallback to SMTP if Resend is not configured
@@ -270,15 +280,25 @@ exports.sendPasswordResetEmail = async (recipientEmail, recipientName, resetToke
     try {
         // Try Resend first if API key is available
         if (resend) {
-            const data = await resend.emails.send({
+            const result = await resend.emails.send({
                 from: `${fromName} <${fromEmail}>`,
                 to: recipientEmail,
                 subject: 'Password Reset Request - Alunex',
                 html: htmlContent
             });
 
-            console.log('Password reset email sent via Resend:', data.id);
-            return { success: true, messageId: data.id, provider: 'resend' };
+            console.log('Resend API Response:', JSON.stringify(result, null, 2));
+
+            // Check if there was an error
+            if (result.error) {
+                console.error('Resend API Error:', result.error);
+                throw new Error(`Resend API Error: ${JSON.stringify(result.error)}`);
+            }
+
+            // Resend returns { data: { id: '...' }, error: null } on success
+            const messageId = result.data?.id || result.id;
+            console.log('Password reset email sent via Resend:', messageId);
+            return { success: true, messageId, provider: 'resend' };
         }
 
         // Fallback to SMTP if Resend is not configured
