@@ -202,7 +202,7 @@ p {
     font-size: 14px;
     font-family: inherit;
     transition: border-color 0.2s;
-    background: white;
+    background: var(--bg-white);
     color: var(--text-dark);
 }
 
@@ -282,7 +282,7 @@ p {
 }
 
 .table tbody tr:hover {
-    background: #fafbfc;
+    background: var(--bg-gray);
 }
 
 /* Utility Classes */

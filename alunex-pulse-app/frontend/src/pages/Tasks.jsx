@@ -578,7 +578,7 @@ const Tasks = () => {
                     zIndex: 1000
                 }}>
                     <div style={{
-                        background: 'white',
+                        background: 'var(--bg-white)',
                         padding: '30px',
                         borderRadius: '8px',
                         width: '90%',
@@ -601,7 +601,7 @@ const Tasks = () => {
                                 />
                             </div>
 
-                            <div style={{ marginBottom: '16px', padding: '16px', background: '#f9fafb', borderRadius: '6px' }}>
+                            <div style={{ marginBottom: '16px', padding: '16px', background: 'var(--bg-gray)', borderRadius: '6px' }}>
                                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
                                       <label style={{ fontWeight: '600', margin: 0 }}>Sub-Tasks</label>
                                       <button
@@ -622,11 +622,11 @@ const Tasks = () => {
                                   </div>
 
                                   {subTasks.length === 0 ? (
-                                      <p style={{ fontSize: '13px', color: '#6b7280', margin: 0 }}>No sub-tasks yet.</p>
+                                      <p style={{ fontSize: '13px', color: 'var(--text-muted)', margin: 0 }}>No sub-tasks yet.</p>
                                   ) : (
                                       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                                           {subTasks.map((subTask, index) => (
-                                              <div key={index} style={{ background: 'white', padding: '12px', borderRadius: '6px', border: '1px solid #e5e7eb' }}>
+                                              <div key={index} style={{ background: 'var(--bg-white)', padding: '12px', borderRadius: '6px', border: '1px solid var(--border-color)' }}>
                                                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                                                       <span style={{ fontWeight: '600', fontSize: '13px' }}>Sub-Task {index + 1}</span>
                                                       <button
@@ -860,7 +860,7 @@ const Tasks = () => {
                       zIndex: 1001
                   }}>
                       <div style={{
-                          background: 'white',
+                          background: 'var(--bg-white)',
                           padding: '30px',
                           borderRadius: '8px',
                           width: '90%',

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
-import jsPDF from 'jspdf';
+import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import { Document, Packer, Paragraph, Table, TableCell, TableRow, WidthType, BorderStyle, AlignmentType, HeadingLevel } from 'docx';
@@ -1067,11 +1067,11 @@ const Reports = () => {
                         {reportType === 'time-summary' && (
                             <div>
                                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '30px' }}>
-                                    <div style={{ padding: '20px', background: '#f8fafc', borderRadius: '8px' }}>
+                                    <div style={{ padding: '20px', background: 'var(--bg-gray)', borderRadius: '8px' }}>
                                         <div style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '8px' }}>Total Hours</div>
                                         <div style={{ fontSize: '28px', fontWeight: '700', color: 'var(--primary-blue)' }}>{reportData.totalHours}h</div>
                                     </div>
-                                    <div style={{ padding: '20px', background: '#f8fafc', borderRadius: '8px' }}>
+                                    <div style={{ padding: '20px', background: 'var(--bg-gray)', borderRadius: '8px' }}>
                                         <div style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '8px' }}>Time Entries</div>
                                         <div style={{ fontSize: '28px', fontWeight: '700', color: 'var(--primary-blue)' }}>{reportData.entriesCount}</div>
                                     </div>
@@ -1116,19 +1116,19 @@ const Reports = () => {
                         {reportType === 'project-progress' && (
                             <div>
                                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '30px' }}>
-                                    <div style={{ padding: '20px', background: '#f8fafc', borderRadius: '8px' }}>
+                                    <div style={{ padding: '20px', background: 'var(--bg-gray)', borderRadius: '8px' }}>
                                         <div style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '8px' }}>Total Tasks</div>
                                         <div style={{ fontSize: '28px', fontWeight: '700', color: 'var(--primary-blue)' }}>{reportData.totalTasks}</div>
                                     </div>
-                                    <div style={{ padding: '20px', background: '#f0fdf4', borderRadius: '8px' }}>
+                                    <div style={{ padding: '20px', background: 'var(--success-bg)', borderRadius: '8px' }}>
                                         <div style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '8px' }}>Completed</div>
-                                        <div style={{ fontSize: '28px', fontWeight: '700', color: '#10b981' }}>{reportData.completedTasks}</div>
+                                        <div style={{ fontSize: '28px', fontWeight: '700', color: 'var(--success-text)' }}>{reportData.completedTasks}</div>
                                     </div>
-                                    <div style={{ padding: '20px', background: '#eff6ff', borderRadius: '8px' }}>
+                                    <div style={{ padding: '20px', background: 'var(--info-bg)', borderRadius: '8px' }}>
                                         <div style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '8px' }}>In Progress</div>
-                                        <div style={{ fontSize: '28px', fontWeight: '700', color: '#3b82f6' }}>{reportData.inProgressTasks}</div>
+                                        <div style={{ fontSize: '28px', fontWeight: '700', color: 'var(--info-text)' }}>{reportData.inProgressTasks}</div>
                                     </div>
-                                    <div style={{ padding: '20px', background: '#f8fafc', borderRadius: '8px' }}>
+                                    <div style={{ padding: '20px', background: 'var(--bg-gray)', borderRadius: '8px' }}>
                                         <div style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '8px' }}>Completion Rate</div>
                                         <div style={{ fontSize: '28px', fontWeight: '700', color: 'var(--primary-blue)' }}>{reportData.completionRate}</div>
                                     </div>
@@ -1164,7 +1164,7 @@ const Reports = () => {
 
                         {reportType === 'team-performance' && (
                             <div>
-                                <div style={{ padding: '20px', background: '#f8fafc', borderRadius: '8px', marginBottom: '30px' }}>
+                                <div style={{ padding: '20px', background: 'var(--bg-gray)', borderRadius: '8px', marginBottom: '30px' }}>
                                     <div style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '8px' }}>Active Team Members</div>
                                     <div style={{ fontSize: '28px', fontWeight: '700', color: 'var(--primary-blue)' }}>{reportData.teamMembers}</div>
                                 </div>
@@ -1200,19 +1200,19 @@ const Reports = () => {
                         {reportType === 'budget-analysis' && (
                             <div>
                                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '30px' }}>
-                                    <div style={{ padding: '20px', background: '#f8fafc', borderRadius: '8px' }}>
+                                    <div style={{ padding: '20px', background: 'var(--bg-gray)', borderRadius: '8px' }}>
                                         <div style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '8px' }}>Total Budget</div>
                                         <div style={{ fontSize: '24px', fontWeight: '700', color: 'var(--primary-blue)' }}>{formatCurrency(reportData.totalBudget)}</div>
                                     </div>
-                                    <div style={{ padding: '20px', background: '#fef2f2', borderRadius: '8px' }}>
+                                    <div style={{ padding: '20px', background: 'var(--danger-bg)', borderRadius: '8px' }}>
                                         <div style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '8px' }}>Total Spent</div>
-                                        <div style={{ fontSize: '24px', fontWeight: '700', color: '#ef4444' }}>{formatCurrency(reportData.totalSpent)}</div>
+                                        <div style={{ fontSize: '24px', fontWeight: '700', color: 'var(--danger-text)' }}>{formatCurrency(reportData.totalSpent)}</div>
                                     </div>
-                                    <div style={{ padding: '20px', background: '#f0fdf4', borderRadius: '8px' }}>
+                                    <div style={{ padding: '20px', background: 'var(--success-bg)', borderRadius: '8px' }}>
                                         <div style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '8px' }}>Remaining</div>
-                                        <div style={{ fontSize: '24px', fontWeight: '700', color: '#10b981' }}>{formatCurrency(reportData.remaining)}</div>
+                                        <div style={{ fontSize: '24px', fontWeight: '700', color: 'var(--success-text)' }}>{formatCurrency(reportData.remaining)}</div>
                                     </div>
-                                    <div style={{ padding: '20px', background: '#f8fafc', borderRadius: '8px' }}>
+                                    <div style={{ padding: '20px', background: 'var(--bg-gray)', borderRadius: '8px' }}>
                                         <div style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '8px' }}>Utilization</div>
                                         <div style={{ fontSize: '24px', fontWeight: '700', color: 'var(--primary-blue)' }}>{reportData.utilizationRate}</div>
                                     </div>
