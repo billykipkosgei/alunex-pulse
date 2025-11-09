@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import './Login.css';
@@ -166,6 +166,9 @@ const Login = () => {
                 </form>
 
                 <div className="login-footer">
+                    <p style={{ marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>
+                        Don't have an account? <Link to="/register" style={{ color: 'var(--primary-blue)', textDecoration: 'none', fontWeight: '600' }}>Sign up here</Link>
+                    </p>
                     <a href="#">Forgot your password?</a>
                 </div>
             </div>

@@ -41,7 +41,10 @@ const upload = multer({
 // Get all departments
 router.get('/', protect, async (req, res) => {
     try {
-        const departments = await Department.find({ isActive: true })
+        const departments = await Department.find({
+            organization: req.user.organization,
+            isActive: true
+        })
             .populate('head', 'name email')
             .populate('members', 'name email role')
             .populate('spendDocumentation.excelFile')
@@ -55,7 +58,10 @@ router.get('/', protect, async (req, res) => {
 // Create department
 router.post('/', protect, async (req, res) => {
     try {
-        const department = await Department.create(req.body);
+        const department = await Department.create({
+            ...req.body,
+            organization: req.user.organization
+        });
         res.status(201).json({ success: true, department });
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -65,7 +71,10 @@ router.post('/', protect, async (req, res) => {
 // Get single department
 router.get('/:id', protect, async (req, res) => {
     try {
-        const department = await Department.findById(req.params.id)
+        const department = await Department.findOne({
+            _id: req.params.id,
+            organization: req.user.organization
+        })
             .populate('head', 'name email')
             .populate('members', 'name email role')
             .populate('spendDocumentation.excelFile')
@@ -82,10 +91,11 @@ router.get('/:id', protect, async (req, res) => {
 // Update department
 router.put('/:id', protect, async (req, res) => {
     try {
-        const department = await Department.findByIdAndUpdate(req.params.id, req.body, {
-            new: true,
-            runValidators: true
-        });
+        const department = await Department.findOneAndUpdate(
+            { _id: req.params.id, organization: req.user.organization },
+            req.body,
+            { new: true, runValidators: true }
+        );
         if (!department) {
             return res.status(404).json({ message: 'Department not found' });
         }
@@ -98,7 +108,10 @@ router.put('/:id', protect, async (req, res) => {
 // Upload spend documentation (Excel file)
 router.post('/:id/spend-documentation/upload', protect, upload.single('file'), async (req, res) => {
     try {
-        const department = await Department.findById(req.params.id);
+        const department = await Department.findOne({
+            _id: req.params.id,
+            organization: req.user.organization
+        });
         if (!department) {
             // Delete uploaded file if department not found
             if (req.file) {
@@ -119,6 +132,7 @@ router.post('/:id/spend-documentation/upload', protect, upload.single('file'), a
             size: req.file.size,
             path: req.file.path,
             url: `/api/files/download/${req.file.filename}`,
+            organization: req.user.organization,
             uploadedBy: req.user.id,
             description: 'Department spend documentation',
             tags: ['spend', 'budget', 'documentation', 'department']
@@ -153,7 +167,10 @@ router.post('/:id/spend-documentation/upload', protect, upload.single('file'), a
 // Update spend documentation link (without file upload)
 router.put('/:id/spend-documentation/link', protect, async (req, res) => {
     try {
-        const department = await Department.findById(req.params.id);
+        const department = await Department.findOne({
+            _id: req.params.id,
+            organization: req.user.organization
+        });
         if (!department) {
             return res.status(404).json({ message: 'Department not found' });
         }
@@ -185,7 +202,10 @@ router.put('/:id/spend-documentation/link', protect, async (req, res) => {
 // Get spend documentation
 router.get('/:id/spend-documentation', protect, async (req, res) => {
     try {
-        const department = await Department.findById(req.params.id)
+        const department = await Department.findOne({
+            _id: req.params.id,
+            organization: req.user.organization
+        })
             .populate('spendDocumentation.excelFile')
             .populate('spendDocumentation.uploadedBy', 'name email');
 
@@ -203,7 +223,10 @@ router.get('/:id/spend-documentation', protect, async (req, res) => {
 // Delete spend documentation
 router.delete('/:id/spend-documentation', protect, async (req, res) => {
     try {
-        const department = await Department.findById(req.params.id).populate('spendDocumentation.excelFile');
+        const department = await Department.findOne({
+            _id: req.params.id,
+            organization: req.user.organization
+        }).populate('spendDocumentation.excelFile');
         if (!department) {
             return res.status(404).json({ message: 'Department not found' });
         }

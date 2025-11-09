@@ -17,6 +17,7 @@ exports.startTimer = async (req, res) => {
         // Check if there's already a running timer for this user
         const existingTimer = await TimeTracking.findOne({
             user: userId,
+            organization: req.user.organization,
             isRunning: true
         });
 
@@ -30,6 +31,7 @@ exports.startTimer = async (req, res) => {
         // Create new timer
         const timerData = {
             user: userId,
+            organization: req.user.organization,
             project: projectId,
             description,
             startTime: new Date(),
@@ -70,6 +72,7 @@ exports.stopTimer = async (req, res) => {
         const timer = await TimeTracking.findOne({
             _id: timerId,
             user: userId,
+            organization: req.user.organization,
             isRunning: true
         });
 
@@ -108,6 +111,7 @@ exports.getActiveTimer = async (req, res) => {
 
         const activeTimer = await TimeTracking.findOne({
             user: userId,
+            organization: req.user.organization,
             isRunning: true
         })
             .populate('project', 'name')
@@ -134,7 +138,10 @@ exports.getTimeLogs = async (req, res) => {
         const userId = req.user.id;
         const { date, allUsers } = req.query;
 
-        let query = { isRunning: false };
+        let query = {
+            organization: req.user.organization,
+            isRunning: false
+        };
 
         // If allUsers is true, don't filter by user (for reports)
         if (!allUsers || allUsers !== 'true') {
@@ -201,6 +208,7 @@ exports.getWeeklySummary = async (req, res) => {
         // Get all time logs for the week
         const weekLogs = await TimeTracking.find({
             user: userId,
+            organization: req.user.organization,
             startTime: { $gte: startOfWeek, $lte: endOfWeek },
             isRunning: false
         });
@@ -280,7 +288,8 @@ exports.deleteTimeLog = async (req, res) => {
 
         const timeLog = await TimeTracking.findOneAndDelete({
             _id: id,
-            user: userId
+            user: userId,
+            organization: req.user.organization
         });
 
         if (!timeLog) {

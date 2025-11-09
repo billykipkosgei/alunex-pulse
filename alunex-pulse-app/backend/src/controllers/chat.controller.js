@@ -7,6 +7,7 @@ exports.getChannels = async (req, res) => {
         const userId = req.user.id;
 
         const channels = await Channel.find({
+            organization: req.user.organization,
             isDeleted: false,
             $or: [
                 { members: userId },
@@ -53,6 +54,7 @@ exports.getMessages = async (req, res) => {
 
         const messages = await Message.find({
             channel: channelId,
+            organization: req.user.organization,
             isDeleted: false
         })
             .populate('sender', 'name email')
@@ -114,6 +116,7 @@ exports.sendMessage = async (req, res) => {
 
         const message = await Message.create({
             channel: channelId,
+            organization: req.user.organization,
             sender: userId,
             text,
             replyTo: replyTo || null,
@@ -161,6 +164,7 @@ exports.createChannel = async (req, res) => {
 
         const channel = await Channel.create({
             name,
+            organization: req.user.organization,
             description,
             project: projectId,
             isPrivate: isPrivate || false,
@@ -200,7 +204,10 @@ exports.deleteMessage = async (req, res) => {
             });
         }
 
-        const message = await Message.findById(messageId);
+        const message = await Message.findOne({
+            _id: messageId,
+            organization: req.user.organization
+        });
 
         if (!message) {
             return res.status(404).json({
@@ -259,7 +266,10 @@ exports.updateMessage = async (req, res) => {
             });
         }
 
-        const message = await Message.findById(messageId);
+        const message = await Message.findOne({
+            _id: messageId,
+            organization: req.user.organization
+        });
 
         if (!message) {
             return res.status(404).json({
@@ -328,7 +338,10 @@ exports.updateChannel = async (req, res) => {
             });
         }
 
-        const channel = await Channel.findById(channelId);
+        const channel = await Channel.findOne({
+            _id: channelId,
+            organization: req.user.organization
+        });
 
         if (!channel) {
             return res.status(404).json({
@@ -375,6 +388,7 @@ exports.getTotalUnreadCount = async (req, res) => {
 
         // Get all channels the user has access to
         const channels = await Channel.find({
+            organization: req.user.organization,
             isDeleted: false,
             $or: [
                 { members: userId },
@@ -420,7 +434,10 @@ exports.deleteChannel = async (req, res) => {
             });
         }
 
-        const channel = await Channel.findById(channelId);
+        const channel = await Channel.findOne({
+            _id: channelId,
+            organization: req.user.organization
+        });
 
         if (!channel) {
             return res.status(404).json({

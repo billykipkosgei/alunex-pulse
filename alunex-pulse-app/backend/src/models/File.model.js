@@ -5,6 +5,11 @@ const fileSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    organization: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Organization',
+        required: true
+    },
     originalName: {
         type: String,
         required: true

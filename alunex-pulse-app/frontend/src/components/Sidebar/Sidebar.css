@@ -1,7 +1,7 @@
 /* Sidebar Styles */
 .sidebar {
     width: 260px;
-    background: white;
+    background: var(--bg-white);
     padding: 20px 0;
     box-shadow: 2px 0 4px rgba(0,0,0,0.05);
     min-height: calc(100vh - 66px);

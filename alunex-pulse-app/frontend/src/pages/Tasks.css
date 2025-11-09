@@ -48,7 +48,7 @@
 }
 
 .kanban-count {
-    background: white;
+    background: var(--bg-white);
     color: var(--text-muted);
     font-size: 12px;
     font-weight: 600;
@@ -58,7 +58,7 @@
 
 /* Kanban Cards */
 .kanban-card {
-    background: white;
+    background: var(--bg-white);
     border-radius: 8px;
     padding: 16px;
     margin-bottom: 12px;
@@ -78,7 +78,7 @@
 
 .kanban-card-completed {
     opacity: 0.7;
-    background: #f0fdf4;
+    background: var(--success-bg-light);
 }
 
 .kanban-card h4 {

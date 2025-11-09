@@ -36,7 +36,8 @@ const upload = multer({
 router.get('/', protect, async (req, res) => {
     try {
         const { project } = req.query;
-        const query = project ? { project } : {};
+        const query = { organization: req.user.organization };
+        if (project) query.project = project;
 
         const files = await File.find(query)
             .populate('uploadedBy', 'name email')
@@ -66,6 +67,7 @@ router.post('/upload', protect, upload.single('file'), async (req, res) => {
             size: req.file.size,
             path: req.file.path,
             url: `/api/files/download/${req.file.filename}`,
+            organization: req.user.organization,
             project: project || null,
             uploadedBy: req.user.id,
             description: description || '',
@@ -90,7 +92,10 @@ router.post('/upload', protect, upload.single('file'), async (req, res) => {
 // Download file
 router.get('/download/:filename', protect, async (req, res) => {
     try {
-        const file = await File.findOne({ name: req.params.filename });
+        const file = await File.findOne({
+            name: req.params.filename,
+            organization: req.user.organization
+        });
 
         if (!file) {
             return res.status(404).json({ message: 'File not found' });

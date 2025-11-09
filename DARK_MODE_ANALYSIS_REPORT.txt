@@ -1,0 +1,200 @@
+# DARK MODE ISSUE ANALYSIS REPORT - Alunex Pulse App
+
+## EXECUTIVE SUMMARY
+
+The Alunex Pulse App is a React-based project management application. It implements a CSS variable-based dark mode system, but has CRITICAL HARDCODED COLORS preventing proper theme switching.
+
+## 1. FRAMEWORK & TECH STACK
+
+Framework: React 19.1.1 with Vite 7.1.7
+Theme System: CSS Variables with data-theme attribute
+Storage: localStorage with key "theme" (values: "light" or "dark")
+
+Key Files:
+- App.jsx: Initializes theme
+- Settings.jsx: Contains theme toggle
+- index.css: Master CSS variables
+
+## 2. HOW DARK MODE WORKS (CORRECTLY)
+
+The app sets data-theme="dark" on <html> when dark mode is selected.
+CSS variables automatically change based on this attribute:
+
+Light Mode (:root):
+  --bg-main: #f8fafc
+  --bg-white: #ffffff
+  --text-dark: #1e293b
+
+Dark Mode ([data-theme="dark"]):
+  --bg-main: #0a0e1a
+  --bg-white: #151b2b
+  --text-dark: #e2e8f0
+
+## 3. CRITICAL ISSUES FOUND
+
+### ISSUE 1: NAVBAR - HARDCODED WHITE (Line 3)
+File: src/components/Navbar/Navbar.css
+Problem: background: white;
+Impact: Navigation bar stays white in dark mode
+Fix: Change to background: var(--bg-white);
+
+### ISSUE 2: SIDEBAR - HARDCODED WHITE (Line 4)
+File: src/components/Sidebar/Sidebar.css
+Problem: background: white;
+Impact: Sidebar stays white in dark mode
+Fix: Change to background: var(--bg-white);
+
+### ISSUE 3: HELP MODAL - MULTIPLE HARDCODED COLORS
+File: src/components/HelpModal/HelpModal.css
+Problems:
+  Line 25: background: white;
+  Line 94: background: #f9fafb;
+  Line 167: background: white;
+  Lines 139, 171, 180, 187, 194, 211: Hardcoded text colors
+  Line 54: Hardcoded gradient (linear-gradient(135deg, #667eea 0%, #764ba2 100%))
+Impact: Modal invisible in dark mode
+Fixes: Use CSS variables for all colors
+
+### ISSUE 4: LOGIN CARD - HARDCODED WHITE
+File: src/pages/Login.css
+Problems:
+  Line 12: background: white;
+  Line 110: background: white;
+  Line 138: background: white;
+Impact: Login card stays white
+Fixes: Use var(--bg-white)
+
+### ISSUE 5: DASHBOARD - HARDCODED WHITE
+File: src/pages/Dashboard.css
+Problems:
+  Line 40: .stat-card { background: white; }
+  Line 70: .card { background: white; }
+Impact: Cards stay white in dark mode
+Fixes: Use var(--bg-white)
+
+### ISSUE 6: TASKS - HARDCODED WHITE
+File: src/pages/Tasks.css
+Problems:
+  Line 51: background: white;
+  Line 61: background: white;
+Impact: Kanban cards stay white
+Fixes: Use var(--bg-white)
+
+### ISSUE 7: TIME TRACKING - HARDCODED COLORS
+File: src/pages/TimeTracking.css
+Problems:
+  Line 128: background: #f0fdf4; (hardcoded success green)
+  Lines 135, 142, 147: Hardcoded green colors
+Impact: Weekly total section doesn't match theme
+Fixes: Create CSS variables for status colors
+
+### ISSUE 8: INLINE STYLES IN JSX (Multiple Files)
+Files with hardcoded colors in inline styles:
+- Sidebar.jsx: background: '#ef4444'
+- Chat.jsx: background: '#ef4444'
+- DepartmentAnalytics.jsx: Hardcoded status colors
+- Departments.jsx: background: '#ef4444', '#f0fdf4'
+- Files.jsx: background: '#ef4444'
+- Settings.jsx: Multiple hardcoded role/status colors
+- Tasks.jsx: background: '#ef4444' (multiple instances)
+- Video.jsx: background: '#ef4444'
+
+Impact: Dynamic elements with hardcoded colors don't respond to theme
+Fixes: Move colors to CSS variables or use styled-components
+
+## 4. COMPLETE FILE LIST - FIXES REQUIRED
+
+### PRIORITY 1 - CRITICAL (Navigation)
+1. F:\Projects\Fiverr\alunex-wireframe-FINAL-FIXED\alunex-pulse-app\frontend\src\components\Navbar\Navbar.css
+   - 1 hardcoded white background
+   - Need to update shadows
+
+2. F:\Projects\Fiverr\alunex-wireframe-FINAL-FIXED\alunex-pulse-app\frontend\src\components\Sidebar\Sidebar.css
+   - 1 hardcoded white background
+   - Inline styles with hardcoded red (#ef4444)
+
+### PRIORITY 2 - HIGH (Modals)
+3. F:\Projects\Fiverr\alunex-wireframe-FINAL-FIXED\alunex-pulse-app\frontend\src\components\HelpModal\HelpModal.css
+   - 4 hardcoded white/light backgrounds
+   - 8+ hardcoded text colors
+   - Multiple gradients
+
+### PRIORITY 3 - HIGH (Pages)
+4. F:\Projects\Fiverr\alunex-wireframe-FINAL-FIXED\alunex-pulse-app\frontend\src\pages\Login.css
+   - 3 hardcoded white backgrounds
+
+5. F:\Projects\Fiverr\alunex-wireframe-FINAL-FIXED\alunex-pulse-app\frontend\src\pages\Dashboard.css
+   - 2 hardcoded white backgrounds
+
+6. F:\Projects\Fiverr\alunex-wireframe-FINAL-FIXED\alunex-pulse-app\frontend\src\pages\Tasks.css
+   - 2 hardcoded white backgrounds
+
+7. F:\Projects\Fiverr\alunex-wireframe-FINAL-FIXED\alunex-pulse-app\frontend\src\pages\TimeTracking.css
+   - 4 hardcoded success green colors
+
+### PRIORITY 4 - MEDIUM (Inline Styles)
+8. F:\Projects\Fiverr\alunex-wireframe-FINAL-FIXED\alunex-pulse-app\frontend\src\components\Sidebar\Sidebar.jsx
+9. F:\Projects\Fiverr\alunex-wireframe-FINAL-FIXED\alunex-pulse-app\frontend\src\pages\Chat.jsx
+10. F:\Projects\Fiverr\alunex-wireframe-FINAL-FIXED\alunex-pulse-app\frontend\src\pages\DepartmentAnalytics.jsx
+11. F:\Projects\Fiverr\alunex-wireframe-FINAL-FIXED\alunex-pulse-app\frontend\src\pages\Departments.jsx
+12. F:\Projects\Fiverr\alunex-wireframe-FINAL-FIXED\alunex-pulse-app\frontend\src\pages\Files.jsx
+13. F:\Projects\Fiverr\alunex-wireframe-FINAL-FIXED\alunex-pulse-app\frontend\src\pages\Settings.jsx
+14. F:\Projects\Fiverr\alunex-wireframe-FINAL-FIXED\alunex-pulse-app\frontend\src\pages\Tasks.jsx
+15. F:\Projects\Fiverr\alunex-wireframe-FINAL-FIXED\alunex-pulse-app\frontend\src\pages\Video.jsx
+
+### FILES THAT ARE CORRECT (No changes needed)
+- App.jsx
+- App.css
+- index.css
+- Layout.css
+- InteractiveGuide.css
+
+## 5. HARDCODED COLORS TO REPLACE
+
+Colors to replace in CSS:
+- white or #ffffff → var(--bg-white)
+- #f1f5f9 → var(--bg-gray)
+- #f9fafb → var(--bg-gray)
+- #f8fafc → var(--bg-main)
+- #1f2937 → var(--text-dark)
+- #374151 → var(--text-medium)
+- #6b7280 → var(--text-medium)
+
+Status colors to define as CSS variables:
+- #ef4444 (red/danger)
+- #f0fdf4 (success green)
+- #166534 (dark success)
+- #15803d (dark success)
+- #16a34a (success accent)
+
+## 6. RECOMMENDED SOLUTION
+
+Step 1: Add status color variables to index.css
+Step 2: Fix Navbar.css and Sidebar.css (highest impact)
+Step 3: Fix HelpModal.css (most colors)
+Step 4: Fix all page CSS files
+Step 5: Fix inline styles in JSX files or create styled component
+
+Estimated effort: 12-17 hours
+
+## 7. FILES TO FIX - QUICK REFERENCE
+
+CSS Files (use Ctrl+H Replace):
+1. Navbar.css - Replace "white" with "var(--bg-white)"
+2. Sidebar.css - Replace "white" with "var(--bg-white)"
+3. HelpModal.css - Replace 20+ hardcoded colors
+4. Login.css - Replace 3 instances of "white"
+5. Dashboard.css - Replace 2 instances of "white"
+6. Tasks.css - Replace 2 instances of "white"
+7. TimeTracking.css - Update success colors
+
+JSX Files (inline styles):
+8. Sidebar.jsx - Use CSS variable for badge
+9. Chat.jsx - Multiple color fixes
+10. DepartmentAnalytics.jsx - Status color variables
+11. Departments.jsx - Use variables
+12. Files.jsx - Delete button color
+13. Settings.jsx - Role and status colors
+14. Tasks.jsx - Delete button colors
+15. Video.jsx - Delete button color
+

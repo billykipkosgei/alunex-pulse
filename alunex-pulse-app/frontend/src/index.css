@@ -25,7 +25,11 @@
 
     /* Status Colors */
     --success-bg: #d1fae5;
+    --success-bg-light: #f0fdf4;
     --success-text: #065f46;
+    --success-text-dark: #166534;
+    --success-text-medium: #15803d;
+    --success-text-light: #16a34a;
     --success: #10b981;
 
     --warning-bg: #fef3c7;
@@ -85,7 +89,11 @@
 
     /* Status Colors - Muted, easier on eyes */
     --success-bg: #0d3d2d;
+    --success-bg-light: #0f2d1f;
     --success-text: #6ee7b7;
+    --success-text-dark: #6ee7b7;
+    --success-text-medium: #34d399;
+    --success-text-light: #10b981;
     --success: #34d399;
 
     --warning-bg: #4a3010;

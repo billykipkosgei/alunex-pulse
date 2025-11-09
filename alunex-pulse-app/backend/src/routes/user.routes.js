@@ -6,7 +6,9 @@ const { protect, authorize } = require('../middleware/auth.middleware');
 router.get('/', protect, async (req, res) => {
     try {
         const User = require('../models/User.model');
-        const users = await User.find().select('-password').populate('department');
+        const users = await User.find({ organization: req.user.organization })
+            .select('-password')
+            .populate('department');
         res.json({ success: true, users });
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -17,7 +19,10 @@ router.get('/', protect, async (req, res) => {
 router.get('/:id', protect, async (req, res) => {
     try {
         const User = require('../models/User.model');
-        const user = await User.findById(req.params.id).select('-password').populate('department');
+        const user = await User.findOne({
+            _id: req.params.id,
+            organization: req.user.organization
+        }).select('-password').populate('department');
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }

@@ -7,7 +7,7 @@ const Task = require('../models/Task.model');
 router.get('/', protect, async (req, res) => {
     try {
         const { project, status } = req.query;
-        const query = {};
+        const query = { organization: req.user.organization };
         if (project) query.project = project;
         if (status) query.status = status;
 
@@ -28,6 +28,7 @@ router.get('/my-tasks/:projectId', protect, async (req, res) => {
         
         // Find tasks assigned to logged-in user for the specific project
         const tasks = await Task.find({
+            organization: req.user.organization,
             project: req.params.projectId,
             assignedTo: req.user.id
         })
@@ -37,7 +38,10 @@ router.get('/my-tasks/:projectId', protect, async (req, res) => {
         // For each task, fetch its sub-tasks
         const tasksWithSubTasks = await Promise.all(
             tasks.map(async (task) => {
-                const subTasks = await SubTask.find({ parentTask: task._id })
+                const subTasks = await SubTask.find({
+                    parentTask: task._id,
+                    organization: req.user.organization
+                })
                     .populate('assignedTo', 'name email')
                     .select('_id title status assignedTo');
                 
@@ -58,7 +62,10 @@ router.get('/my-tasks/:projectId', protect, async (req, res) => {
 // Create task
 router.post('/', protect, async (req, res) => {
     try {
-        const task = await Task.create(req.body);
+        const task = await Task.create({
+            ...req.body,
+            organization: req.user.organization
+        });
         res.status(201).json({ success: true, task });
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -68,10 +75,11 @@ router.post('/', protect, async (req, res) => {
 // Update task
 router.put('/:id', protect, async (req, res) => {
     try {
-        const task = await Task.findByIdAndUpdate(req.params.id, req.body, {
-            new: true,
-            runValidators: true
-        });
+        const task = await Task.findOneAndUpdate(
+            { _id: req.params.id, organization: req.user.organization },
+            req.body,
+            { new: true, runValidators: true }
+        );
         if (!task) {
             return res.status(404).json({ message: 'Task not found' });
         }
@@ -84,7 +92,10 @@ router.put('/:id', protect, async (req, res) => {
 // Delete task
 router.delete('/:id', protect, async (req, res) => {
     try {
-        const task = await Task.findByIdAndDelete(req.params.id);
+        const task = await Task.findOneAndDelete({
+            _id: req.params.id,
+            organization: req.user.organization
+        });
         if (!task) {
             return res.status(404).json({ message: 'Task not found' });
         }

@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User.model');
+const Organization = require('../models/Organization.model');
 const { sendInvitationEmail } = require('../utils/emailService');
 
 // Generate JWT Token
@@ -12,7 +13,7 @@ const generateToken = (id) => {
 // Register new user
 exports.register = async (req, res) => {
     try {
-        const { name, email, password, role, department } = req.body;
+        const { name, email, password, role, department, organizationName } = req.body;
 
         // Check if user already exists
         const userExists = await User.findOne({ email });
@@ -20,15 +21,37 @@ exports.register = async (req, res) => {
             return res.status(400).json({ message: 'User already exists' });
         }
 
-        // Only admin can set role or invite users
-        // If a role is specified or headers contain auth token, require admin authorization
-        if (role || req.headers.authorization) {
-            // This is an invitation by admin, verify admin authorization
-            if (!req.user || req.user.role !== 'admin') {
+        // Determine if this is a public registration or admin invitation
+        const isPublicRegistration = !req.user; // No authenticated user = public registration
+
+        let organizationId;
+        let userRole;
+
+        if (isPublicRegistration) {
+            // PUBLIC REGISTRATION: Create new organization and make user admin
+            userRole = 'admin';
+
+            // Create organization name from user's name if not provided
+            const orgName = organizationName || `${name}'s Workspace`;
+
+            const organization = await Organization.create({
+                name: orgName,
+                owner: null // Will be updated after user creation
+            });
+
+            organizationId = organization._id;
+        } else {
+            // ADMIN INVITATION: Add user to admin's organization
+            // Only admin can invite users
+            if (req.user.role !== 'admin') {
                 return res.status(403).json({
-                    message: 'Only administrators can invite users or assign roles'
+                    message: 'Only administrators can invite users'
                 });
             }
+
+            // User joins the admin's organization
+            organizationId = req.user.organization;
+            userRole = role || 'team_member';
         }
 
         // Create user
@@ -36,9 +59,17 @@ exports.register = async (req, res) => {
             name,
             email,
             password,
-            role: role || 'team_member',
+            organization: organizationId,
+            role: userRole,
             department: department || null
         });
+
+        // If this was a public registration, update organization owner
+        if (isPublicRegistration) {
+            await Organization.findByIdAndUpdate(organizationId, {
+                owner: user._id
+            });
+        }
 
         // If this is an admin invitation, send welcome email
         let emailSent = false;
@@ -243,7 +274,7 @@ exports.setupAdmin = async (req, res) => {
             });
         }
 
-        const { name, email, password } = req.body;
+        const { name, email, password, organizationName } = req.body;
 
         // Validate input
         if (!name || !email || !password) {
@@ -252,13 +283,26 @@ exports.setupAdmin = async (req, res) => {
             });
         }
 
+        // Create organization first
+        const orgName = organizationName || `${name}'s Organization`;
+        const organization = await Organization.create({
+            name: orgName,
+            owner: null // Will be updated after user creation
+        });
+
         // Create admin user
         const adminUser = await User.create({
             name,
             email,
             password,
+            organization: organization._id,
             role: 'admin',
             isActive: true
+        });
+
+        // Update organization owner
+        await Organization.findByIdAndUpdate(organization._id, {
+            owner: adminUser._id
         });
 
         // Generate token
@@ -273,6 +317,7 @@ exports.setupAdmin = async (req, res) => {
                 name: adminUser.name,
                 email: adminUser.email,
                 role: adminUser.role,
+                organization: organization._id,
                 initials: adminUser.getInitials()
             }
         });

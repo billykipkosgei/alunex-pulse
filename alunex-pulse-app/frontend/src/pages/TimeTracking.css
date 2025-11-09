@@ -125,26 +125,26 @@
 .weekly-total {
     text-align: center;
     padding: 20px;
-    background: #f0fdf4;
+    background: var(--success-bg-light);
     border-radius: 6px;
     margin: 0 24px 24px;
 }
 
 .weekly-total-label {
     font-size: 14px;
-    color: #166534;
+    color: var(--success-text-dark);
     margin-bottom: 8px;
 }
 
 .weekly-total-hours {
     font-size: 36px;
     font-weight: bold;
-    color: #15803d;
+    color: var(--success-text-medium);
 }
 
 .weekly-total-change {
     font-size: 13px;
-    color: #16a34a;
+    color: var(--success-text-light);
     margin-top: 8px;
     display: flex;
     align-items: center;

@@ -6,6 +6,11 @@ const timeTrackingSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
+    organization: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Organization',
+        required: true
+    },
     project: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Project',

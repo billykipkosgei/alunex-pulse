@@ -7,7 +7,10 @@ const Task = require('../models/Task.model');
 // Get all sub-tasks for a parent task
 router.get('/task/:taskId', protect, async (req, res) => {
     try {
-        const subTasks = await SubTask.find({ parentTask: req.params.taskId })
+        const subTasks = await SubTask.find({
+            parentTask: req.params.taskId,
+            organization: req.user.organization
+        })
             .populate('assignedTo', 'name email')
             .sort('order');
         res.json({ success: true, subTasks });
@@ -19,7 +22,10 @@ router.get('/task/:taskId', protect, async (req, res) => {
 // Create sub-task
 router.post('/', protect, async (req, res) => {
     try {
-        const subTask = await SubTask.create(req.body);
+        const subTask = await SubTask.create({
+            ...req.body,
+            organization: req.user.organization
+        });
         
         // Recalculate parent task progress
         const parentTask = await Task.findById(subTask.parentTask);
@@ -39,10 +45,11 @@ router.post('/', protect, async (req, res) => {
 // Update sub-task
 router.put('/:id', protect, async (req, res) => {
     try {
-        const subTask = await SubTask.findByIdAndUpdate(req.params.id, req.body, {
-            new: true,
-            runValidators: true
-        }).populate('assignedTo', 'name email');
+        const subTask = await SubTask.findOneAndUpdate(
+            { _id: req.params.id, organization: req.user.organization },
+            req.body,
+            { new: true, runValidators: true }
+        ).populate('assignedTo', 'name email');
         
         if (!subTask) {
             return res.status(404).json({ message: 'Sub-task not found' });
@@ -63,7 +70,10 @@ router.put('/:id', protect, async (req, res) => {
 // Delete sub-task
 router.delete('/:id', protect, async (req, res) => {
     try {
-        const subTask = await SubTask.findByIdAndDelete(req.params.id);
+        const subTask = await SubTask.findOneAndDelete({
+            _id: req.params.id,
+            organization: req.user.organization
+        });
         
         if (!subTask) {
             return res.status(404).json({ message: 'Sub-task not found' });

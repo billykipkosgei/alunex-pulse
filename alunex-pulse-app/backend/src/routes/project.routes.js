@@ -41,7 +41,7 @@ const upload = multer({
 // Get all projects
 router.get('/', protect, async (req, res) => {
     try {
-        const projects = await Project.find()
+        const projects = await Project.find({ organization: req.user.organization })
             .populate('manager', 'name email')
             .populate('team.user', 'name email')
             .populate('client', 'name email')
@@ -56,7 +56,10 @@ router.get('/', protect, async (req, res) => {
 // Create project
 router.post('/', protect, async (req, res) => {
     try {
-        const project = await Project.create(req.body);
+        const project = await Project.create({
+            ...req.body,
+            organization: req.user.organization
+        });
         res.status(201).json({ success: true, project });
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -66,7 +69,10 @@ router.post('/', protect, async (req, res) => {
 // Get single project
 router.get('/:id', protect, async (req, res) => {
     try {
-        const project = await Project.findById(req.params.id)
+        const project = await Project.findOne({
+            _id: req.params.id,
+            organization: req.user.organization
+        })
             .populate('manager', 'name email')
             .populate('team.user', 'name email')
             .populate('client', 'name email')
@@ -84,10 +90,11 @@ router.get('/:id', protect, async (req, res) => {
 // Update project
 router.put('/:id', protect, async (req, res) => {
     try {
-        const project = await Project.findByIdAndUpdate(req.params.id, req.body, {
-            new: true,
-            runValidators: true
-        });
+        const project = await Project.findOneAndUpdate(
+            { _id: req.params.id, organization: req.user.organization },
+            req.body,
+            { new: true, runValidators: true }
+        );
         if (!project) {
             return res.status(404).json({ message: 'Project not found' });
         }
@@ -100,7 +107,10 @@ router.put('/:id', protect, async (req, res) => {
 // Upload spend documentation (Excel file)
 router.post('/:id/spend-documentation/upload', protect, upload.single('file'), async (req, res) => {
     try {
-        const project = await Project.findById(req.params.id);
+        const project = await Project.findOne({
+            _id: req.params.id,
+            organization: req.user.organization
+        });
         if (!project) {
             // Delete uploaded file if project not found
             if (req.file) {
@@ -121,6 +131,7 @@ router.post('/:id/spend-documentation/upload', protect, upload.single('file'), a
             size: req.file.size,
             path: req.file.path,
             url: `/api/files/download/${req.file.filename}`,
+            organization: req.user.organization,
             project: project._id,
             uploadedBy: req.user.id,
             description: 'Spend documentation',
@@ -156,7 +167,10 @@ router.post('/:id/spend-documentation/upload', protect, upload.single('file'), a
 // Update spend documentation link (without file upload)
 router.put('/:id/spend-documentation/link', protect, async (req, res) => {
     try {
-        const project = await Project.findById(req.params.id);
+        const project = await Project.findOne({
+            _id: req.params.id,
+            organization: req.user.organization
+        });
         if (!project) {
             return res.status(404).json({ message: 'Project not found' });
         }
@@ -188,7 +202,10 @@ router.put('/:id/spend-documentation/link', protect, async (req, res) => {
 // Get spend documentation
 router.get('/:id/spend-documentation', protect, async (req, res) => {
     try {
-        const project = await Project.findById(req.params.id)
+        const project = await Project.findOne({
+            _id: req.params.id,
+            organization: req.user.organization
+        })
             .populate('spendDocumentation.excelFile')
             .populate('spendDocumentation.uploadedBy', 'name email');
 
@@ -206,7 +223,10 @@ router.get('/:id/spend-documentation', protect, async (req, res) => {
 // Delete spend documentation
 router.delete('/:id/spend-documentation', protect, async (req, res) => {
     try {
-        const project = await Project.findById(req.params.id).populate('spendDocumentation.excelFile');
+        const project = await Project.findOne({
+            _id: req.params.id,
+            organization: req.user.organization
+        }).populate('spendDocumentation.excelFile');
         if (!project) {
             return res.status(404).json({ message: 'Project not found' });
         }

@@ -10,6 +10,11 @@ const taskSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
+    organization: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Organization',
+        required: [true, 'Organization is required']
+    },
     project: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Project',

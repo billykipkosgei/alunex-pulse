@@ -5,6 +5,11 @@ const channelSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    organization: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Organization',
+        required: true
+    },
     description: {
         type: String
     },

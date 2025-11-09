@@ -23,6 +23,7 @@ exports.getDashboardStats = async (req, res) => {
         // Calculate hours logged today
         const todayLogs = await TimeTracking.find({
             user: userId,
+            organization: req.user.organization,
             startTime: { $gte: today, $lte: todayEnd },
             isRunning: false
         });
@@ -32,6 +33,7 @@ exports.getDashboardStats = async (req, res) => {
         // Calculate hours logged yesterday
         const yesterdayLogs = await TimeTracking.find({
             user: userId,
+            organization: req.user.organization,
             startTime: { $gte: yesterday, $lte: yesterdayEnd },
             isRunning: false
         });
@@ -52,6 +54,7 @@ exports.getDashboardStats = async (req, res) => {
         // Get active tasks
         const activeTasks = await Task.countDocuments({
             assignedTo: userId,
+            organization: req.user.organization,
             status: { $in: ['todo', 'in_progress'] }
         });
 
@@ -60,27 +63,33 @@ exports.getDashboardStats = async (req, res) => {
         weekEnd.setDate(weekEnd.getDate() + 7);
         const tasksDueThisWeek = await Task.countDocuments({
             assignedTo: userId,
+            organization: req.user.organization,
             status: { $in: ['todo', 'in_progress'] },
             dueDate: { $gte: today, $lte: weekEnd }
         });
 
         // Get active projects
         const activeProjects = await Project.countDocuments({
+            organization: req.user.organization,
             status: 'active'
         });
 
         // Get projects completed this month
         const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
         const projectsCompletedThisMonth = await Project.countDocuments({
+            organization: req.user.organization,
             status: 'completed',
             updatedAt: { $gte: monthStart }
         });
 
         // Get online users (last login within 30 minutes)
         const onlineUsers = await User.countDocuments({
+            organization: req.user.organization,
             lastLogin: { $gte: new Date(Date.now() - 30 * 60 * 1000) }
         });
-        const totalUsers = await User.countDocuments();
+        const totalUsers = await User.countDocuments({
+            organization: req.user.organization
+        });
 
         res.status(200).json({
             success: true,
@@ -107,7 +116,7 @@ exports.getDashboardStats = async (req, res) => {
 // Get recent tasks
 exports.getRecentTasks = async (req, res) => {
     try {
-        const tasks = await Task.find()
+        const tasks = await Task.find({ organization: req.user.organization })
             .populate('project', 'name')
             .populate('assignedTo', 'name')
             .sort({ createdAt: -1 })
@@ -136,6 +145,7 @@ exports.getTeamActivity = async (req, res) => {
         todayEnd.setHours(23, 59, 59, 999);
 
         const users = await User.find({
+            organization: req.user.organization,
             lastLogin: { $gte: new Date(Date.now() - 24 * 60 * 60 * 1000) } // Last 24 hours
         })
         .select('name lastLogin')
@@ -145,12 +155,14 @@ exports.getTeamActivity = async (req, res) => {
             // Get user's active task
             const activeTask = await Task.findOne({
                 assignedTo: user._id,
+                organization: req.user.organization,
                 status: 'in_progress'
             }).select('title');
 
             // Calculate time logged today
             const timeLogs = await TimeTracking.find({
                 user: user._id,
+                organization: req.user.organization,
                 startTime: { $gte: today, $lte: todayEnd },
                 isRunning: false
             });

@@ -12,6 +12,11 @@ const projectSchema = new mongoose.Schema({
         sparse: true,
         trim: true
     },
+    organization: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Organization',
+        required: [true, 'Organization is required']
+    },
     description: {
         type: String,
         default: ''

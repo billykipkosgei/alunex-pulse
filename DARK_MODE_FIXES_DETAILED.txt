@@ -1,0 +1,223 @@
+DARK MODE FIX DETAILS - Alunex Pulse App
+========================================
+
+QUICK START FIXES (Most Impact):
+
+1. NAVBAR.CSS
+   Location: F:\Projects\Fiverr\alunex-wireframe-FINAL-FIXED\alunex-pulse-app\frontend\src\components\Navbar\Navbar.css
+   Line 3: background: white;
+   Change to: background: var(--bg-white);
+
+2. SIDEBAR.CSS
+   Location: F:\Projects\Fiverr\alunex-wireframe-FINAL-FIXED\alunex-pulse-app\frontend\src\components\Sidebar\Sidebar.css
+   Line 4: background: white;
+   Change to: background: var(--bg-white);
+
+3. HELPMODAL.CSS
+   Location: F:\Projects\Fiverr\alunex-wireframe-FINAL-FIXED\alunex-pulse-app\frontend\src\components\HelpModal\HelpModal.css
+   
+   Line 25: background: white;
+   Change to: background: var(--bg-white);
+   
+   Line 54: background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+   Change to: background: linear-gradient(135deg, var(--primary-blue) 0%, #764ba2 100%);
+   
+   Line 94: background: #f9fafb;
+   Change to: background: var(--bg-gray);
+   
+   Line 139: color: #4b5563;
+   Change to: color: var(--text-medium);
+   
+   Line 142: background: white;
+   Change to: background: var(--bg-white);
+   
+   Line 167: background: white;
+   Change to: background: var(--bg-white);
+   
+   Line 171: color: #1f2937;
+   Change to: color: var(--text-dark);
+   
+   Line 180: color: #374151;
+   Change to: color: var(--text-medium);
+   
+   Line 187: color: #4b5563;
+   Change to: color: var(--text-medium);
+   
+   Line 194: color: #6b7280;
+   Change to: color: var(--text-medium);
+   
+   Line 211: color: #374151;
+   Change to: color: var(--text-medium);
+   
+   Line 223: background: linear-gradient(135deg, #f5f7fa 0%, #e3e9f2 100%);
+   Change to: background: linear-gradient(135deg, var(--bg-gray) 0%, var(--border-light) 100%);
+   
+   Line 244: color: #1f2937;
+   Change to: color: var(--text-dark);
+   
+   Line 256: background: #f9fafb;
+   Change to: background: var(--bg-gray);
+   
+   Line 269: background: #f0f4f8;
+   Change to: background: linear-gradient(135deg, var(--bg-gray) 0%, var(--border-light) 100%);
+   
+   Line 282: background: linear-gradient(135deg, #e0f2fe 0%, #bfdbfe 100%);
+   Need dark mode version or use info background color variable
+
+4. LOGIN.CSS
+   Location: F:\Projects\Fiverr\alunex-wireframe-FINAL-FIXED\alunex-pulse-app\frontend\src\pages\Login.css
+   
+   Line 12: background: white;
+   Change to: background: var(--bg-white);
+   
+   Line 110: background: white;
+   Change to: background: var(--bg-white);
+   
+   Line 138: background: white;
+   Change to: background: var(--bg-white);
+
+5. DASHBOARD.CSS
+   Location: F:\Projects\Fiverr\alunex-wireframe-FINAL-FIXED\alunex-pulse-app\frontend\src\pages\Dashboard.css
+   
+   Line 40: background: white;
+   Change to: background: var(--bg-white);
+   
+   Line 70: background: white;
+   Change to: background: var(--bg-white);
+
+6. TASKS.CSS
+   Location: F:\Projects\Fiverr\alunex-wireframe-FINAL-FIXED\alunex-pulse-app\frontend\src\pages\Tasks.css
+   
+   Line 51: background: white;
+   Change to: background: var(--bg-white);
+   
+   Line 61: background: white;
+   Change to: background: var(--bg-white);
+
+7. TIMETRACKING.CSS
+   Location: F:\Projects\Fiverr\alunex-wireframe-FINAL-FIXED\alunex-pulse-app\frontend\src\pages\TimeTracking.css
+   
+   Lines 128-153: Success colors need to be variables
+   
+   Line 128: background: #f0fdf4;
+   Change to: background: var(--success-bg);
+   
+   Line 135: color: #166534;
+   Change to: color: var(--success-text);
+   
+   Line 142: color: #15803d;
+   Change to: color: var(--success);
+   
+   Line 147: color: #16a34a;
+   Change to: color: var(--success);
+
+INLINE STYLES (JSX Files):
+
+8. SIDEBAR.JSX
+   Location: F:\Projects\Fiverr\alunex-wireframe-FINAL-FIXED\alunex-pulse-app\frontend\src\components\Sidebar\Sidebar.jsx
+   
+   Line ~120: background: '#ef4444',
+   Change to: background: 'var(--danger)',
+   OR create a const for the style and use CSS class instead
+
+9. CHAT.JSX
+   Location: F:\Projects\Fiverr\alunex-wireframe-FINAL-FIXED\alunex-pulse-app\frontend\src\pages\Chat.jsx
+   
+   Multiple instances of: background: '#ef4444'
+   Change all to: background: 'var(--danger)'
+   OR move to CSS classes
+
+10. DEPARTMENTANALYTICS.JSX
+    Location: F:\Projects\Fiverr\alunex-wireframe-FINAL-FIXED\alunex-pulse-app\frontend\src\pages\DepartmentAnalytics.jsx
+    
+    background: '#f0fdf4' - Change to: 'var(--success-bg)'
+    background: '#eff6ff' - Change to: 'var(--primary-blue-light)'
+    background: '#fef2f2' - Change to: 'var(--danger-bg)'
+    background: '#f8fafc' - Change to: 'var(--bg-main)'
+
+11. DEPARTMENTS.JSX
+    Location: F:\Projects\Fiverr\alunex-wireframe-FINAL-FIXED\alunex-pulse-app\frontend\src\pages\Departments.jsx
+    
+    background: '#ef4444' - Change to: 'var(--danger)'
+    background: '#f0fdf4' - Change to: 'var(--success-bg)'
+
+12. FILES.JSX
+    Location: F:\Projects\Fiverr\alunex-wireframe-FINAL-FIXED\alunex-pulse-app\frontend\src\pages\Files.jsx
+    
+    background: '#ef4444' - Change to: 'var(--danger)'
+
+13. SETTINGS.JSX
+    Location: F:\Projects\Fiverr\alunex-wireframe-FINAL-FIXED\alunex-pulse-app\frontend\src\pages\Settings.jsx
+    
+    Multiple background colors for role badges and status indicators
+    These need to be extracted into CSS classes or use styled-components
+
+14. TASKS.JSX
+    Location: F:\Projects\Fiverr\alunex-wireframe-FINAL-FIXED\alunex-pulse-app\frontend\src\pages\Tasks.jsx
+    
+    Multiple instances of: background: '#ef4444'
+    Change all to: 'var(--danger)'
+
+15. VIDEO.JSX
+    Location: F:\Projects\Fiverr\alunex-wireframe-FINAL-FIXED\alunex-pulse-app\frontend\src\pages\Video.jsx
+    
+    background: '#ef4444' - Change to: 'var(--danger)'
+
+STEPS TO IMPLEMENT:
+
+1. Add new CSS variables to index.css for missing status colors:
+   
+   :root {
+     --success-bg: #d1fae5;
+     --success-text: #065f46;
+     --success: #10b981;
+     --danger: #dc2626;
+     --danger-bg: #fee2e2;
+     --danger-text: #991b1b;
+     --warning: #f59e0b;
+     --warning-bg: #fef3c7;
+     --warning-text: #92400e;
+     --info-bg: #dbeafe;
+     --info-text: #1e40af;
+   }
+   
+   [data-theme="dark"] {
+     --success-bg: #0d3d2d;
+     --success-text: #6ee7b7;
+     --success: #34d399;
+     --danger: #ef4444;
+     --danger-bg: #4a1818;
+     --danger-text: #f87171;
+     --warning: #f59e0b;
+     --warning-bg: #4a3010;
+     --warning-text: #fbbf24;
+     --info-bg: #1e3a5f;
+     --info-text: #60a5fa;
+   }
+
+2. Fix CSS files first (easier with find/replace)
+3. Fix JSX inline styles
+4. Test all pages in dark mode
+5. Test all modals in dark mode
+6. Test all buttons and badges in dark mode
+
+TESTING CHECKLIST:
+
+- Navbar: Text visible, shadow appropriate
+- Sidebar: Background correct, hover states visible
+- Help Modal: Readable text, proper contrast
+- Login Page: Card visible, form elements clear
+- Dashboard: Cards visible, stats readable
+- Tasks: Kanban cards visible, text readable
+- TimeTracking: Weekly total visible and themed
+- All delete buttons: Proper color and visibility
+- All badges: Proper theming
+- All status indicators: Proper theming
+
+ESTIMATED TIME TO FIX:
+
+- CSS files: 1-2 hours (many can use find/replace)
+- Inline styles: 4-6 hours (needs careful refactoring)
+- Testing: 2-3 hours
+Total: 8-11 hours
+

@@ -468,7 +468,7 @@ const Chat = () => {
                                                 position: 'absolute',
                                                 top: '100%',
                                                 right: 0,
-                                                background: 'white',
+                                                background: 'var(--bg-white)',
                                                 border: '1px solid #e5e7eb',
                                                 borderRadius: '6px',
                                                 boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
@@ -486,15 +486,15 @@ const Chat = () => {
                                                         width: '100%',
                                                         padding: '10px 14px',
                                                         border: 'none',
-                                                        background: 'white',
+                                                        background: 'var(--bg-white)',
                                                         textAlign: 'left',
                                                         cursor: 'pointer',
                                                         fontSize: '14px',
                                                         color: '#374151',
                                                         borderBottom: '1px solid #f3f4f6'
                                                     }}
-                                                    onMouseOver={(e) => e.target.style.background = '#f9fafb'}
-                                                    onMouseOut={(e) => e.target.style.background = 'white'}
+                                                    onMouseOver={(e) => e.target.style.background = 'var(--bg-gray)'}
+                                                    onMouseOut={(e) => e.target.style.background = 'var(--bg-white)'}
                                                 >
                                                     Edit
                                                 </button>
@@ -513,14 +513,14 @@ const Chat = () => {
                                                         width: '100%',
                                                         padding: '10px 14px',
                                                         border: 'none',
-                                                        background: 'white',
+                                                        background: 'var(--bg-white)',
                                                         textAlign: 'left',
                                                         cursor: 'pointer',
                                                         fontSize: '14px',
                                                         color: '#ef4444'
                                                     }}
-                                                    onMouseOver={(e) => e.target.style.background = '#fef2f2'}
-                                                    onMouseOut={(e) => e.target.style.background = 'white'}
+                                                    onMouseOver={(e) => e.target.style.background = 'var(--danger-bg)'}
+                                                    onMouseOut={(e) => e.target.style.background = 'var(--bg-white)'}
                                                 >
                                                     Delete
                                                 </button>
@@ -554,7 +554,7 @@ const Chat = () => {
                                 flex: 1,
                                 padding: '24px',
                                 overflowY: 'auto',
-                                background: '#f9fafb'
+                                background: 'var(--bg-gray)'
                             }} className="chat-messages">
                                 {messages.length > 0 ? messages.map(msg => {
                                     const isOwnMessage = (msg.sender._id || msg.sender.id) === (user._id || user.id);
