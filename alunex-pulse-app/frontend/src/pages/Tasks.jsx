@@ -601,6 +601,114 @@ const Tasks = () => {
                                 />
                             </div>
 
+                            <div style={{ marginBottom: '16px', padding: '16px', background: '#f9fafb', borderRadius: '6px' }}>
+                                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                                      <label style={{ fontWeight: '600', margin: 0 }}>Sub-Tasks</label>
+                                      <button
+                                          type="button"
+                                          onClick={handleAddSubTask}
+                                          style={{
+                                              padding: '6px 12px',
+                                              fontSize: '13px',
+                                              background: '#10b981',
+                                              color: 'white',
+                                              border: 'none',
+                                              borderRadius: '4px',
+                                              cursor: 'pointer'
+                                          }}
+                                      >
+                                          + Add Sub-Task
+                                      </button>
+                                  </div>
+
+                                  {subTasks.length === 0 ? (
+                                      <p style={{ fontSize: '13px', color: '#6b7280', margin: 0 }}>No sub-tasks yet.</p>
+                                  ) : (
+                                      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                          {subTasks.map((subTask, index) => (
+                                              <div key={index} style={{ background: 'white', padding: '12px', borderRadius: '6px', border: '1px solid #e5e7eb' }}>
+                                                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                                                      <span style={{ fontWeight: '600', fontSize: '13px' }}>Sub-Task {index + 1}</span>
+                                                      <button
+                                                          type="button"
+                                                          onClick={() => handleDeleteSubTask(index)}
+                                                          style={{
+                                                              padding: '4px 8px',
+                                                              fontSize: '12px',
+                                                              background: '#ef4444',
+                                                              color: 'white',
+                                                              border: 'none',
+                                                              borderRadius: '4px',
+                                                              cursor: 'pointer'
+                                                          }}
+                                                      >
+                                                          Remove
+                                                      </button>
+                                                  </div>
+                                                  <div style={{ display: 'grid', gap: '8px' }}>
+                                                      <input
+                                                          type="text"
+                                                          placeholder="Sub-task title"
+                                                          className="form-control"
+                                                          style={{ fontSize: '13px' }}
+                                                          value={subTask.title}
+                                                          onChange={(e) => handleSubTaskChange(index, 'title', e.target.value)}
+                                                      />
+                                                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                                                          <select
+                                                              className="form-control"
+                                                              style={{ fontSize: '13px' }}
+                                                              value={subTask.assignedTo || ''}
+                                                              onChange={(e) => handleSubTaskChange(index, 'assignedTo', e.target.value)}
+                                                          >
+                                                              <option value="">Assign To</option>
+                                                              {teamMembers.map(member => (
+                                                                  <option key={member._id} value={member._id}>{member.name}</option>
+                                                              ))}
+                                                          </select>
+                                                          <select
+                                                              className="form-control"
+                                                              style={{ fontSize: '13px' }}
+                                                              value={subTask.status}
+                                                              onChange={(e) => handleSubTaskChange(index, 'status', e.target.value)}
+                                                          >
+                                                              <option value="todo">To Do</option>
+                                                              <option value="in_progress">In Progress</option>
+                                                              <option value="done">Done</option>
+                                                          </select>
+                                                      </div>
+                                                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px' }}>
+                                                          <input
+                                                              type="date"
+                                                              className="form-control"
+                                                              style={{ fontSize: '13px' }}
+                                                              value={subTask.startDate || ''}
+                                                              onChange={(e) => handleSubTaskChange(index, 'startDate', e.target.value)}
+                                                          />
+                                                          <input
+                                                              type="date"
+                                                              className="form-control"
+                                                              style={{ fontSize: '13px' }}
+                                                              value={subTask.endDate || ''}
+                                                              onChange={(e) => handleSubTaskChange(index, 'endDate', e.target.value)}
+                                                          />
+                                                          <input
+                                                              type="number"
+                                                              className="form-control"
+                                                              style={{ fontSize: '13px' }}
+                                                              value={subTask.estimatedHours || ''}
+                                                              onChange={(e) => handleSubTaskChange(index, 'estimatedHours', e.target.value)}
+                                                              placeholder="Est. Hours"
+                                                              min="0"
+                                                          />
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          ))}
+                                      </div>
+                                  )}
+                              </div>
+
                             <div style={{ marginBottom: '16px' }}>
                                 <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Description</label>
                                 <textarea
@@ -737,29 +845,116 @@ const Tasks = () => {
                     </div>
                 </div>
             )}
-            {/* Project Creation Modal */}
+
             {showProjectModal && (
-                <div className="modal-overlay" onClick={() => setShowProjectModal(false)} style={{
-                    position: "fixed",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    background: "rgba(0,0,0,0.6)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    zIndex: 1100
-                }}>
-                    <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{
-                        background: "white",
-                        width: "90%",
-                        maxWidth: "500px",
-                        padding: "24px",
-                        borderRadius: "8px",
-                        maxHeight: "90vh",
-                        overflow: "auto"
-                    }}>                        <h2 style={{ marginTop: 0 }}>Create New Project</h2>                        <form onSubmit={handleCreateProject}>                            <div style={{ marginBottom: "16px" }}>                                <label style={{ display: "block", marginBottom: "4px", fontWeight: "600" }}>Project Name *</label>                                <input                                    type="text"                                    className="form-control"                                    value={projectFormData.name}                                    onChange={(e) => setProjectFormData(prev => ({ ...prev, name: e.target.value }))}                                    required                                    placeholder="Enter project name"                                />                            </div>                            <div style={{ marginBottom: "16px" }}>                                <label style={{ display: "block", marginBottom: "4px", fontWeight: "600" }}>Project Code</label>                                <input                                    type="text"                                    className="form-control"                                    value={projectFormData.code}                                    onChange={(e) => setProjectFormData(prev => ({ ...prev, code: e.target.value }))}                                    placeholder="Optional project code"                                />                            </div>                            <div style={{ marginBottom: "16px" }}>                                <label style={{ display: "block", marginBottom: "4px", fontWeight: "600" }}>Client Name</label>                                <input                                    type="text"                                    className="form-control"                                    value={projectFormData.clientName}                                    onChange={(e) => setProjectFormData(prev => ({ ...prev, clientName: e.target.value }))}                                    placeholder="Optional client name"                                />                            </div>                            <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end" }}>                                <button                                    type="button"                                    className="btn btn-secondary"                                    onClick={() => setShowProjectModal(false)}                                >                                    Cancel                                </button>                                <button type="submit" className="btn btn-primary">                                    Create Project                                </button>                            </div>                        </form>                    </div>                </div>            )}
+                  <div style={{
+                      position: 'fixed',
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      background: 'rgba(0,0,0,0.5)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      zIndex: 1001
+                  }}>
+                      <div style={{
+                          background: 'white',
+                          padding: '30px',
+                          borderRadius: '8px',
+                          width: '90%',
+                          maxWidth: '500px',
+                          maxHeight: '90vh',
+                          overflow: 'auto'
+                      }}>
+                          <h2 style={{ marginTop: 0 }}>Create New Project</h2>
+                          <form onSubmit={handleCreateProject}>
+                              <div style={{ marginBottom: '16px' }}>
+                                  <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Project Name *</label>
+                                  <input
+                                      type="text"
+                                      name="name"
+                                      className="form-control"
+                                      value={projectFormData.name}
+                                      onChange={handleProjectFormChange}
+                                      placeholder="Enter project name"
+                                      required
+                                  />
+                              </div>
+
+                              <div style={{ marginBottom: '16px' }}>
+                                  <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Project Code</label>
+                                  <input
+                                      type="text"
+                                      name="code"
+                                      className="form-control"
+                                      value={projectFormData.code}
+                                      onChange={handleProjectFormChange}
+                                      placeholder="e.g., PROJ-001"
+                                  />
+                              </div>
+
+                              <div style={{ marginBottom: '16px' }}>
+                                  <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Client Name</label>
+                                  <input
+                                      type="text"
+                                      name="clientName"
+                                      className="form-control"
+                                      value={projectFormData.clientName}
+                                      onChange={handleProjectFormChange}
+                                      placeholder="Enter client name"
+                                  />
+                              </div>
+
+                              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
+                                  <div>
+                                      <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Start Date</label>
+                                      <input
+                                          type="date"
+                                          name="startDate"
+                                          className="form-control"
+                                          value={projectFormData.startDate}
+                                          onChange={handleProjectFormChange}
+                                      />
+                                  </div>
+                                  <div>
+                                      <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>End Date</label>
+                                      <input
+                                          type="date"
+                                          name="endDate"
+                                          className="form-control"
+                                          value={projectFormData.endDate}
+                                          onChange={handleProjectFormChange}
+                                      />
+                                  </div>
+                              </div>
+
+                              <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+                                  <button
+                                      type="button"
+                                      className="btn btn-secondary"
+                                      onClick={() => {
+                                          setShowProjectModal(false);
+                                          setProjectFormData({
+                                              name: '',
+                                              code: '',
+                                              clientName: '',
+                                              startDate: '',
+                                              endDate: ''
+                                          });
+                                      }}
+                                  >
+                                      Cancel
+                                  </button>
+                                  <button type="submit" className="btn btn-primary">
+                                      Create Project
+                                  </button>
+                              </div>
+                          </form>
+                      </div>
+                  </div>
+              )}
         </div>
     );
 };
