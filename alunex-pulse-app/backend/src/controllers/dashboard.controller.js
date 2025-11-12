@@ -7,6 +7,7 @@ const TimeTracking = require('../models/TimeTracking.model');
 exports.getDashboardStats = async (req, res) => {
     try {
         const userId = req.user.id;
+        const { projectId } = req.query;
 
         // Get today's date range
         const today = new Date();
@@ -20,22 +21,30 @@ exports.getDashboardStats = async (req, res) => {
         const yesterdayEnd = new Date(yesterday);
         yesterdayEnd.setHours(23, 59, 59, 999);
 
-        // Calculate hours logged today
-        const todayLogs = await TimeTracking.find({
+        // Build base filter for time tracking
+        const timeFilter = {
             user: userId,
             organization: req.user.organization,
-            startTime: { $gte: today, $lte: todayEnd },
             isRunning: false
+        };
+
+        // Add project filter for time tracking if provided
+        if (projectId && projectId !== 'all') {
+            timeFilter.project = projectId;
+        }
+
+        // Calculate hours logged today
+        const todayLogs = await TimeTracking.find({
+            ...timeFilter,
+            startTime: { $gte: today, $lte: todayEnd }
         });
         const todaySeconds = todayLogs.reduce((sum, log) => sum + log.duration, 0);
         const todayHours = (todaySeconds / 3600).toFixed(1);
 
         // Calculate hours logged yesterday
         const yesterdayLogs = await TimeTracking.find({
-            user: userId,
-            organization: req.user.organization,
-            startTime: { $gte: yesterday, $lte: yesterdayEnd },
-            isRunning: false
+            ...timeFilter,
+            startTime: { $gte: yesterday, $lte: yesterdayEnd }
         });
         const yesterdaySeconds = yesterdayLogs.reduce((sum, log) => sum + log.duration, 0);
         const yesterdayHours = yesterdaySeconds / 3600;
@@ -51,10 +60,20 @@ exports.getDashboardStats = async (req, res) => {
             changeDirection = 'up';
         }
 
+        // Build base filter for tasks
+        const taskFilter = {
+            assignedTo: userId,
+            organization: req.user.organization
+        };
+
+        // Add project filter for tasks if provided
+        if (projectId && projectId !== 'all') {
+            taskFilter.project = projectId;
+        }
+
         // Get active tasks
         const activeTasks = await Task.countDocuments({
-            assignedTo: userId,
-            organization: req.user.organization,
+            ...taskFilter,
             status: { $in: ['todo', 'in_progress'] }
         });
 
@@ -62,8 +81,7 @@ exports.getDashboardStats = async (req, res) => {
         const weekEnd = new Date(today);
         weekEnd.setDate(weekEnd.getDate() + 7);
         const tasksDueThisWeek = await Task.countDocuments({
-            assignedTo: userId,
-            organization: req.user.organization,
+            ...taskFilter,
             status: { $in: ['todo', 'in_progress'] },
             dueDate: { $gte: today, $lte: weekEnd }
         });
@@ -116,7 +134,17 @@ exports.getDashboardStats = async (req, res) => {
 // Get recent tasks
 exports.getRecentTasks = async (req, res) => {
     try {
-        const tasks = await Task.find({ organization: req.user.organization })
+        const { projectId } = req.query;
+
+        // Build query filter
+        const filter = { organization: req.user.organization };
+
+        // Add project filter if provided
+        if (projectId && projectId !== 'all') {
+            filter.project = projectId;
+        }
+
+        const tasks = await Task.find(filter)
             .populate('project', 'name')
             .populate('assignedTo', 'name')
             .sort({ createdAt: -1 })
@@ -138,6 +166,8 @@ exports.getRecentTasks = async (req, res) => {
 // Get team activity
 exports.getTeamActivity = async (req, res) => {
     try {
+        const { projectId } = req.query;
+
         // Get today's date range
         const today = new Date();
         today.setHours(0, 0, 0, 0);
@@ -152,20 +182,36 @@ exports.getTeamActivity = async (req, res) => {
         .limit(5);
 
         const activity = await Promise.all(users.map(async (user) => {
-            // Get user's active task
-            const activeTask = await Task.findOne({
+            // Build task filter
+            const taskFilter = {
                 assignedTo: user._id,
                 organization: req.user.organization,
                 status: 'in_progress'
-            }).select('title');
+            };
 
-            // Calculate time logged today
-            const timeLogs = await TimeTracking.find({
+            // Add project filter if provided
+            if (projectId && projectId !== 'all') {
+                taskFilter.project = projectId;
+            }
+
+            // Get user's active task
+            const activeTask = await Task.findOne(taskFilter).select('title');
+
+            // Build time tracking filter
+            const timeFilter = {
                 user: user._id,
                 organization: req.user.organization,
                 startTime: { $gte: today, $lte: todayEnd },
                 isRunning: false
-            });
+            };
+
+            // Add project filter for time tracking if provided
+            if (projectId && projectId !== 'all') {
+                timeFilter.project = projectId;
+            }
+
+            // Calculate time logged today
+            const timeLogs = await TimeTracking.find(timeFilter);
             const totalSeconds = timeLogs.reduce((sum, log) => sum + log.duration, 0);
             const hours = (totalSeconds / 3600).toFixed(1);
 
