@@ -25,14 +25,15 @@ router.get('/', protect, async (req, res) => {
 router.get('/my-tasks/:projectId', protect, async (req, res) => {
     try {
         const SubTask = require('../models/SubTask.model');
-        
-        // Find tasks assigned to logged-in user for the specific project
+
+        // Find all tasks for the specific project (not just assigned to user)
+        // This allows time tracking on any task in the project
         const tasks = await Task.find({
             organization: req.user.organization,
-            project: req.params.projectId,
-            assignedTo: req.user.id
+            project: req.params.projectId
         })
         .populate('project', 'name')
+        .populate('assignedTo', 'name email')
         .select('_id title description status priority dueDate startDate');
 
         // For each task, fetch its sub-tasks
