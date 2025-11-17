@@ -17,6 +17,9 @@ const Departments = () => {
     const [docLink, setDocLink] = useState('');
     const [docNotes, setDocNotes] = useState('');
     const [uploadingDoc, setUploadingDoc] = useState(false);
+    const [expandedDept, setExpandedDept] = useState(null);
+    const [deptProjects, setDeptProjects] = useState({});
+    const [loadingProjects, setLoadingProjects] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
         description: '',
@@ -284,6 +287,33 @@ const Departments = () => {
         return Math.round((spent / budget) * 100);
     };
 
+    const fetchDepartmentProjects = async (deptId) => {
+        try {
+            setLoadingProjects(true);
+            const headers = { Authorization: `Bearer ${token}` };
+            const response = await axios.get(`${API_URL}/departments/${deptId}/projects`, { headers });
+            setDeptProjects(prev => ({
+                ...prev,
+                [deptId]: response.data.projects
+            }));
+        } catch (error) {
+            console.error('Error fetching department projects:', error);
+        } finally {
+            setLoadingProjects(false);
+        }
+    };
+
+    const toggleDepartmentExpand = (deptId) => {
+        if (expandedDept === deptId) {
+            setExpandedDept(null);
+        } else {
+            setExpandedDept(deptId);
+            if (!deptProjects[deptId]) {
+                fetchDepartmentProjects(deptId);
+            }
+        }
+    };
+
     if (loading) {
         return (
             <div className="loading-container">
@@ -328,6 +358,7 @@ const Departments = () => {
                 <table className="table">
                     <thead>
                         <tr>
+                            <th style={{ width: '40px' }}></th>
                             <th>Department</th>
                             <th>Head</th>
                             <th>Budget</th>
@@ -343,30 +374,49 @@ const Departments = () => {
                             const spent = dept.budget?.spent || 0;
                             const utilization = budget > 0 ? getUtilization(budget, spent) : 0;
                             const remaining = budget - spent;
+                            const isExpanded = expandedDept === dept._id;
+                            const projects = deptProjects[dept._id] || [];
 
                             return (
-                                <tr key={dept._id}>
-                                    <td><strong>{dept.name}</strong></td>
-                                    <td>{dept.head?.name || 'Not assigned'}</td>
-                                    <td>{formatCurrency(budget)}</td>
-                                    <td>{formatCurrency(spent)}</td>
-                                    <td>{formatCurrency(remaining)}</td>
-                                    <td>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                            <div style={{ flex: 1, height: '8px', background: '#f1f5f9', borderRadius: '4px', overflow: 'hidden' }}>
-                                                <div
-                                                    style={{
-                                                        width: `${utilization}%`,
-                                                        height: '100%',
-                                                        background: utilization > 75 ? '#f59e0b' : 'var(--primary-blue)',
-                                                        transition: 'width 0.3s'
-                                                    }}
-                                                ></div>
+                                <>
+                                    <tr key={dept._id}>
+                                        <td>
+                                            <button
+                                                onClick={() => toggleDepartmentExpand(dept._id)}
+                                                style={{
+                                                    background: 'none',
+                                                    border: 'none',
+                                                    cursor: 'pointer',
+                                                    fontSize: '18px',
+                                                    padding: '4px',
+                                                    transition: 'transform 0.2s'
+                                                }}
+                                                title="View projects"
+                                            >
+                                                {isExpanded ? '▼' : '▶'}
+                                            </button>
+                                        </td>
+                                        <td><strong>{dept.name}</strong></td>
+                                        <td>{dept.head?.name || 'Not assigned'}</td>
+                                        <td>{formatCurrency(budget)}</td>
+                                        <td>{formatCurrency(spent)}</td>
+                                        <td>{formatCurrency(remaining)}</td>
+                                        <td>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                                <div style={{ flex: 1, height: '8px', background: '#f1f5f9', borderRadius: '4px', overflow: 'hidden' }}>
+                                                    <div
+                                                        style={{
+                                                            width: `${utilization}%`,
+                                                            height: '100%',
+                                                            background: utilization > 75 ? '#f59e0b' : 'var(--primary-blue)',
+                                                            transition: 'width 0.3s'
+                                                        }}
+                                                    ></div>
+                                                </div>
+                                                <span style={{ fontSize: '14px', fontWeight: '600', minWidth: '40px' }}>{utilization}%</span>
                                             </div>
-                                            <span style={{ fontSize: '14px', fontWeight: '600', minWidth: '40px' }}>{utilization}%</span>
-                                        </div>
-                                    </td>
-                                    <td>
+                                        </td>
+                                        <td>
                                         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                                             <button
                                                 onClick={() => handleOpenModal(dept)}
@@ -414,10 +464,121 @@ const Departments = () => {
                                         </div>
                                     </td>
                                 </tr>
+
+                                {/* Expandable Project Breakdown */}
+                                {isExpanded && (
+                                    <tr>
+                                        <td colSpan="8" style={{ padding: 0, background: '#f8fafc' }}>
+                                            <div style={{ padding: '20px', borderTop: '2px solid #e2e8f0' }}>
+                                                <h3 style={{ margin: '0 0 16px 0', fontSize: '1rem', color: '#475569' }}>
+                                                    Projects in {dept.name}
+                                                </h3>
+
+                                                {loadingProjects && !projects.length ? (
+                                                    <div style={{ textAlign: 'center', padding: '20px' }}>
+                                                        <div className="loading-spinner"></div>
+                                                        <p>Loading projects...</p>
+                                                    </div>
+                                                ) : projects.length > 0 ? (
+                                                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                                        <thead>
+                                                            <tr style={{ background: '#e2e8f0' }}>
+                                                                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #cbd5e1' }}>Project Name</th>
+                                                                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #cbd5e1' }}>Project Code</th>
+                                                                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #cbd5e1' }}>Status</th>
+                                                                <th style={{ padding: '12px', textAlign: 'right', borderBottom: '2px solid #cbd5e1' }}>Allocated Budget</th>
+                                                                <th style={{ padding: '12px', textAlign: 'right', borderBottom: '2px solid #cbd5e1' }}>Spent</th>
+                                                                <th style={{ padding: '12px', textAlign: 'right', borderBottom: '2px solid #cbd5e1' }}>Remaining</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {projects.map((project) => {
+                                                                const projectBudget = project.budget?.allocated || 0;
+                                                                const projectSpent = project.budget?.spent || 0;
+                                                                const projectRemaining = projectBudget - projectSpent;
+
+                                                                return (
+                                                                    <tr key={project._id} style={{ borderBottom: '1px solid #e2e8f0' }}>
+                                                                        <td style={{ padding: '12px' }}>
+                                                                            <strong>{project.name}</strong>
+                                                                        </td>
+                                                                        <td style={{ padding: '12px' }}>
+                                                                            <span style={{
+                                                                                padding: '4px 8px',
+                                                                                background: '#e0e7ff',
+                                                                                color: '#4338ca',
+                                                                                borderRadius: '4px',
+                                                                                fontSize: '0.85rem',
+                                                                                fontWeight: '600'
+                                                                            }}>
+                                                                                {project.code || 'N/A'}
+                                                                            </span>
+                                                                        </td>
+                                                                        <td style={{ padding: '12px' }}>
+                                                                            <span style={{
+                                                                                padding: '4px 8px',
+                                                                                borderRadius: '4px',
+                                                                                fontSize: '0.85rem',
+                                                                                fontWeight: '600',
+                                                                                background:
+                                                                                    project.status === 'active' ? '#dcfce7' :
+                                                                                    project.status === 'completed' ? '#dbeafe' :
+                                                                                    project.status === 'on_hold' ? '#fef3c7' :
+                                                                                    '#f3f4f6',
+                                                                                color:
+                                                                                    project.status === 'active' ? '#166534' :
+                                                                                    project.status === 'completed' ? '#1e40af' :
+                                                                                    project.status === 'on_hold' ? '#92400e' :
+                                                                                    '#374151'
+                                                                            }}>
+                                                                                {project.status?.replace('_', ' ').toUpperCase() || 'N/A'}
+                                                                            </span>
+                                                                        </td>
+                                                                        <td style={{ padding: '12px', textAlign: 'right', fontWeight: '600' }}>
+                                                                            {formatCurrency(projectBudget)}
+                                                                        </td>
+                                                                        <td style={{ padding: '12px', textAlign: 'right', color: projectSpent > projectBudget ? '#dc2626' : '#059669' }}>
+                                                                            {formatCurrency(projectSpent)}
+                                                                        </td>
+                                                                        <td style={{ padding: '12px', textAlign: 'right', fontWeight: '600', color: projectRemaining < 0 ? '#dc2626' : '#059669' }}>
+                                                                            {formatCurrency(projectRemaining)}
+                                                                        </td>
+                                                                    </tr>
+                                                                );
+                                                            })}
+                                                            <tr style={{ background: '#f1f5f9', fontWeight: '700' }}>
+                                                                <td colSpan="3" style={{ padding: '12px', textAlign: 'right' }}>
+                                                                    Total:
+                                                                </td>
+                                                                <td style={{ padding: '12px', textAlign: 'right' }}>
+                                                                    {formatCurrency(projects.reduce((sum, p) => sum + (p.budget?.allocated || 0), 0))}
+                                                                </td>
+                                                                <td style={{ padding: '12px', textAlign: 'right' }}>
+                                                                    {formatCurrency(projects.reduce((sum, p) => sum + (p.budget?.spent || 0), 0))}
+                                                                </td>
+                                                                <td style={{ padding: '12px', textAlign: 'right' }}>
+                                                                    {formatCurrency(
+                                                                        projects.reduce((sum, p) => sum + (p.budget?.allocated || 0), 0) -
+                                                                        projects.reduce((sum, p) => sum + (p.budget?.spent || 0), 0)
+                                                                    )}
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                ) : (
+                                                    <p style={{ textAlign: 'center', padding: '20px', color: '#64748b', fontStyle: 'italic' }}>
+                                                        No projects assigned to this department yet.
+                                                    </p>
+                                                )}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                )}
+                                </>
                             );
                         }) : (
                             <tr>
-                                <td colSpan="7" style={{ textAlign: 'center', padding: '20px' }}>
+                                <td colSpan="8" style={{ textAlign: 'center', padding: '20px' }}>
                                     No departments found
                                 </td>
                             </tr>

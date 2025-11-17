@@ -280,6 +280,130 @@ exports.getWeeklySummary = async (req, res) => {
     }
 };
 
+// Create manual time entry
+exports.createManualEntry = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const { projectId, description, startTime, endTime, taskId, subTaskId, billable } = req.body;
+
+        if (!projectId || !description || !startTime || !endTime) {
+            return res.status(400).json({
+                success: false,
+                message: 'Project, description, start time, and end time are required'
+            });
+        }
+
+        const start = new Date(startTime);
+        const end = new Date(endTime);
+
+        if (start >= end) {
+            return res.status(400).json({
+                success: false,
+                message: 'End time must be after start time'
+            });
+        }
+
+        const entryData = {
+            user: userId,
+            organization: req.user.organization,
+            project: projectId,
+            description,
+            startTime: start,
+            endTime: end,
+            isRunning: false,
+            billable: billable !== undefined ? billable : true
+        };
+
+        if (taskId) entryData.task = taskId;
+        if (subTaskId) entryData.subTask = subTaskId;
+
+        const entry = await TimeTracking.create(entryData);
+
+        const populatedEntry = await TimeTracking.findById(entry._id)
+            .populate('project', 'name')
+            .populate('task', 'title')
+            .populate('subTask', 'title')
+            .populate('user', 'name email');
+
+        res.status(201).json({
+            success: true,
+            entry: populatedEntry
+        });
+    } catch (error) {
+        console.error('Error creating manual time entry:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error creating manual time entry'
+        });
+    }
+};
+
+// Update a time log
+exports.updateTimeLog = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const { id } = req.params;
+        const { projectId, description, startTime, endTime, taskId, subTaskId, billable } = req.body;
+
+        const timeLog = await TimeTracking.findOne({
+            _id: id,
+            user: userId,
+            organization: req.user.organization
+        });
+
+        if (!timeLog) {
+            return res.status(404).json({
+                success: false,
+                message: 'Time log not found'
+            });
+        }
+
+        // Don't allow editing running timers
+        if (timeLog.isRunning) {
+            return res.status(400).json({
+                success: false,
+                message: 'Cannot edit a running timer. Please stop it first.'
+            });
+        }
+
+        // Update fields
+        if (projectId) timeLog.project = projectId;
+        if (description !== undefined) timeLog.description = description;
+        if (startTime) timeLog.startTime = new Date(startTime);
+        if (endTime) timeLog.endTime = new Date(endTime);
+        if (taskId !== undefined) timeLog.task = taskId || undefined;
+        if (subTaskId !== undefined) timeLog.subTask = subTaskId || undefined;
+        if (billable !== undefined) timeLog.billable = billable;
+
+        // Validate times
+        if (timeLog.startTime >= timeLog.endTime) {
+            return res.status(400).json({
+                success: false,
+                message: 'End time must be after start time'
+            });
+        }
+
+        await timeLog.save();
+
+        const populatedLog = await TimeTracking.findById(timeLog._id)
+            .populate('project', 'name')
+            .populate('task', 'title')
+            .populate('subTask', 'title')
+            .populate('user', 'name email');
+
+        res.status(200).json({
+            success: true,
+            log: populatedLog
+        });
+    } catch (error) {
+        console.error('Error updating time log:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error updating time log'
+        });
+    }
+};
+
 // Delete a time log
 exports.deleteTimeLog = async (req, res) => {
     try {

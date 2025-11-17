@@ -5,6 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const { protect } = require('../middleware/auth.middleware');
 const Department = require('../models/Department.model');
+const Project = require('../models/Project.model');
 const File = require('../models/File.model');
 
 // Configure multer for spend documentation uploads
@@ -83,6 +84,31 @@ router.get('/:id', protect, async (req, res) => {
             return res.status(404).json({ message: 'Department not found' });
         }
         res.json({ success: true, department });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Get projects by department
+router.get('/:id/projects', protect, async (req, res) => {
+    try {
+        const department = await Department.findOne({
+            _id: req.params.id,
+            organization: req.user.organization
+        });
+
+        if (!department) {
+            return res.status(404).json({ message: 'Department not found' });
+        }
+
+        const projects = await Project.find({
+            department: req.params.id,
+            organization: req.user.organization
+        })
+            .populate('manager', 'name email')
+            .select('name code budget status priority startDate endDate');
+
+        res.json({ success: true, projects });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

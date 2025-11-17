@@ -25,6 +25,19 @@ const TimeTracking = () => {
     const [weekTotal, setWeekTotal] = useState('0');
     const [billableTotal, setBillableTotal] = useState('0');
     const [nonBillableTotal, setNonBillableTotal] = useState('0');
+    const [isBillable, setIsBillable] = useState(true);
+    const [showManualEntryModal, setShowManualEntryModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [editingLog, setEditingLog] = useState(null);
+    const [manualEntryData, setManualEntryData] = useState({
+        projectId: '',
+        taskId: '',
+        subTaskId: '',
+        description: '',
+        startTime: '',
+        endTime: '',
+        billable: true
+    });
 
     useEffect(() => {
         fetchInitialData();
@@ -213,7 +226,7 @@ const TimeTracking = () => {
             const payload = {
                 projectId: selectedProject,
                 description: taskDescription,
-                billable: !isGeneralWork
+                billable: isBillable
             };
 
             if (selectedTask) payload.taskId = selectedTask;
@@ -287,6 +300,86 @@ const TimeTracking = () => {
         } catch (error) {
             console.error('Error deleting time log:', error);
             alert('Error deleting time log');
+        }
+    };
+
+    const handleManualEntryChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        setManualEntryData(prev => ({
+            ...prev,
+            [name]: type === 'checkbox' ? checked : value
+        }));
+    };
+
+    const handleCreateManualEntry = async (e) => {
+        e.preventDefault();
+
+        if (!manualEntryData.projectId || !manualEntryData.description ||
+            !manualEntryData.startTime || !manualEntryData.endTime) {
+            alert('Please fill in all required fields');
+            return;
+        }
+
+        try {
+            const headers = { Authorization: `Bearer ${token}` };
+            await axios.post(`${API_URL}/timetracking/manual`, manualEntryData, { headers });
+
+            setShowManualEntryModal(false);
+            setManualEntryData({
+                projectId: '',
+                taskId: '',
+                subTaskId: '',
+                description: '',
+                startTime: '',
+                endTime: '',
+                billable: true
+            });
+
+            await fetchTimeLogs();
+            await fetchWeeklySummary();
+        } catch (error) {
+            console.error('Error creating manual entry:', error);
+            alert(error.response?.data?.message || 'Error creating manual entry');
+        }
+    };
+
+    const handleEditLog = (log) => {
+        setEditingLog({
+            id: log._id,
+            projectId: log.project?._id || '',
+            taskId: log.task?._id || '',
+            subTaskId: log.subTask?._id || '',
+            description: log.description,
+            startTime: new Date(log.startTime).toISOString().slice(0, 16),
+            endTime: new Date(log.endTime).toISOString().slice(0, 16),
+            billable: log.billable
+        });
+        setShowEditModal(true);
+    };
+
+    const handleEditChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        setEditingLog(prev => ({
+            ...prev,
+            [name]: type === 'checkbox' ? checked : value
+        }));
+    };
+
+    const handleUpdateLog = async (e) => {
+        e.preventDefault();
+
+        try {
+            const headers = { Authorization: `Bearer ${token}` };
+            await axios.put(`${API_URL}/timetracking/logs/${editingLog.id}`, editingLog, { headers });
+
+            setShowEditModal(false);
+            setEditingLog(null);
+
+            await fetchTimeLogs();
+            await fetchWeeklySummary();
+        } catch (error) {
+            console.error('Error updating log:', error);
+            alert(error.response?.data?.message || 'Error updating log');
         }
     };
 
@@ -410,6 +503,20 @@ const TimeTracking = () => {
                                 />
                             </div>
                         )}
+
+                        <div className="form-group timer-form-group" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <input
+                                type="checkbox"
+                                id="billable-checkbox"
+                                checked={isBillable}
+                                onChange={(e) => setIsBillable(e.target.checked)}
+                                disabled={isTimerRunning}
+                                style={{ width: 'auto', margin: 0 }}
+                            />
+                            <label htmlFor="billable-checkbox" style={{ margin: 0, fontWeight: '600' }}>
+                                Billable (charge to client)
+                            </label>
+                        </div>
                     </div>
 
                     <div className="timer-actions">
@@ -458,6 +565,9 @@ const TimeTracking = () => {
                             value={selectedDate}
                             onChange={(e) => setSelectedDate(e.target.value)}
                         />
+                        <button className="btn btn-secondary" onClick={() => setShowManualEntryModal(true)}>
+                            Add Manual Entry
+                        </button>
                         <button className="btn btn-primary" onClick={handleExport}>Export</button>
                     </div>
                 </div>
@@ -470,6 +580,7 @@ const TimeTracking = () => {
                             <th>Start Time</th>
                             <th>End Time</th>
                             <th>Duration</th>
+                            <th>Billable</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -482,6 +593,18 @@ const TimeTracking = () => {
                                 <td>{log.endTime ? formatTimeForDisplay(log.endTime) : '-'}</td>
                                 <td><strong>{formatTime(log.duration)}</strong></td>
                                 <td>
+                                    <span className={`badge ${log.billable ? 'badge-success' : 'badge-secondary'}`}>
+                                        {log.billable ? 'Yes' : 'No'}
+                                    </span>
+                                </td>
+                                <td>
+                                    <button
+                                        className="btn btn-secondary btn-small"
+                                        onClick={() => handleEditLog(log)}
+                                        style={{ marginRight: '8px' }}
+                                    >
+                                        Edit
+                                    </button>
                                     <button
                                         className="btn btn-secondary btn-small"
                                         onClick={() => handleDeleteLog(log._id)}
@@ -492,7 +615,7 @@ const TimeTracking = () => {
                             </tr>
                         )) : (
                             <tr>
-                                <td colSpan="6" style={{ textAlign: 'center', padding: '20px' }}>
+                                <td colSpan="7" style={{ textAlign: 'center', padding: '20px' }}>
                                     No time logs for this date
                                 </td>
                             </tr>
@@ -531,7 +654,256 @@ const TimeTracking = () => {
                     <div className="weekly-total-label">Weekly Total</div>
                     <div className="weekly-total-hours">{weekTotal} hours</div>
                 </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginTop: '16px', padding: '0 16px 16px' }}>
+                    <div style={{ textAlign: 'center', padding: '12px', background: 'var(--bg-light)', borderRadius: '8px' }}>
+                        <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: '4px' }}>Billable Hours</div>
+                        <div style={{ fontSize: '1.5rem', fontWeight: '600', color: '#10b981' }}>{billableTotal}h</div>
+                    </div>
+                    <div style={{ textAlign: 'center', padding: '12px', background: 'var(--bg-light)', borderRadius: '8px' }}>
+                        <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: '4px' }}>Non-Billable Hours</div>
+                        <div style={{ fontSize: '1.5rem', fontWeight: '600', color: '#6b7280' }}>{nonBillableTotal}h</div>
+                    </div>
+                </div>
             </div>
+
+            {/* Manual Entry Modal */}
+            {showManualEntryModal && (
+                <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'rgba(0,0,0,0.5)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    zIndex: 1001
+                }}>
+                    <div style={{
+                        background: 'var(--bg-white)',
+                        padding: '30px',
+                        borderRadius: '8px',
+                        width: '90%',
+                        maxWidth: '500px',
+                        maxHeight: '90vh',
+                        overflow: 'auto'
+                    }}>
+                        <h2 style={{ marginTop: 0 }}>Add Manual Time Entry</h2>
+                        <form onSubmit={handleCreateManualEntry}>
+                            <div style={{ marginBottom: '16px' }}>
+                                <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Project *</label>
+                                <select
+                                    name="projectId"
+                                    className="form-control"
+                                    value={manualEntryData.projectId}
+                                    onChange={handleManualEntryChange}
+                                    required
+                                >
+                                    <option value="">Select Project</option>
+                                    {projects.filter(p => p._id).map(project => (
+                                        <option key={project._id} value={project._id}>
+                                            {project.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div style={{ marginBottom: '16px' }}>
+                                <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Description *</label>
+                                <textarea
+                                    name="description"
+                                    className="form-control"
+                                    value={manualEntryData.description}
+                                    onChange={handleManualEntryChange}
+                                    placeholder="What did you work on?"
+                                    rows="3"
+                                    required
+                                />
+                            </div>
+
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+                                <div>
+                                    <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Start Time *</label>
+                                    <input
+                                        type="datetime-local"
+                                        name="startTime"
+                                        className="form-control"
+                                        value={manualEntryData.startTime}
+                                        onChange={handleManualEntryChange}
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>End Time *</label>
+                                    <input
+                                        type="datetime-local"
+                                        name="endTime"
+                                        className="form-control"
+                                        value={manualEntryData.endTime}
+                                        onChange={handleManualEntryChange}
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            <div style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <input
+                                    type="checkbox"
+                                    name="billable"
+                                    id="manual-billable"
+                                    checked={manualEntryData.billable}
+                                    onChange={handleManualEntryChange}
+                                    style={{ width: 'auto', margin: 0 }}
+                                />
+                                <label htmlFor="manual-billable" style={{ margin: 0, fontWeight: '600' }}>
+                                    Billable (charge to client)
+                                </label>
+                            </div>
+
+                            <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+                                <button
+                                    type="button"
+                                    className="btn btn-secondary"
+                                    onClick={() => {
+                                        setShowManualEntryModal(false);
+                                        setManualEntryData({
+                                            projectId: '',
+                                            taskId: '',
+                                            subTaskId: '',
+                                            description: '',
+                                            startTime: '',
+                                            endTime: '',
+                                            billable: true
+                                        });
+                                    }}
+                                >
+                                    Cancel
+                                </button>
+                                <button type="submit" className="btn btn-primary">
+                                    Save Entry
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Edit Modal */}
+            {showEditModal && editingLog && (
+                <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'rgba(0,0,0,0.5)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    zIndex: 1001
+                }}>
+                    <div style={{
+                        background: 'var(--bg-white)',
+                        padding: '30px',
+                        borderRadius: '8px',
+                        width: '90%',
+                        maxWidth: '500px',
+                        maxHeight: '90vh',
+                        overflow: 'auto'
+                    }}>
+                        <h2 style={{ marginTop: 0 }}>Edit Time Entry</h2>
+                        <form onSubmit={handleUpdateLog}>
+                            <div style={{ marginBottom: '16px' }}>
+                                <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Project *</label>
+                                <select
+                                    name="projectId"
+                                    className="form-control"
+                                    value={editingLog.projectId}
+                                    onChange={handleEditChange}
+                                    required
+                                >
+                                    <option value="">Select Project</option>
+                                    {projects.filter(p => p._id).map(project => (
+                                        <option key={project._id} value={project._id}>
+                                            {project.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div style={{ marginBottom: '16px' }}>
+                                <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Description *</label>
+                                <textarea
+                                    name="description"
+                                    className="form-control"
+                                    value={editingLog.description}
+                                    onChange={handleEditChange}
+                                    placeholder="What did you work on?"
+                                    rows="3"
+                                    required
+                                />
+                            </div>
+
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+                                <div>
+                                    <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Start Time *</label>
+                                    <input
+                                        type="datetime-local"
+                                        name="startTime"
+                                        className="form-control"
+                                        value={editingLog.startTime}
+                                        onChange={handleEditChange}
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>End Time *</label>
+                                    <input
+                                        type="datetime-local"
+                                        name="endTime"
+                                        className="form-control"
+                                        value={editingLog.endTime}
+                                        onChange={handleEditChange}
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            <div style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <input
+                                    type="checkbox"
+                                    name="billable"
+                                    id="edit-billable"
+                                    checked={editingLog.billable}
+                                    onChange={handleEditChange}
+                                    style={{ width: 'auto', margin: 0 }}
+                                />
+                                <label htmlFor="edit-billable" style={{ margin: 0, fontWeight: '600' }}>
+                                    Billable (charge to client)
+                                </label>
+                            </div>
+
+                            <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+                                <button
+                                    type="button"
+                                    className="btn btn-secondary"
+                                    onClick={() => {
+                                        setShowEditModal(false);
+                                        setEditingLog(null);
+                                    }}
+                                >
+                                    Cancel
+                                </button>
+                                <button type="submit" className="btn btn-primary">
+                                    Update Entry
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

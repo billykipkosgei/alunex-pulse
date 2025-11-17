@@ -17,6 +17,10 @@ const projectSchema = new mongoose.Schema({
         ref: 'Organization',
         required: [true, 'Organization is required']
     },
+    department: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Department'
+    },
     description: {
         type: String,
         default: ''
