@@ -436,6 +436,55 @@ const TimeTracking = () => {
                     <h2>Active Timer</h2>
                 </div>
 
+                {/* Info Section - Shows when timer is NOT running */}
+                {!isTimerRunning && (
+                    <div style={{
+                        padding: '20px',
+                        background: 'linear-gradient(135deg, #ecfdf5 0%, #ffffff 100%)',
+                        borderBottom: '2px solid #10b981',
+                        margin: '0'
+                    }}>
+                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
+                            <div style={{
+                                width: '48px',
+                                height: '48px',
+                                borderRadius: '50%',
+                                background: '#d1fae5',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '24px',
+                                flexShrink: 0
+                            }}>
+                                💼
+                            </div>
+                            <div>
+                                <h3 style={{ margin: '0 0 8px 0', fontSize: '1.1rem', color: '#065f46' }}>
+                                    Track Multiple Projects in One Day
+                                </h3>
+                                <p style={{ margin: '0 0 12px 0', fontSize: '0.9rem', color: '#047857', lineHeight: '1.6' }}>
+                                    You can split your workday across different projects. Simply start a timer for one project,
+                                    then switch to another when needed. All time entries are logged separately!
+                                </p>
+                                <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', fontSize: '0.85rem', color: '#065f46' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                        <span style={{ fontSize: '16px' }}>✅</span>
+                                        <span>Track 3 hours on Project A</span>
+                                    </div>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                        <span style={{ fontSize: '16px' }}>✅</span>
+                                        <span>Switch to 3 hours on Project B</span>
+                                    </div>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                        <span style={{ fontSize: '16px' }}>✅</span>
+                                        <span>Track 2 hours on Project C</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 <div className="timer-container">
                     <div className="timer-display">{formatTime(timeElapsed)}</div>
 
@@ -586,45 +635,112 @@ const TimeTracking = () => {
                 </div>
             </div>
 
-            {/* Quick Switch Section */}
+            {/* Quick Switch Section - Enhanced */}
             {isTimerRunning && (
-                <div className="card">
-                    <div className="card-header">
-                        <h2>Switch to Different Project/Task</h2>
-                        <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginTop: '8px', marginBottom: 0 }}>
-                            Stop current timer and start a new one for a different project
-                        </p>
+                <div className="card" style={{ border: '2px solid #f59e0b', background: 'linear-gradient(135deg, #fffbeb 0%, #ffffff 100%)' }}>
+                    <div className="card-header" style={{ background: '#f59e0b', color: 'white', borderBottom: 'none' }}>
+                        <div>
+                            <h2 style={{ color: 'white', margin: 0 }}>⚡ Quick Switch Project</h2>
+                            <p style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.95)', marginTop: '8px', marginBottom: 0 }}>
+                                Switch to a different project without losing your current time entry
+                            </p>
+                        </div>
                     </div>
                     <div style={{ padding: '24px' }}>
-                        <div style={{ display: 'grid', gap: '16px', maxWidth: '600px' }}>
-                            <div>
-                                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>Select New Project</label>
-                                <select
-                                    className="form-control"
-                                    onChange={async (e) => {
-                                        if (e.target.value && window.confirm('Stop current timer and switch to this project?')) {
-                                            const newProjectId = e.target.value;
-                                            // Stop current timer
-                                            await handleStopTimer();
-                                            // Set new project
-                                            setTimeout(() => {
-                                                handleProjectChange(newProjectId);
-                                            }, 100);
-                                        }
-                                        e.target.value = '';
-                                    }}
-                                    defaultValue=""
-                                >
-                                    <option value="">Choose a project to switch to...</option>
-                                    {projects.filter(p => p._id && p._id !== selectedProject).map(project => (
-                                        <option key={project._id} value={project._id}>
-                                            {project.name}
-                                        </option>
-                                    ))}
-                                </select>
-                                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '8px', marginBottom: 0 }}>
-                                    This will save your current time entry and prepare a new timer for the selected project
-                                </p>
+                        <div style={{
+                            background: 'white',
+                            padding: '20px',
+                            borderRadius: '8px',
+                            border: '1px solid #fbbf24',
+                            marginBottom: '16px'
+                        }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                                <div style={{
+                                    width: '40px',
+                                    height: '40px',
+                                    borderRadius: '50%',
+                                    background: '#fef3c7',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    fontSize: '20px'
+                                }}>
+                                    🔄
+                                </div>
+                                <div style={{ flex: 1 }}>
+                                    <div style={{ fontWeight: '600', fontSize: '0.95rem', marginBottom: '4px' }}>
+                                        Currently Tracking: {projects.find(p => p._id === selectedProject)?.name || 'Unknown'}
+                                    </div>
+                                    <div style={{ fontSize: '0.85rem', color: '#78716c' }}>
+                                        Your time will be automatically saved when you switch
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style={{ display: 'grid', gap: '12px' }}>
+                            <label style={{ display: 'block', fontWeight: '700', fontSize: '1rem', color: '#292524' }}>
+                                Switch to Another Project:
+                            </label>
+
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '12px' }}>
+                                {projects.filter(p => p._id && p._id !== selectedProject && p.name !== 'Select Project').map(project => (
+                                    <button
+                                        key={project._id}
+                                        onClick={async () => {
+                                            if (window.confirm(`Stop current timer and switch to "${project.name}"?\n\nYour current time entry will be saved automatically.`)) {
+                                                const newProjectId = project._id;
+                                                await handleStopTimer();
+                                                setTimeout(() => {
+                                                    handleProjectChange(newProjectId);
+                                                }, 100);
+                                            }
+                                        }}
+                                        style={{
+                                            padding: '16px',
+                                            background: 'white',
+                                            border: '2px solid #e5e7eb',
+                                            borderRadius: '8px',
+                                            cursor: 'pointer',
+                                            transition: 'all 0.2s',
+                                            fontWeight: '600',
+                                            fontSize: '0.9rem',
+                                            color: '#1f2937',
+                                            textAlign: 'left',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '8px'
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            e.currentTarget.style.borderColor = '#f59e0b';
+                                            e.currentTarget.style.background = '#fffbeb';
+                                            e.currentTarget.style.transform = 'translateY(-2px)';
+                                            e.currentTarget.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.currentTarget.style.borderColor = '#e5e7eb';
+                                            e.currentTarget.style.background = 'white';
+                                            e.currentTarget.style.transform = 'translateY(0)';
+                                            e.currentTarget.style.boxShadow = 'none';
+                                        }}
+                                    >
+                                        <span style={{ fontSize: '18px' }}>📁</span>
+                                        <span>{project.name}</span>
+                                    </button>
+                                ))}
+                            </div>
+
+                            <div style={{
+                                marginTop: '12px',
+                                padding: '12px 16px',
+                                background: '#fef3c7',
+                                borderRadius: '6px',
+                                borderLeft: '4px solid #f59e0b'
+                            }}>
+                                <div style={{ fontSize: '0.85rem', color: '#78716c' }}>
+                                    <strong style={{ color: '#92400e' }}>💡 Pro Tip:</strong> You can split your workday across multiple projects.
+                                    Just switch between projects as needed - all your time entries will be logged separately!
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -647,6 +763,60 @@ const TimeTracking = () => {
                         <button className="btn btn-primary" onClick={handleExport}>Export</button>
                     </div>
                 </div>
+
+                {/* Project Time Breakdown Summary */}
+                {timeLogs.length > 0 && (() => {
+                    const projectBreakdown = timeLogs.reduce((acc, log) => {
+                        const projectName = log.project?.name || 'Unknown Project';
+                        if (!acc[projectName]) {
+                            acc[projectName] = 0;
+                        }
+                        acc[projectName] += log.duration;
+                        return acc;
+                    }, {});
+
+                    return Object.keys(projectBreakdown).length > 1 ? (
+                        <div style={{
+                            padding: '20px',
+                            background: 'linear-gradient(135deg, #f0f9ff 0%, #ffffff 100%)',
+                            borderBottom: '1px solid #e5e7eb',
+                            borderTop: '3px solid #3b82f6'
+                        }}>
+                            <div style={{ marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <span style={{ fontSize: '20px' }}>📊</span>
+                                <h3 style={{ margin: 0, fontSize: '1.1rem', color: '#1e40af' }}>
+                                    Time Split Across Projects
+                                </h3>
+                            </div>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
+                                {Object.entries(projectBreakdown).map(([projectName, duration]) => (
+                                    <div
+                                        key={projectName}
+                                        style={{
+                                            background: 'white',
+                                            padding: '16px',
+                                            borderRadius: '8px',
+                                            border: '2px solid #bfdbfe',
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            gap: '8px'
+                                        }}
+                                    >
+                                        <div style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: '600' }}>
+                                            {projectName}
+                                        </div>
+                                        <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1e40af' }}>
+                                            {formatTime(duration)}
+                                        </div>
+                                        <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+                                            {((duration / totalDuration) * 100).toFixed(1)}% of total time
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    ) : null;
+                })()}
 
                 <table className="table">
                     <thead>

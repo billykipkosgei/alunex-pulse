@@ -1232,7 +1232,9 @@ const Tasks = () => {
                                           <option value="America/Los_Angeles">Pacific Time (PT)</option>
                                           <option value="Europe/London">London (GMT)</option>
                                           <option value="Europe/Paris">Paris (CET)</option>
-                                          <option value="Asia/Dubai">Dubai</option>
+                                          <option value="Asia/Dubai">Dubai (UAE - GST)</option>
+                                          <option value="Asia/Riyadh">Riyadh (Saudi Arabia - AST)</option>
+                                          <option value="Asia/Qatar">Qatar (AST)</option>
                                           <option value="Asia/Kolkata">India (IST)</option>
                                           <option value="Asia/Shanghai">China (CST)</option>
                                           <option value="Asia/Tokyo">Tokyo (JST)</option>
