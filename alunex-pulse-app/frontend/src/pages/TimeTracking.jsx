@@ -440,8 +440,8 @@ const TimeTracking = () => {
                 {!isTimerRunning && (
                     <div style={{
                         padding: '20px',
-                        background: 'var(--bg-light)',
-                        borderBottom: '2px solid var(--primary-color)',
+                        background: 'rgba(59, 130, 246, 0.08)',
+                        borderBottom: '2px solid #3b82f6',
                         margin: '0'
                     }}>
                         <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
@@ -449,7 +449,7 @@ const TimeTracking = () => {
                                 width: '48px',
                                 height: '48px',
                                 borderRadius: '50%',
-                                background: 'var(--primary-color)',
+                                background: '#3b82f6',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
@@ -460,28 +460,28 @@ const TimeTracking = () => {
                                 </svg>
                             </div>
                             <div>
-                                <h3 style={{ margin: '0 0 8px 0', fontSize: '1.1rem', color: 'var(--text-dark)' }}>
+                                <h3 style={{ margin: '0 0 8px 0', fontSize: '1.1rem', color: '#1e3a8a', fontWeight: '700' }}>
                                     Track Multiple Projects in One Day
                                 </h3>
-                                <p style={{ margin: '0 0 12px 0', fontSize: '0.9rem', color: 'var(--text-muted)', lineHeight: '1.6' }}>
+                                <p style={{ margin: '0 0 12px 0', fontSize: '0.9rem', color: '#1e40af', lineHeight: '1.6' }}>
                                     You can split your workday across different projects. Simply start a timer for one project,
                                     then switch to another when needed. All time entries are logged separately.
                                 </p>
-                                <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                                <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', fontSize: '0.85rem', color: '#1e40af' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                        <svg width="16" height="16" fill="none" stroke="var(--primary-color)" viewBox="0 0 24 24">
+                                        <svg width="16" height="16" fill="none" stroke="#3b82f6" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                         </svg>
                                         <span>Track 3 hours on Project A</span>
                                     </div>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                        <svg width="16" height="16" fill="none" stroke="var(--primary-color)" viewBox="0 0 24 24">
+                                        <svg width="16" height="16" fill="none" stroke="#3b82f6" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                         </svg>
                                         <span>Switch to 3 hours on Project B</span>
                                     </div>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                        <svg width="16" height="16" fill="none" stroke="var(--primary-color)" viewBox="0 0 24 24">
+                                        <svg width="16" height="16" fill="none" stroke="#3b82f6" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                         </svg>
                                         <span>Track 2 hours on Project C</span>
@@ -644,8 +644,8 @@ const TimeTracking = () => {
 
             {/* Quick Switch Section - Enhanced */}
             {isTimerRunning && (
-                <div className="card" style={{ border: '2px solid var(--primary-color)' }}>
-                    <div className="card-header" style={{ background: 'var(--primary-color)', color: 'white', borderBottom: 'none' }}>
+                <div className="card" style={{ border: '2px solid #3b82f6', background: 'linear-gradient(135deg, #dbeafe 0%, #ffffff 100%)' }}>
+                    <div className="card-header" style={{ background: '#3b82f6', color: 'white', borderBottom: 'none' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                             <svg width="24" height="24" fill="none" stroke="white" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
@@ -660,10 +660,10 @@ const TimeTracking = () => {
                     </div>
                     <div style={{ padding: '24px' }}>
                         <div style={{
-                            background: 'var(--bg-light)',
+                            background: 'rgba(59, 130, 246, 0.1)',
                             padding: '20px',
                             borderRadius: '8px',
-                            border: '1px solid var(--border-color)',
+                            border: '2px solid rgba(59, 130, 246, 0.3)',
                             marginBottom: '16px'
                         }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -671,7 +671,7 @@ const TimeTracking = () => {
                                     width: '40px',
                                     height: '40px',
                                     borderRadius: '50%',
-                                    background: 'var(--primary-color)',
+                                    background: '#3b82f6',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center'
@@ -681,10 +681,10 @@ const TimeTracking = () => {
                                     </svg>
                                 </div>
                                 <div style={{ flex: 1 }}>
-                                    <div style={{ fontWeight: '600', fontSize: '0.95rem', marginBottom: '4px', color: 'var(--text-dark)' }}>
+                                    <div style={{ fontWeight: '700', fontSize: '0.95rem', marginBottom: '4px', color: '#1e3a8a' }}>
                                         Currently Tracking: {projects.find(p => p._id === selectedProject)?.name || 'Unknown'}
                                     </div>
-                                    <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                                    <div style={{ fontSize: '0.85rem', color: '#3b82f6', fontWeight: '500' }}>
                                         Your time will be automatically saved when you switch
                                     </div>
                                 </div>
@@ -692,7 +692,7 @@ const TimeTracking = () => {
                         </div>
 
                         <div style={{ display: 'grid', gap: '12px' }}>
-                            <label style={{ display: 'block', fontWeight: '700', fontSize: '1rem', color: 'var(--text-dark)' }}>
+                            <label style={{ display: 'block', fontWeight: '700', fontSize: '1rem', color: '#1e3a8a' }}>
                                 Switch to Another Project:
                             </label>
 
@@ -712,26 +712,26 @@ const TimeTracking = () => {
                                         style={{
                                             padding: '16px',
                                             background: 'white',
-                                            border: '2px solid var(--border-color)',
+                                            border: '2px solid #e5e7eb',
                                             borderRadius: '8px',
                                             cursor: 'pointer',
                                             transition: 'all 0.2s',
                                             fontWeight: '600',
                                             fontSize: '0.9rem',
-                                            color: 'var(--text-dark)',
+                                            color: '#1f2937',
                                             textAlign: 'left',
                                             display: 'flex',
                                             alignItems: 'center',
                                             gap: '8px'
                                         }}
                                         onMouseEnter={(e) => {
-                                            e.currentTarget.style.borderColor = 'var(--primary-color)';
-                                            e.currentTarget.style.background = 'var(--bg-light)';
+                                            e.currentTarget.style.borderColor = '#3b82f6';
+                                            e.currentTarget.style.background = 'rgba(59, 130, 246, 0.05)';
                                             e.currentTarget.style.transform = 'translateY(-2px)';
-                                            e.currentTarget.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+                                            e.currentTarget.style.boxShadow = '0 4px 12px rgba(59, 130, 246, 0.2)';
                                         }}
                                         onMouseLeave={(e) => {
-                                            e.currentTarget.style.borderColor = 'var(--border-color)';
+                                            e.currentTarget.style.borderColor = '#e5e7eb';
                                             e.currentTarget.style.background = 'white';
                                             e.currentTarget.style.transform = 'translateY(0)';
                                             e.currentTarget.style.boxShadow = 'none';
@@ -748,16 +748,16 @@ const TimeTracking = () => {
                             <div style={{
                                 marginTop: '12px',
                                 padding: '12px 16px',
-                                background: 'var(--bg-light)',
+                                background: 'rgba(59, 130, 246, 0.08)',
                                 borderRadius: '6px',
-                                borderLeft: '4px solid var(--primary-color)'
+                                borderLeft: '4px solid #3b82f6'
                             }}>
-                                <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                                    <svg width="16" height="16" fill="none" stroke="var(--primary-color)" viewBox="0 0 24 24" style={{ flexShrink: 0, marginTop: '2px' }}>
+                                <div style={{ fontSize: '0.85rem', color: '#1e40af', display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                                    <svg width="16" height="16" fill="none" stroke="#3b82f6" viewBox="0 0 24 24" style={{ flexShrink: 0, marginTop: '2px' }}>
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                     </svg>
                                     <span>
-                                        <strong style={{ color: 'var(--text-dark)' }}>Tip:</strong> You can split your workday across multiple projects.
+                                        <strong style={{ color: '#1e3a8a' }}>Tip:</strong> You can split your workday across multiple projects.
                                         Just switch between projects as needed - all your time entries will be logged separately.
                                     </span>
                                 </div>
@@ -798,15 +798,15 @@ const TimeTracking = () => {
                     return Object.keys(projectBreakdown).length > 1 ? (
                         <div style={{
                             padding: '20px',
-                            background: 'var(--bg-light)',
-                            borderBottom: '1px solid var(--border-color)',
-                            borderTop: '3px solid var(--primary-color)'
+                            background: 'rgba(59, 130, 246, 0.05)',
+                            borderBottom: '1px solid #e5e7eb',
+                            borderTop: '3px solid #3b82f6'
                         }}>
                             <div style={{ marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <svg width="20" height="20" fill="none" stroke="var(--primary-color)" viewBox="0 0 24 24">
+                                <svg width="20" height="20" fill="none" stroke="#3b82f6" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                                 </svg>
-                                <h3 style={{ margin: 0, fontSize: '1.1rem', color: 'var(--text-dark)' }}>
+                                <h3 style={{ margin: 0, fontSize: '1.1rem', color: '#1e3a8a', fontWeight: '700' }}>
                                     Time Split Across Projects
                                 </h3>
                             </div>
@@ -818,19 +818,19 @@ const TimeTracking = () => {
                                             background: 'white',
                                             padding: '16px',
                                             borderRadius: '8px',
-                                            border: '2px solid var(--border-color)',
+                                            border: '2px solid rgba(59, 130, 246, 0.2)',
                                             display: 'flex',
                                             flexDirection: 'column',
                                             gap: '8px'
                                         }}
                                     >
-                                        <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: '600' }}>
+                                        <div style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: '600' }}>
                                             {projectName}
                                         </div>
-                                        <div style={{ fontSize: '1.5rem', fontWeight: '700', color: 'var(--primary-color)' }}>
+                                        <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#3b82f6' }}>
                                             {formatTime(duration)}
                                         </div>
-                                        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                                        <div style={{ fontSize: '0.75rem', color: '#64748b' }}>
                                             {((duration / totalDuration) * 100).toFixed(1)}% of total time
                                         </div>
                                     </div>
