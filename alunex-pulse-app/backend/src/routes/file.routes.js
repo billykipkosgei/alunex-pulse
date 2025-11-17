@@ -114,6 +114,47 @@ router.get('/download/:filename', protect, async (req, res) => {
     }
 });
 
+// Add external link (for reports hosted elsewhere)
+router.post('/add-link', protect, async (req, res) => {
+    try {
+        const { url, title, description, project, tags } = req.body;
+
+        if (!url || !title) {
+            return res.status(400).json({ message: 'URL and title are required' });
+        }
+
+        // Validate URL format
+        try {
+            new URL(url);
+        } catch (error) {
+            return res.status(400).json({ message: 'Invalid URL format' });
+        }
+
+        const file = await File.create({
+            name: title,
+            originalName: title,
+            mimeType: 'external/link',
+            size: 0,
+            path: url,
+            url: url,
+            organization: req.user.organization,
+            project: project || null,
+            uploadedBy: req.user.id,
+            description: description || '',
+            tags: tags ? (Array.isArray(tags) ? tags : [tags]) : ['report']
+        });
+
+        const populatedFile = await File.findById(file._id)
+            .populate('uploadedBy', 'name email')
+            .populate('project', 'name');
+
+        res.status(201).json({ success: true, file: populatedFile });
+    } catch (error) {
+        console.error('Error adding external link:', error);
+        res.status(500).json({ message: 'Error adding external link' });
+    }
+});
+
 // Delete file
 router.delete('/:id', protect, async (req, res) => {
     try {
@@ -123,10 +164,12 @@ router.delete('/:id', protect, async (req, res) => {
             return res.status(404).json({ message: 'File not found' });
         }
 
-        // Delete file from disk
-        const filePath = path.join(uploadsDir, file.name);
-        if (fs.existsSync(filePath)) {
-            fs.unlinkSync(filePath);
+        // Delete file from disk only if it's not an external link
+        if (file.mimeType !== 'external/link') {
+            const filePath = path.join(uploadsDir, file.name);
+            if (fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath);
+            }
         }
 
         // Delete from database

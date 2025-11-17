@@ -20,6 +20,8 @@ const Departments = () => {
     const [expandedDept, setExpandedDept] = useState(null);
     const [deptProjects, setDeptProjects] = useState({});
     const [loadingProjects, setLoadingProjects] = useState(false);
+    const [allProjects, setAllProjects] = useState([]);
+    const [selectedProjects, setSelectedProjects] = useState([]);
     const [formData, setFormData] = useState({
         name: '',
         description: '',
@@ -66,7 +68,20 @@ const Departments = () => {
         }
     };
 
-    const handleOpenModal = (dept = null) => {
+    const fetchAllProjects = async () => {
+        try {
+            const headers = { Authorization: `Bearer ${token}` };
+            const response = await axios.get(`${API_URL}/projects`, { headers });
+            setAllProjects(response.data.projects || []);
+        } catch (error) {
+            console.error('Error fetching projects:', error);
+        }
+    };
+
+    const handleOpenModal = async (dept = null) => {
+        // Fetch all projects first
+        await fetchAllProjects();
+
         if (dept) {
             setEditingDept(dept);
             setFormData({
@@ -78,8 +93,20 @@ const Departments = () => {
                     spent: dept.budget?.spent || 0
                 }
             });
+            // Fetch projects for this department if editing
+            if (dept._id) {
+                try {
+                    const headers = { Authorization: `Bearer ${token}` };
+                    const response = await axios.get(`${API_URL}/departments/${dept._id}/projects`, { headers });
+                    setSelectedProjects(response.data.projects || []);
+                } catch (error) {
+                    console.error('Error fetching department projects:', error);
+                    setSelectedProjects([]);
+                }
+            }
         } else {
             setEditingDept(null);
+            setSelectedProjects([]);
             setFormData({
                 name: '',
                 description: '',
@@ -96,6 +123,7 @@ const Departments = () => {
     const handleCloseModal = () => {
         setShowModal(false);
         setEditingDept(null);
+        setSelectedProjects([]);
         setFormData({
             name: '',
             description: '',
@@ -105,6 +133,32 @@ const Departments = () => {
                 spent: 0
             }
         });
+    };
+
+    const handleProjectSelect = (projectId) => {
+        const project = allProjects.find(p => p._id === projectId);
+        if (project && !selectedProjects.find(p => p._id === projectId)) {
+            setSelectedProjects([...selectedProjects, project]);
+        }
+    };
+
+    const handleProjectRemove = (projectId) => {
+        setSelectedProjects(selectedProjects.filter(p => p._id !== projectId));
+    };
+
+    const handleProjectBudgetChange = (projectId, field, value) => {
+        setSelectedProjects(selectedProjects.map(p => {
+            if (p._id === projectId) {
+                return {
+                    ...p,
+                    budget: {
+                        ...p.budget,
+                        [field]: parseFloat(value) || 0
+                    }
+                };
+            }
+            return p;
+        }));
     };
 
     const handleInputChange = (e) => {
@@ -136,11 +190,57 @@ const Departments = () => {
 
         try {
             const headers = { Authorization: `Bearer ${token}` };
+            let departmentId;
+
+            // Save department first
             if (editingDept) {
                 await axios.put(`${API_URL}/departments/${editingDept._id}`, formData, { headers });
+                departmentId = editingDept._id;
             } else {
-                await axios.post(`${API_URL}/departments`, formData, { headers });
+                const response = await axios.post(`${API_URL}/departments`, formData, { headers });
+                departmentId = response.data.department._id;
             }
+
+            // Update project assignments and budgets
+            for (const project of selectedProjects) {
+                try {
+                    await axios.put(
+                        `${API_URL}/projects/${project._id}`,
+                        {
+                            department: departmentId,
+                            budget: {
+                                allocated: project.budget?.allocated || 0,
+                                spent: project.budget?.spent || 0
+                            }
+                        },
+                        { headers }
+                    );
+                } catch (err) {
+                    console.error(`Error updating project ${project.name}:`, err);
+                }
+            }
+
+            // Remove department from projects that were unselected
+            if (editingDept) {
+                const headers = { Authorization: `Bearer ${token}` };
+                const response = await axios.get(`${API_URL}/departments/${editingDept._id}/projects`, { headers });
+                const oldProjects = response.data.projects || [];
+
+                for (const oldProject of oldProjects) {
+                    if (!selectedProjects.find(p => p._id === oldProject._id)) {
+                        try {
+                            await axios.put(
+                                `${API_URL}/projects/${oldProject._id}`,
+                                { department: null },
+                                { headers }
+                            );
+                        } catch (err) {
+                            console.error(`Error removing project ${oldProject.name}:`, err);
+                        }
+                    }
+                }
+            }
+
             handleCloseModal();
             fetchDepartments();
         } catch (error) {
@@ -676,6 +776,131 @@ const Departments = () => {
                                         step="100"
                                     />
                                 </div>
+                            </div>
+
+                            {/* Project Management Section */}
+                            <div style={{ marginBottom: '20px', padding: '16px', background: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                                <h3 style={{ margin: '0 0 12px 0', fontSize: '1rem', color: '#334155' }}>Project Budgets</h3>
+                                <p style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '16px' }}>
+                                    Assign projects to this department and manage their budgets
+                                </p>
+
+                                {/* Project Selector */}
+                                <div style={{ marginBottom: '16px' }}>
+                                    <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Add Project</label>
+                                    <select
+                                        className="form-control"
+                                        onChange={(e) => {
+                                            if (e.target.value) {
+                                                handleProjectSelect(e.target.value);
+                                                e.target.value = '';
+                                            }
+                                        }}
+                                    >
+                                        <option value="">Select a project to add...</option>
+                                        {allProjects
+                                            .filter(p => !selectedProjects.find(sp => sp._id === p._id))
+                                            .map(project => (
+                                                <option key={project._id} value={project._id}>
+                                                    {project.name} {project.code ? `(${project.code})` : ''}
+                                                </option>
+                                            ))
+                                        }
+                                    </select>
+                                </div>
+
+                                {/* Selected Projects Table */}
+                                {selectedProjects.length > 0 ? (
+                                    <div style={{ overflowX: 'auto' }}>
+                                        <table style={{ width: '100%', borderCollapse: 'collapse', background: 'white' }}>
+                                            <thead>
+                                                <tr style={{ background: '#e2e8f0' }}>
+                                                    <th style={{ padding: '8px', textAlign: 'left', fontSize: '0.875rem', borderBottom: '2px solid #cbd5e1' }}>Project Name</th>
+                                                    <th style={{ padding: '8px', textAlign: 'left', fontSize: '0.875rem', borderBottom: '2px solid #cbd5e1' }}>Code</th>
+                                                    <th style={{ padding: '8px', textAlign: 'right', fontSize: '0.875rem', borderBottom: '2px solid #cbd5e1' }}>Allocated</th>
+                                                    <th style={{ padding: '8px', textAlign: 'right', fontSize: '0.875rem', borderBottom: '2px solid #cbd5e1' }}>Spent</th>
+                                                    <th style={{ padding: '8px', textAlign: 'center', fontSize: '0.875rem', borderBottom: '2px solid #cbd5e1' }}>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {selectedProjects.map(project => (
+                                                    <tr key={project._id} style={{ borderBottom: '1px solid #e2e8f0' }}>
+                                                        <td style={{ padding: '8px', fontSize: '0.875rem' }}>
+                                                            <strong>{project.name}</strong>
+                                                        </td>
+                                                        <td style={{ padding: '8px', fontSize: '0.875rem' }}>
+                                                            <span style={{
+                                                                padding: '2px 6px',
+                                                                background: '#e0e7ff',
+                                                                color: '#4338ca',
+                                                                borderRadius: '4px',
+                                                                fontSize: '0.75rem',
+                                                                fontWeight: '600'
+                                                            }}>
+                                                                {project.code || 'N/A'}
+                                                            </span>
+                                                        </td>
+                                                        <td style={{ padding: '8px' }}>
+                                                            <input
+                                                                type="number"
+                                                                className="form-control"
+                                                                value={project.budget?.allocated || 0}
+                                                                onChange={(e) => handleProjectBudgetChange(project._id, 'allocated', e.target.value)}
+                                                                min="0"
+                                                                step="1000"
+                                                                style={{ width: '120px', fontSize: '0.875rem', padding: '4px 8px' }}
+                                                            />
+                                                        </td>
+                                                        <td style={{ padding: '8px' }}>
+                                                            <input
+                                                                type="number"
+                                                                className="form-control"
+                                                                value={project.budget?.spent || 0}
+                                                                onChange={(e) => handleProjectBudgetChange(project._id, 'spent', e.target.value)}
+                                                                min="0"
+                                                                step="100"
+                                                                style={{ width: '120px', fontSize: '0.875rem', padding: '4px 8px' }}
+                                                            />
+                                                        </td>
+                                                        <td style={{ padding: '8px', textAlign: 'center' }}>
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => handleProjectRemove(project._id)}
+                                                                style={{
+                                                                    padding: '4px 8px',
+                                                                    fontSize: '0.75rem',
+                                                                    background: '#ef4444',
+                                                                    color: 'white',
+                                                                    border: 'none',
+                                                                    borderRadius: '4px',
+                                                                    cursor: 'pointer'
+                                                                }}
+                                                            >
+                                                                Remove
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                                <tr style={{ background: '#f1f5f9', fontWeight: '600' }}>
+                                                    <td colSpan="2" style={{ padding: '8px', textAlign: 'right', fontSize: '0.875rem' }}>
+                                                        Total Project Budgets:
+                                                    </td>
+                                                    <td style={{ padding: '8px', textAlign: 'right', fontSize: '0.875rem' }}>
+                                                        {formatCurrency(selectedProjects.reduce((sum, p) => sum + (p.budget?.allocated || 0), 0))}
+                                                    </td>
+                                                    <td style={{ padding: '8px', textAlign: 'right', fontSize: '0.875rem' }}>
+                                                        {formatCurrency(selectedProjects.reduce((sum, p) => sum + (p.budget?.spent || 0), 0))}
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                ) : (
+                                    <p style={{ textAlign: 'center', padding: '20px', color: '#94a3b8', fontSize: '0.875rem', fontStyle: 'italic' }}>
+                                        No projects assigned yet. Select a project from the dropdown above.
+                                    </p>
+                                )}
                             </div>
 
                             <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>

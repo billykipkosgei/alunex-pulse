@@ -552,8 +552,84 @@ const TimeTracking = () => {
                             </>
                         )}
                     </div>
+
+                    {/* Currently Running Timer Info */}
+                    {isTimerRunning && (
+                        <div style={{
+                            marginTop: '20px',
+                            padding: '16px',
+                            background: '#f0f9ff',
+                            border: '1px solid #0ea5e9',
+                            borderRadius: '8px'
+                        }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <div>
+                                    <div style={{ fontSize: '0.875rem', color: '#0369a1', fontWeight: '600', marginBottom: '4px' }}>
+                                        Currently Tracking:
+                                    </div>
+                                    <div style={{ fontSize: '1rem', fontWeight: '600', color: '#0c4a6e' }}>
+                                        {projects.find(p => p._id === selectedProject)?.name || 'Unknown Project'}
+                                    </div>
+                                    <div style={{ fontSize: '0.875rem', color: '#64748b' }}>
+                                        {taskDescription || 'No description'}
+                                    </div>
+                                </div>
+                                <div style={{ textAlign: 'right' }}>
+                                    <div style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '4px' }}>Started</div>
+                                    <div style={{ fontSize: '0.875rem', fontWeight: '600', color: '#0c4a6e' }}>
+                                        {timerStartTime ? formatTimeForDisplay(timerStartTime) : '-'}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
+
+            {/* Quick Switch Section */}
+            {isTimerRunning && (
+                <div className="card">
+                    <div className="card-header">
+                        <h2>Switch to Different Project/Task</h2>
+                        <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginTop: '8px', marginBottom: 0 }}>
+                            Stop current timer and start a new one for a different project
+                        </p>
+                    </div>
+                    <div style={{ padding: '24px' }}>
+                        <div style={{ display: 'grid', gap: '16px', maxWidth: '600px' }}>
+                            <div>
+                                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>Select New Project</label>
+                                <select
+                                    className="form-control"
+                                    onChange={async (e) => {
+                                        if (e.target.value && window.confirm('Stop current timer and switch to this project?')) {
+                                            const newProjectId = e.target.value;
+                                            // Stop current timer
+                                            await handleStopTimer();
+                                            // Set new project
+                                            setTimeout(() => {
+                                                handleProjectChange(newProjectId);
+                                            }, 100);
+                                        }
+                                        e.target.value = '';
+                                    }}
+                                    defaultValue=""
+                                >
+                                    <option value="">Choose a project to switch to...</option>
+                                    {projects.filter(p => p._id && p._id !== selectedProject).map(project => (
+                                        <option key={project._id} value={project._id}>
+                                            {project.name}
+                                        </option>
+                                    ))}
+                                </select>
+                                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '8px', marginBottom: 0 }}>
+                                    This will save your current time entry and prepare a new timer for the selected project
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <div className="card">
                 <div className="card-header">

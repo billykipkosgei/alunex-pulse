@@ -45,6 +45,7 @@ router.get('/', protect, async (req, res) => {
             .populate('manager', 'name email')
             .populate('team.user', 'name email')
             .populate('client', 'name email')
+            .populate('department', 'name')
             .populate('spendDocumentation.excelFile')
             .populate('spendDocumentation.uploadedBy', 'name email');
         res.json({ success: true, projects });
@@ -56,10 +57,21 @@ router.get('/', protect, async (req, res) => {
 // Create project
 router.post('/', protect, async (req, res) => {
     try {
-        const project = await Project.create({
+        const projectData = {
             ...req.body,
             organization: req.user.organization
-        });
+        };
+
+        // Ensure empty strings for department are set to null/undefined
+        if (projectData.department === '') {
+            delete projectData.department;
+        }
+
+        const project = await Project.create(projectData);
+
+        // Populate department before sending response
+        await project.populate('department', 'name');
+
         res.status(201).json({ success: true, project });
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -76,6 +88,7 @@ router.get('/:id', protect, async (req, res) => {
             .populate('manager', 'name email')
             .populate('team.user', 'name email')
             .populate('client', 'name email')
+            .populate('department', 'name')
             .populate('spendDocumentation.excelFile')
             .populate('spendDocumentation.uploadedBy', 'name email');
         if (!project) {
@@ -90,11 +103,25 @@ router.get('/:id', protect, async (req, res) => {
 // Update project
 router.put('/:id', protect, async (req, res) => {
     try {
+        const updateData = { ...req.body };
+
+        // Ensure empty strings for department are set to null
+        if (updateData.department === '') {
+            updateData.department = null;
+        }
+
         const project = await Project.findOneAndUpdate(
             { _id: req.params.id, organization: req.user.organization },
-            req.body,
+            updateData,
             { new: true, runValidators: true }
-        );
+        )
+            .populate('manager', 'name email')
+            .populate('team.user', 'name email')
+            .populate('client', 'name email')
+            .populate('department', 'name')
+            .populate('spendDocumentation.excelFile')
+            .populate('spendDocumentation.uploadedBy', 'name email');
+
         if (!project) {
             return res.status(404).json({ message: 'Project not found' });
         }
