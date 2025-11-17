@@ -33,6 +33,10 @@ const fileSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Project'
     },
+    department: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Department'
+    },
     uploadedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

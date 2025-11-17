@@ -9,6 +9,7 @@ const Files = () => {
     const [uploading, setUploading] = useState(false);
     const [selectedProject, setSelectedProject] = useState('all');
     const [projects, setProjects] = useState([]);
+    const [departments, setDepartments] = useState([]);
     const fileInputRef = useRef(null);
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -19,10 +20,13 @@ const Files = () => {
     const [linkUrl, setLinkUrl] = useState('');
     const [linkTitle, setLinkTitle] = useState('');
     const [linkDescription, setLinkDescription] = useState('');
+    const [selectedModalProject, setSelectedModalProject] = useState('');
+    const [selectedDepartment, setSelectedDepartment] = useState('');
 
     useEffect(() => {
         fetchFiles();
         fetchProjects();
+        fetchDepartments();
     }, []);
 
     const fetchFiles = async () => {
@@ -48,6 +52,16 @@ const Files = () => {
             ]);
         } catch (error) {
             console.error('Error fetching projects:', error);
+        }
+    };
+
+    const fetchDepartments = async () => {
+        try {
+            const headers = { Authorization: `Bearer ${token}` };
+            const response = await axios.get(`${API_URL}/departments`, { headers });
+            setDepartments(response.data.departments || []);
+        } catch (error) {
+            console.error('Error fetching departments:', error);
         }
     };
 
@@ -96,8 +110,11 @@ const Files = () => {
             if (uploadType === 'file') {
                 const formData = new FormData();
                 formData.append('file', uploadFile);
-                if (selectedProject !== 'all') {
-                    formData.append('project', selectedProject);
+                if (selectedModalProject) {
+                    formData.append('project', selectedModalProject);
+                }
+                if (selectedDepartment) {
+                    formData.append('department', selectedDepartment);
                 }
                 if (linkDescription) {
                     formData.append('description', linkDescription);
@@ -118,7 +135,8 @@ const Files = () => {
                         url: linkUrl,
                         title: linkTitle,
                         description: linkDescription,
-                        project: selectedProject !== 'all' ? selectedProject : null
+                        project: selectedModalProject || null,
+                        department: selectedDepartment || null
                     },
                     { headers }
                 );
@@ -131,6 +149,8 @@ const Files = () => {
             setLinkUrl('');
             setLinkTitle('');
             setLinkDescription('');
+            setSelectedModalProject('');
+            setSelectedDepartment('');
             setUploadType('file');
             fetchFiles();
         } catch (error) {
@@ -421,6 +441,38 @@ const Files = () => {
                                 </div>
                             </>
                         )}
+
+                        <div className="form-group" style={{ marginBottom: '16px' }}>
+                            <label className="form-label">Department (Optional)</label>
+                            <select
+                                className="form-control"
+                                value={selectedDepartment}
+                                onChange={(e) => setSelectedDepartment(e.target.value)}
+                            >
+                                <option value="">-- Select a department --</option>
+                                {departments.map(dept => (
+                                    <option key={dept._id} value={dept._id}>
+                                        {dept.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div className="form-group" style={{ marginBottom: '16px' }}>
+                            <label className="form-label">Project (Optional)</label>
+                            <select
+                                className="form-control"
+                                value={selectedModalProject}
+                                onChange={(e) => setSelectedModalProject(e.target.value)}
+                            >
+                                <option value="">-- Select a project --</option>
+                                {projects.filter(p => p._id !== 'all').map(project => (
+                                    <option key={project._id} value={project._id}>
+                                        {project.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
 
                         <div className="form-group" style={{ marginBottom: '20px' }}>
                             <label className="form-label">Description (Optional)</label>

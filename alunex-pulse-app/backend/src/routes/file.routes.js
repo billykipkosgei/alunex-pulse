@@ -42,6 +42,7 @@ router.get('/', protect, async (req, res) => {
         const files = await File.find(query)
             .populate('uploadedBy', 'name email')
             .populate('project', 'name')
+            .populate('department', 'name')
             .sort({ createdAt: -1 });
 
         res.json({ success: true, files });
@@ -58,7 +59,7 @@ router.post('/upload', protect, upload.single('file'), async (req, res) => {
             return res.status(400).json({ message: 'No file uploaded' });
         }
 
-        const { project, description, tags } = req.body;
+        const { project, department, description, tags } = req.body;
 
         const file = await File.create({
             name: req.file.filename,
@@ -69,6 +70,7 @@ router.post('/upload', protect, upload.single('file'), async (req, res) => {
             url: `/api/files/download/${req.file.filename}`,
             organization: req.user.organization,
             project: project || null,
+            department: department || null,
             uploadedBy: req.user.id,
             description: description || '',
             tags: tags ? JSON.parse(tags) : []
@@ -76,7 +78,8 @@ router.post('/upload', protect, upload.single('file'), async (req, res) => {
 
         const populatedFile = await File.findById(file._id)
             .populate('uploadedBy', 'name email')
-            .populate('project', 'name');
+            .populate('project', 'name')
+            .populate('department', 'name');
 
         res.status(201).json({ success: true, file: populatedFile });
     } catch (error) {
@@ -117,7 +120,7 @@ router.get('/download/:filename', protect, async (req, res) => {
 // Add external link (for reports hosted elsewhere)
 router.post('/add-link', protect, async (req, res) => {
     try {
-        const { url, title, description, project, tags } = req.body;
+        const { url, title, description, project, department, tags } = req.body;
 
         if (!url || !title) {
             return res.status(400).json({ message: 'URL and title are required' });
@@ -139,6 +142,7 @@ router.post('/add-link', protect, async (req, res) => {
             url: url,
             organization: req.user.organization,
             project: project || null,
+            department: department || null,
             uploadedBy: req.user.id,
             description: description || '',
             tags: tags ? (Array.isArray(tags) ? tags : [tags]) : ['report']
@@ -146,7 +150,8 @@ router.post('/add-link', protect, async (req, res) => {
 
         const populatedFile = await File.findById(file._id)
             .populate('uploadedBy', 'name email')
-            .populate('project', 'name');
+            .populate('project', 'name')
+            .populate('department', 'name');
 
         res.status(201).json({ success: true, file: populatedFile });
     } catch (error) {

@@ -160,6 +160,7 @@ router.post('/:id/spend-documentation/upload', protect, upload.single('file'), a
             url: `/api/files/download/${req.file.filename}`,
             organization: req.user.organization,
             uploadedBy: req.user.id,
+            project: req.body.project || null,
             description: 'Department spend documentation',
             tags: ['spend', 'budget', 'documentation', 'department']
         });

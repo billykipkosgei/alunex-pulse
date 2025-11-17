@@ -17,6 +17,7 @@ const Departments = () => {
     const [docLink, setDocLink] = useState('');
     const [docNotes, setDocNotes] = useState('');
     const [uploadingDoc, setUploadingDoc] = useState(false);
+    const [selectedDocProject, setSelectedDocProject] = useState('');
     const [expandedDept, setExpandedDept] = useState(null);
     const [deptProjects, setDeptProjects] = useState({});
     const [loadingProjects, setLoadingProjects] = useState(false);
@@ -262,11 +263,14 @@ const Departments = () => {
         }
     };
 
-    const handleOpenDocModal = (dept) => {
+    const handleOpenDocModal = async (dept) => {
         setCurrentDeptForDoc(dept);
         setDocLink(dept.spendDocumentation?.documentLink || '');
         setDocNotes(dept.spendDocumentation?.notes || '');
         setUploadFile(null);
+        setSelectedDocProject('');
+        // Fetch all projects for the dropdown
+        await fetchAllProjects();
         setShowDocModal(true);
     };
 
@@ -276,6 +280,7 @@ const Departments = () => {
         setUploadFile(null);
         setDocLink('');
         setDocNotes('');
+        setSelectedDocProject('');
     };
 
     const handleFileChange = (e) => {
@@ -308,6 +313,9 @@ const Departments = () => {
                 formData.append('file', uploadFile);
                 formData.append('documentLink', docLink);
                 formData.append('notes', docNotes);
+                if (selectedDocProject) {
+                    formData.append('project', selectedDocProject);
+                }
 
                 await axios.post(
                     `${API_URL}/departments/${currentDeptForDoc._id}/spend-documentation/upload`,
@@ -321,9 +329,13 @@ const Departments = () => {
                 );
             } else if (docLink) {
                 // Only link provided
+                const linkData = { documentLink: docLink, notes: docNotes };
+                if (selectedDocProject) {
+                    linkData.project = selectedDocProject;
+                }
                 await axios.put(
                     `${API_URL}/departments/${currentDeptForDoc._id}/spend-documentation/link`,
-                    { documentLink: docLink, notes: docNotes },
+                    linkData,
                     { headers }
                 );
             }
@@ -993,6 +1005,28 @@ const Departments = () => {
                                 </button>
                             </div>
                         )}
+
+                        <div style={{ marginBottom: '20px' }}>
+                            <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>
+                                Select Project (Optional)
+                            </label>
+                            <select
+                                className="form-control"
+                                value={selectedDocProject}
+                                onChange={(e) => setSelectedDocProject(e.target.value)}
+                                style={{ width: '100%' }}
+                            >
+                                <option value="">-- Select a project --</option>
+                                {allProjects.map(project => (
+                                    <option key={project._id} value={project._id}>
+                                        {project.name}
+                                    </option>
+                                ))}
+                            </select>
+                            <p style={{ fontSize: '12px', color: '#6b7280', marginTop: '6px' }}>
+                                Associate this documentation with a specific project
+                            </p>
+                        </div>
 
                         <div style={{ marginBottom: '20px' }}>
                             <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>
