@@ -180,14 +180,6 @@ const Tasks = () => {
         }));
     };
 
-    const handleProjectFormChange = (e) => {
-        const { name, value } = e.target;
-        setProjectFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-    };
-
     const handleAddSubTask = () => {
         setSubTasks([...subTasks, {
             title: '',
