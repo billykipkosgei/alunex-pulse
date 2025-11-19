@@ -12,7 +12,14 @@ router.get('/', protect, async (req, res) => {
         if (status) query.status = status;
 
         const tasks = await Task.find(query)
-            .populate('project', 'name')
+            .populate({
+                path: 'project',
+                select: 'name department',
+                populate: {
+                    path: 'department',
+                    select: 'name'
+                }
+            })
             .populate('assignedTo', 'name email')
             .populate('department', 'name');
         res.json({ success: true, tasks });

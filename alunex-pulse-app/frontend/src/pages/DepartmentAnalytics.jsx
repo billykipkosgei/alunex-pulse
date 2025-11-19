@@ -50,7 +50,12 @@ const DepartmentAnalytics = () => {
 
             if (selectedDept !== 'all') {
                 selectedDeptData = depts.find(d => d._id === selectedDept);
-                filteredTasks = tasks.filter(t => t.department === selectedDept);
+                // Filter tasks by department - check both task's direct department AND project's department
+                filteredTasks = tasks.filter(t => {
+                    const taskDeptId = t.department?._id || t.department;
+                    const projectDeptId = t.project?.department?._id || t.project?.department;
+                    return taskDeptId === selectedDept || projectDeptId === selectedDept;
+                });
                 filteredUsers = users.filter(u => selectedDeptData?.members?.includes(u._id));
             }
 
