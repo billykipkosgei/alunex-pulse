@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import { jsPDF } from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import { Document, Packer, Paragraph, Table, TableCell, TableRow, WidthType, BorderStyle, AlignmentType, HeadingLevel } from 'docx';
 
@@ -10,6 +10,7 @@ const Reports = () => {
     const { token, API_URL } = useAuth();
     const [loading, setLoading] = useState(true);
     const [generating, setGenerating] = useState(false);
+    const [downloading, setDownloading] = useState(false);
     const [reportType, setReportType] = useState('time-summary');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -219,10 +220,20 @@ const Reports = () => {
     };
 
     const downloadPDF = () => {
-        if (!reportData) return;
+        if (!reportData) {
+            alert('No report data available to download');
+            return;
+        }
 
-        const doc = new jsPDF();
-        const pageWidth = doc.internal.pageSize.getWidth();
+        setDownloading(true);
+
+        // Use setTimeout to allow UI to update before heavy PDF generation
+        setTimeout(() => {
+            try {
+                console.log('Starting PDF generation...');
+                const doc = new jsPDF();
+
+                const pageWidth = doc.internal.pageSize.getWidth();
 
         // Header
         doc.setFontSize(18);
@@ -246,7 +257,7 @@ const Reports = () => {
                 ['Time Entries', reportData.entriesCount]
             ];
 
-            doc.autoTable({
+            autoTable(doc, {
                 startY: yPos,
                 head: [['Metric', 'Value']],
                 body: summaryData,
@@ -267,7 +278,7 @@ const Reports = () => {
                 project, hours.toFixed(2) + 'h'
             ]);
 
-            doc.autoTable({
+            autoTable(doc, {
                 startY: yPos,
                 head: [['Project', 'Hours']],
                 body: projectData,
@@ -288,7 +299,7 @@ const Reports = () => {
                 user, hours.toFixed(2) + 'h'
             ]);
 
-            doc.autoTable({
+            autoTable(doc, {
                 startY: yPos,
                 head: [['Team Member', 'Hours']],
                 body: userData,
@@ -304,7 +315,7 @@ const Reports = () => {
                 ['Completion Rate', reportData.completionRate]
             ];
 
-            doc.autoTable({
+            autoTable(doc, {
                 startY: yPos,
                 head: [['Metric', 'Value']],
                 body: summaryData,
@@ -325,7 +336,7 @@ const Reports = () => {
                 return [project, data.total, data.completed, data.inProgress, completion + '%'];
             });
 
-            doc.autoTable({
+            autoTable(doc, {
                 startY: yPos,
                 head: [['Project', 'Total Tasks', 'Completed', 'In Progress', 'Completion %']],
                 body: projectData,
@@ -336,7 +347,7 @@ const Reports = () => {
         } else if (reportType === 'team-performance') {
             const summaryData = [['Active Team Members', reportData.teamMembers]];
 
-            doc.autoTable({
+            autoTable(doc, {
                 startY: yPos,
                 head: [['Metric', 'Value']],
                 body: summaryData,
@@ -357,7 +368,7 @@ const Reports = () => {
                 return [user, data.totalTasks, data.completedTasks, data.hoursLogged.toFixed(1) + 'h', completion + '%'];
             });
 
-            doc.autoTable({
+            autoTable(doc, {
                 startY: yPos,
                 head: [['Team Member', 'Total Tasks', 'Completed', 'Hours Logged', 'Completion Rate']],
                 body: userData,
@@ -373,7 +384,7 @@ const Reports = () => {
                 ['Utilization', reportData.utilizationRate]
             ];
 
-            doc.autoTable({
+            autoTable(doc, {
                 startY: yPos,
                 head: [['Metric', 'Value']],
                 body: summaryData,
@@ -396,7 +407,7 @@ const Reports = () => {
                 formatCurrency(data.remaining)
             ]);
 
-            doc.autoTable({
+            autoTable(doc, {
                 startY: yPos,
                 head: [['Department', 'Allocated', 'Spent', 'Remaining']],
                 body: deptData,
@@ -406,7 +417,36 @@ const Reports = () => {
             });
         }
 
-        doc.save(`${reportData.type.replace(/ /g, '_')}_Report_${new Date().toISOString().split('T')[0]}.pdf`);
+            // Generate and download the PDF
+            const fileName = `${reportData.type.replace(/ /g, '_')}_Report_${new Date().toISOString().split('T')[0]}.pdf`;
+
+                // Try to save the PDF
+                try {
+                    doc.save(fileName);
+                    console.log('PDF downloaded successfully:', fileName);
+                } catch (saveError) {
+                    // Fallback: Try blob method
+                    console.warn('doc.save() failed, trying blob method:', saveError);
+                    const pdfBlob = doc.output('blob');
+                    const url = window.URL.createObjectURL(pdfBlob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = fileName;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(url);
+                    console.log('PDF downloaded via blob method');
+                }
+                setDownloading(false);
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                console.error('Error details:', error.message);
+                console.error('Error stack:', error.stack);
+                alert(`Failed to generate PDF: ${error.message}\n\nPlease try Excel or Word export instead.`);
+                setDownloading(false);
+            }
+        }, 100);
     };
 
     const downloadExcel = () => {
@@ -984,27 +1024,35 @@ const Reports = () => {
                                         downloadPDF();
                                         document.getElementById('download-dropdown').style.display = 'none';
                                     }}
+                                    disabled={downloading}
                                     style={{
                                         width: '100%',
                                         padding: '12px 16px',
                                         border: 'none',
                                         background: 'transparent',
                                         textAlign: 'left',
-                                        cursor: 'pointer',
+                                        cursor: downloading ? 'not-allowed' : 'pointer',
                                         fontSize: '14px',
-                                        color: 'var(--text-dark)',
+                                        color: downloading ? 'var(--text-muted)' : 'var(--text-dark)',
                                         display: 'flex',
                                         alignItems: 'center',
                                         gap: '10px',
-                                        transition: 'background 0.2s'
+                                        transition: 'background 0.2s',
+                                        opacity: downloading ? 0.6 : 1
                                     }}
-                                    onMouseEnter={(e) => e.target.style.background = 'var(--bg-gray)'}
+                                    onMouseEnter={(e) => !downloading && (e.target.style.background = 'var(--bg-gray)')}
                                     onMouseLeave={(e) => e.target.style.background = 'transparent'}
                                 >
-                                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                                    </svg>
-                                    Download PDF
+                                    {downloading ? (
+                                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ animation: 'spin 1s linear infinite' }}>
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                        </svg>
+                                    ) : (
+                                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                        </svg>
+                                    )}
+                                    {downloading ? 'Generating PDF...' : 'Download PDF'}
                                 </button>
                                 <button
                                     onClick={() => {

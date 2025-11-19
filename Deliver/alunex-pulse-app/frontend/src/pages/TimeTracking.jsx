@@ -25,6 +25,19 @@ const TimeTracking = () => {
     const [weekTotal, setWeekTotal] = useState('0');
     const [billableTotal, setBillableTotal] = useState('0');
     const [nonBillableTotal, setNonBillableTotal] = useState('0');
+    const [isBillable, setIsBillable] = useState(true);
+    const [showManualEntryModal, setShowManualEntryModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [editingLog, setEditingLog] = useState(null);
+    const [manualEntryData, setManualEntryData] = useState({
+        projectId: '',
+        taskId: '',
+        subTaskId: '',
+        description: '',
+        startTime: '',
+        endTime: '',
+        billable: true
+    });
 
     useEffect(() => {
         fetchInitialData();
@@ -213,7 +226,7 @@ const TimeTracking = () => {
             const payload = {
                 projectId: selectedProject,
                 description: taskDescription,
-                billable: !isGeneralWork
+                billable: isBillable
             };
 
             if (selectedTask) payload.taskId = selectedTask;
@@ -290,6 +303,86 @@ const TimeTracking = () => {
         }
     };
 
+    const handleManualEntryChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        setManualEntryData(prev => ({
+            ...prev,
+            [name]: type === 'checkbox' ? checked : value
+        }));
+    };
+
+    const handleCreateManualEntry = async (e) => {
+        e.preventDefault();
+
+        if (!manualEntryData.projectId || !manualEntryData.description ||
+            !manualEntryData.startTime || !manualEntryData.endTime) {
+            alert('Please fill in all required fields');
+            return;
+        }
+
+        try {
+            const headers = { Authorization: `Bearer ${token}` };
+            await axios.post(`${API_URL}/timetracking/manual`, manualEntryData, { headers });
+
+            setShowManualEntryModal(false);
+            setManualEntryData({
+                projectId: '',
+                taskId: '',
+                subTaskId: '',
+                description: '',
+                startTime: '',
+                endTime: '',
+                billable: true
+            });
+
+            await fetchTimeLogs();
+            await fetchWeeklySummary();
+        } catch (error) {
+            console.error('Error creating manual entry:', error);
+            alert(error.response?.data?.message || 'Error creating manual entry');
+        }
+    };
+
+    const handleEditLog = (log) => {
+        setEditingLog({
+            id: log._id,
+            projectId: log.project?._id || '',
+            taskId: log.task?._id || '',
+            subTaskId: log.subTask?._id || '',
+            description: log.description,
+            startTime: new Date(log.startTime).toISOString().slice(0, 16),
+            endTime: new Date(log.endTime).toISOString().slice(0, 16),
+            billable: log.billable
+        });
+        setShowEditModal(true);
+    };
+
+    const handleEditChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        setEditingLog(prev => ({
+            ...prev,
+            [name]: type === 'checkbox' ? checked : value
+        }));
+    };
+
+    const handleUpdateLog = async (e) => {
+        e.preventDefault();
+
+        try {
+            const headers = { Authorization: `Bearer ${token}` };
+            await axios.put(`${API_URL}/timetracking/logs/${editingLog.id}`, editingLog, { headers });
+
+            setShowEditModal(false);
+            setEditingLog(null);
+
+            await fetchTimeLogs();
+            await fetchWeeklySummary();
+        } catch (error) {
+            console.error('Error updating log:', error);
+            alert(error.response?.data?.message || 'Error updating log');
+        }
+    };
+
     const handleExport = () => {
         if (timeLogs.length === 0) {
             alert('No time logs to export');
@@ -342,6 +435,62 @@ const TimeTracking = () => {
                 <div className="card-header">
                     <h2>Active Timer</h2>
                 </div>
+
+                {/* Info Section - Shows when timer is NOT running */}
+                {!isTimerRunning && (
+                    <div style={{
+                        padding: '20px',
+                        background: 'rgba(59, 130, 246, 0.08)',
+                        borderBottom: '2px solid #3b82f6',
+                        margin: '0'
+                    }}>
+                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
+                            <div style={{
+                                width: '48px',
+                                height: '48px',
+                                borderRadius: '50%',
+                                background: '#3b82f6',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                flexShrink: 0
+                            }}>
+                                <svg width="24" height="24" fill="none" stroke="white" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 style={{ margin: '0 0 8px 0', fontSize: '1.1rem', color: '#1e3a8a', fontWeight: '700' }}>
+                                    Track Multiple Projects in One Day
+                                </h3>
+                                <p style={{ margin: '0 0 12px 0', fontSize: '0.9rem', color: '#1e40af', lineHeight: '1.6' }}>
+                                    You can split your workday across different projects. Simply start a timer for one project,
+                                    then switch to another when needed. All time entries are logged separately.
+                                </p>
+                                <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', fontSize: '0.85rem', color: '#1e40af' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                        <svg width="16" height="16" fill="none" stroke="#3b82f6" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                        <span>Track 3 hours on Project A</span>
+                                    </div>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                        <svg width="16" height="16" fill="none" stroke="#3b82f6" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                        <span>Switch to 3 hours on Project B</span>
+                                    </div>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                        <svg width="16" height="16" fill="none" stroke="#3b82f6" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                        <span>Track 2 hours on Project C</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 <div className="timer-container">
                     <div className="timer-display">{formatTime(timeElapsed)}</div>
@@ -410,6 +559,20 @@ const TimeTracking = () => {
                                 />
                             </div>
                         )}
+
+                        <div className="form-group timer-form-group" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <input
+                                type="checkbox"
+                                id="billable-checkbox"
+                                checked={isBillable}
+                                onChange={(e) => setIsBillable(e.target.checked)}
+                                disabled={isTimerRunning}
+                                style={{ width: 'auto', margin: 0 }}
+                            />
+                            <label htmlFor="billable-checkbox" style={{ margin: 0, fontWeight: '600' }}>
+                                Billable (charge to client)
+                            </label>
+                        </div>
                     </div>
 
                     <div className="timer-actions">
@@ -445,8 +608,164 @@ const TimeTracking = () => {
                             </>
                         )}
                     </div>
+
+                    {/* Currently Running Timer Info */}
+                    {isTimerRunning && (
+                        <div style={{
+                            marginTop: '20px',
+                            padding: '16px',
+                            background: '#f0f9ff',
+                            border: '1px solid #0ea5e9',
+                            borderRadius: '8px'
+                        }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <div>
+                                    <div style={{ fontSize: '0.875rem', color: '#0369a1', fontWeight: '600', marginBottom: '4px' }}>
+                                        Currently Tracking:
+                                    </div>
+                                    <div style={{ fontSize: '1rem', fontWeight: '600', color: '#0c4a6e' }}>
+                                        {projects.find(p => p._id === selectedProject)?.name || 'Unknown Project'}
+                                    </div>
+                                    <div style={{ fontSize: '0.875rem', color: '#64748b' }}>
+                                        {taskDescription || 'No description'}
+                                    </div>
+                                </div>
+                                <div style={{ textAlign: 'right' }}>
+                                    <div style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '4px' }}>Started</div>
+                                    <div style={{ fontSize: '0.875rem', fontWeight: '600', color: '#0c4a6e' }}>
+                                        {timerStartTime ? formatTimeForDisplay(timerStartTime) : '-'}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
+
+            {/* Quick Switch Section - Enhanced */}
+            {isTimerRunning && (
+                <div className="card" style={{ border: '2px solid #3b82f6', background: 'linear-gradient(135deg, #dbeafe 0%, #ffffff 100%)' }}>
+                    <div className="card-header" style={{ background: '#3b82f6', color: 'white', borderBottom: 'none' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                            <svg width="24" height="24" fill="none" stroke="white" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+                            </svg>
+                            <div>
+                                <h2 style={{ color: 'white', margin: 0 }}>Quick Switch Project</h2>
+                                <p style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.95)', marginTop: '8px', marginBottom: 0 }}>
+                                    Switch to a different project without losing your current time entry
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div style={{ padding: '24px' }}>
+                        <div style={{
+                            background: 'rgba(59, 130, 246, 0.1)',
+                            padding: '20px',
+                            borderRadius: '8px',
+                            border: '2px solid rgba(59, 130, 246, 0.3)',
+                            marginBottom: '16px'
+                        }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                <div style={{
+                                    width: '40px',
+                                    height: '40px',
+                                    borderRadius: '50%',
+                                    background: '#3b82f6',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }}>
+                                    <svg width="20" height="20" fill="none" stroke="white" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                </div>
+                                <div style={{ flex: 1 }}>
+                                    <div style={{ fontWeight: '700', fontSize: '0.95rem', marginBottom: '4px', color: '#1e3a8a' }}>
+                                        Currently Tracking: {projects.find(p => p._id === selectedProject)?.name || 'Unknown'}
+                                    </div>
+                                    <div style={{ fontSize: '0.85rem', color: '#3b82f6', fontWeight: '500' }}>
+                                        Your time will be automatically saved when you switch
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style={{ display: 'grid', gap: '12px' }}>
+                            <label style={{ display: 'block', fontWeight: '700', fontSize: '1rem', color: '#1e3a8a' }}>
+                                Switch to Another Project:
+                            </label>
+
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '12px' }}>
+                                {projects.filter(p => p._id && p._id !== selectedProject && p.name !== 'Select Project').map(project => (
+                                    <button
+                                        key={project._id}
+                                        onClick={async () => {
+                                            if (window.confirm(`Stop current timer and switch to "${project.name}"?\n\nYour current time entry will be saved automatically.`)) {
+                                                const newProjectId = project._id;
+                                                await handleStopTimer();
+                                                setTimeout(() => {
+                                                    handleProjectChange(newProjectId);
+                                                }, 100);
+                                            }
+                                        }}
+                                        style={{
+                                            padding: '16px',
+                                            background: 'white',
+                                            border: '2px solid #e5e7eb',
+                                            borderRadius: '8px',
+                                            cursor: 'pointer',
+                                            transition: 'all 0.2s',
+                                            fontWeight: '600',
+                                            fontSize: '0.9rem',
+                                            color: '#1f2937',
+                                            textAlign: 'left',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '8px'
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            e.currentTarget.style.borderColor = '#3b82f6';
+                                            e.currentTarget.style.background = 'rgba(59, 130, 246, 0.05)';
+                                            e.currentTarget.style.transform = 'translateY(-2px)';
+                                            e.currentTarget.style.boxShadow = '0 4px 12px rgba(59, 130, 246, 0.2)';
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.currentTarget.style.borderColor = '#e5e7eb';
+                                            e.currentTarget.style.background = 'white';
+                                            e.currentTarget.style.transform = 'translateY(0)';
+                                            e.currentTarget.style.boxShadow = 'none';
+                                        }}
+                                    >
+                                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
+                                        </svg>
+                                        <span>{project.name}</span>
+                                    </button>
+                                ))}
+                            </div>
+
+                            <div style={{
+                                marginTop: '12px',
+                                padding: '12px 16px',
+                                background: 'rgba(59, 130, 246, 0.08)',
+                                borderRadius: '6px',
+                                borderLeft: '4px solid #3b82f6'
+                            }}>
+                                <div style={{ fontSize: '0.85rem', color: '#1e40af', display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                                    <svg width="16" height="16" fill="none" stroke="#3b82f6" viewBox="0 0 24 24" style={{ flexShrink: 0, marginTop: '2px' }}>
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    <span>
+                                        <strong style={{ color: '#1e3a8a' }}>Tip:</strong> You can split your workday across multiple projects.
+                                        Just switch between projects as needed - all your time entries will be logged separately.
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <div className="card">
                 <div className="card-header">
@@ -458,9 +777,68 @@ const TimeTracking = () => {
                             value={selectedDate}
                             onChange={(e) => setSelectedDate(e.target.value)}
                         />
+                        <button className="btn btn-secondary" onClick={() => setShowManualEntryModal(true)}>
+                            Add Manual Entry
+                        </button>
                         <button className="btn btn-primary" onClick={handleExport}>Export</button>
                     </div>
                 </div>
+
+                {/* Project Time Breakdown Summary */}
+                {timeLogs.length > 0 && (() => {
+                    const projectBreakdown = timeLogs.reduce((acc, log) => {
+                        const projectName = log.project?.name || 'Unknown Project';
+                        if (!acc[projectName]) {
+                            acc[projectName] = 0;
+                        }
+                        acc[projectName] += log.duration;
+                        return acc;
+                    }, {});
+
+                    return Object.keys(projectBreakdown).length > 1 ? (
+                        <div style={{
+                            padding: '20px',
+                            background: 'rgba(59, 130, 246, 0.05)',
+                            borderBottom: '1px solid #e5e7eb',
+                            borderTop: '3px solid #3b82f6'
+                        }}>
+                            <div style={{ marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <svg width="20" height="20" fill="none" stroke="#3b82f6" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                                </svg>
+                                <h3 style={{ margin: 0, fontSize: '1.1rem', color: '#1e3a8a', fontWeight: '700' }}>
+                                    Time Split Across Projects
+                                </h3>
+                            </div>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
+                                {Object.entries(projectBreakdown).map(([projectName, duration]) => (
+                                    <div
+                                        key={projectName}
+                                        style={{
+                                            background: 'white',
+                                            padding: '16px',
+                                            borderRadius: '8px',
+                                            border: '2px solid rgba(59, 130, 246, 0.2)',
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            gap: '8px'
+                                        }}
+                                    >
+                                        <div style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: '600' }}>
+                                            {projectName}
+                                        </div>
+                                        <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#3b82f6' }}>
+                                            {formatTime(duration)}
+                                        </div>
+                                        <div style={{ fontSize: '0.75rem', color: '#64748b' }}>
+                                            {((duration / totalDuration) * 100).toFixed(1)}% of total time
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    ) : null;
+                })()}
 
                 <table className="table">
                     <thead>
@@ -470,6 +848,7 @@ const TimeTracking = () => {
                             <th>Start Time</th>
                             <th>End Time</th>
                             <th>Duration</th>
+                            <th>Billable</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -482,6 +861,18 @@ const TimeTracking = () => {
                                 <td>{log.endTime ? formatTimeForDisplay(log.endTime) : '-'}</td>
                                 <td><strong>{formatTime(log.duration)}</strong></td>
                                 <td>
+                                    <span className={`badge ${log.billable ? 'badge-success' : 'badge-secondary'}`}>
+                                        {log.billable ? 'Yes' : 'No'}
+                                    </span>
+                                </td>
+                                <td>
+                                    <button
+                                        className="btn btn-secondary btn-small"
+                                        onClick={() => handleEditLog(log)}
+                                        style={{ marginRight: '8px' }}
+                                    >
+                                        Edit
+                                    </button>
                                     <button
                                         className="btn btn-secondary btn-small"
                                         onClick={() => handleDeleteLog(log._id)}
@@ -492,7 +883,7 @@ const TimeTracking = () => {
                             </tr>
                         )) : (
                             <tr>
-                                <td colSpan="6" style={{ textAlign: 'center', padding: '20px' }}>
+                                <td colSpan="7" style={{ textAlign: 'center', padding: '20px' }}>
                                     No time logs for this date
                                 </td>
                             </tr>
@@ -531,7 +922,256 @@ const TimeTracking = () => {
                     <div className="weekly-total-label">Weekly Total</div>
                     <div className="weekly-total-hours">{weekTotal} hours</div>
                 </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginTop: '16px', padding: '0 16px 16px' }}>
+                    <div style={{ textAlign: 'center', padding: '12px', background: 'var(--bg-light)', borderRadius: '8px' }}>
+                        <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: '4px' }}>Billable Hours</div>
+                        <div style={{ fontSize: '1.5rem', fontWeight: '600', color: '#10b981' }}>{billableTotal}h</div>
+                    </div>
+                    <div style={{ textAlign: 'center', padding: '12px', background: 'var(--bg-light)', borderRadius: '8px' }}>
+                        <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: '4px' }}>Non-Billable Hours</div>
+                        <div style={{ fontSize: '1.5rem', fontWeight: '600', color: '#6b7280' }}>{nonBillableTotal}h</div>
+                    </div>
+                </div>
             </div>
+
+            {/* Manual Entry Modal */}
+            {showManualEntryModal && (
+                <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'rgba(0,0,0,0.5)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    zIndex: 1001
+                }}>
+                    <div style={{
+                        background: 'var(--bg-white)',
+                        padding: '30px',
+                        borderRadius: '8px',
+                        width: '90%',
+                        maxWidth: '500px',
+                        maxHeight: '90vh',
+                        overflow: 'auto'
+                    }}>
+                        <h2 style={{ marginTop: 0 }}>Add Manual Time Entry</h2>
+                        <form onSubmit={handleCreateManualEntry}>
+                            <div style={{ marginBottom: '16px' }}>
+                                <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Project *</label>
+                                <select
+                                    name="projectId"
+                                    className="form-control"
+                                    value={manualEntryData.projectId}
+                                    onChange={handleManualEntryChange}
+                                    required
+                                >
+                                    <option value="">Select Project</option>
+                                    {projects.filter(p => p._id).map(project => (
+                                        <option key={project._id} value={project._id}>
+                                            {project.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div style={{ marginBottom: '16px' }}>
+                                <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Description *</label>
+                                <textarea
+                                    name="description"
+                                    className="form-control"
+                                    value={manualEntryData.description}
+                                    onChange={handleManualEntryChange}
+                                    placeholder="What did you work on?"
+                                    rows="3"
+                                    required
+                                />
+                            </div>
+
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+                                <div>
+                                    <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Start Time *</label>
+                                    <input
+                                        type="datetime-local"
+                                        name="startTime"
+                                        className="form-control"
+                                        value={manualEntryData.startTime}
+                                        onChange={handleManualEntryChange}
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>End Time *</label>
+                                    <input
+                                        type="datetime-local"
+                                        name="endTime"
+                                        className="form-control"
+                                        value={manualEntryData.endTime}
+                                        onChange={handleManualEntryChange}
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            <div style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <input
+                                    type="checkbox"
+                                    name="billable"
+                                    id="manual-billable"
+                                    checked={manualEntryData.billable}
+                                    onChange={handleManualEntryChange}
+                                    style={{ width: 'auto', margin: 0 }}
+                                />
+                                <label htmlFor="manual-billable" style={{ margin: 0, fontWeight: '600' }}>
+                                    Billable (charge to client)
+                                </label>
+                            </div>
+
+                            <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+                                <button
+                                    type="button"
+                                    className="btn btn-secondary"
+                                    onClick={() => {
+                                        setShowManualEntryModal(false);
+                                        setManualEntryData({
+                                            projectId: '',
+                                            taskId: '',
+                                            subTaskId: '',
+                                            description: '',
+                                            startTime: '',
+                                            endTime: '',
+                                            billable: true
+                                        });
+                                    }}
+                                >
+                                    Cancel
+                                </button>
+                                <button type="submit" className="btn btn-primary">
+                                    Save Entry
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Edit Modal */}
+            {showEditModal && editingLog && (
+                <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'rgba(0,0,0,0.5)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    zIndex: 1001
+                }}>
+                    <div style={{
+                        background: 'var(--bg-white)',
+                        padding: '30px',
+                        borderRadius: '8px',
+                        width: '90%',
+                        maxWidth: '500px',
+                        maxHeight: '90vh',
+                        overflow: 'auto'
+                    }}>
+                        <h2 style={{ marginTop: 0 }}>Edit Time Entry</h2>
+                        <form onSubmit={handleUpdateLog}>
+                            <div style={{ marginBottom: '16px' }}>
+                                <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Project *</label>
+                                <select
+                                    name="projectId"
+                                    className="form-control"
+                                    value={editingLog.projectId}
+                                    onChange={handleEditChange}
+                                    required
+                                >
+                                    <option value="">Select Project</option>
+                                    {projects.filter(p => p._id).map(project => (
+                                        <option key={project._id} value={project._id}>
+                                            {project.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div style={{ marginBottom: '16px' }}>
+                                <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Description *</label>
+                                <textarea
+                                    name="description"
+                                    className="form-control"
+                                    value={editingLog.description}
+                                    onChange={handleEditChange}
+                                    placeholder="What did you work on?"
+                                    rows="3"
+                                    required
+                                />
+                            </div>
+
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+                                <div>
+                                    <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Start Time *</label>
+                                    <input
+                                        type="datetime-local"
+                                        name="startTime"
+                                        className="form-control"
+                                        value={editingLog.startTime}
+                                        onChange={handleEditChange}
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>End Time *</label>
+                                    <input
+                                        type="datetime-local"
+                                        name="endTime"
+                                        className="form-control"
+                                        value={editingLog.endTime}
+                                        onChange={handleEditChange}
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            <div style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <input
+                                    type="checkbox"
+                                    name="billable"
+                                    id="edit-billable"
+                                    checked={editingLog.billable}
+                                    onChange={handleEditChange}
+                                    style={{ width: 'auto', margin: 0 }}
+                                />
+                                <label htmlFor="edit-billable" style={{ margin: 0, fontWeight: '600' }}>
+                                    Billable (charge to client)
+                                </label>
+                            </div>
+
+                            <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+                                <button
+                                    type="button"
+                                    className="btn btn-secondary"
+                                    onClick={() => {
+                                        setShowEditModal(false);
+                                        setEditingLog(null);
+                                    }}
+                                >
+                                    Cancel
+                                </button>
+                                <button type="submit" className="btn btn-primary">
+                                    Update Entry
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
