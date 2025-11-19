@@ -48,6 +48,8 @@ const Tasks = () => {
         country: '',
         timezone: 'UTC'
     });
+    const [customCurrency, setCustomCurrency] = useState('');
+    const [customTimezone, setCustomTimezone] = useState('');
 
     useEffect(() => {
         fetchData();
@@ -367,6 +369,15 @@ const Tasks = () => {
                 role: 'Member' // Default role
             }));
 
+            // Use custom currency/timezone if selected
+            const finalCurrency = projectFormData.budget.currency === 'CUSTOM'
+                ? (customCurrency || 'USD')
+                : projectFormData.budget.currency;
+
+            const finalTimezone = projectFormData.timezone === 'CUSTOM'
+                ? (customTimezone || 'UTC')
+                : projectFormData.timezone;
+
             const payload = {
                 name: projectFormData.name,
                 code: projectFormData.code || undefined,
@@ -382,11 +393,11 @@ const Tasks = () => {
                 client: projectFormData.client || undefined,
                 budget: {
                     allocated: projectFormData.budget.allocated ? Number(projectFormData.budget.allocated) : 0,
-                    currency: projectFormData.budget.currency || 'USD'
+                    currency: finalCurrency
                 },
                 profitMargin: projectFormData.profitMargin ? Number(projectFormData.profitMargin) : 0,
                 country: projectFormData.country || undefined,
-                timezone: projectFormData.timezone || 'UTC'
+                timezone: finalTimezone
             };
 
             const response = await axios.post(`${API_URL}/projects`, payload, { headers });
@@ -416,6 +427,8 @@ const Tasks = () => {
                 country: '',
                 timezone: 'UTC'
             });
+            setCustomCurrency('');
+            setCustomTimezone('');
             setShowProjectModal(false);
 
             alert('Project created successfully!');
@@ -1183,7 +1196,21 @@ const Tasks = () => {
                                           <option value="INR">INR</option>
                                           <option value="AUD">AUD</option>
                                           <option value="CAD">CAD</option>
+                                          <option value="AED">AED</option>
+                                          <option value="QAR">QAR</option>
+                                          <option value="SAR">SAR</option>
+                                          <option value="CUSTOM">Custom...</option>
                                       </select>
+                                      {projectFormData.budget.currency === 'CUSTOM' && (
+                                          <input
+                                              type="text"
+                                              className="form-control"
+                                              style={{ marginTop: '8px' }}
+                                              value={customCurrency}
+                                              onChange={(e) => setCustomCurrency(e.target.value.toUpperCase())}
+                                              placeholder="Enter custom currency code (e.g., JPY, CNY)"
+                                          />
+                                      )}
                                   </div>
                               </div>
 
@@ -1239,7 +1266,18 @@ const Tasks = () => {
                                           <option value="Asia/Shanghai">China (CST)</option>
                                           <option value="Asia/Tokyo">Tokyo (JST)</option>
                                           <option value="Australia/Sydney">Sydney (AEST)</option>
+                                          <option value="CUSTOM">Custom...</option>
                                       </select>
+                                      {projectFormData.timezone === 'CUSTOM' && (
+                                          <input
+                                              type="text"
+                                              className="form-control"
+                                              style={{ marginTop: '8px' }}
+                                              value={customTimezone}
+                                              onChange={(e) => setCustomTimezone(e.target.value)}
+                                              placeholder="Enter custom timezone (e.g., Asia/Bangkok, America/Mexico_City)"
+                                          />
+                                      )}
                                   </div>
                               </div>
 
@@ -1270,6 +1308,8 @@ const Tasks = () => {
                                               country: '',
                                               timezone: 'UTC'
                                           });
+                                          setCustomCurrency('');
+                                          setCustomTimezone('');
                                       }}
                                       disabled={isCreatingProject}
                                   >

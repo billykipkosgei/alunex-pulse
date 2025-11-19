@@ -36,6 +36,9 @@ const Dashboard = () => {
         country: '',
         timezone: 'UTC'
     });
+    const [customCurrency, setCustomCurrency] = useState('');
+    const [customTimezone, setCustomTimezone] = useState('');
+    const [editingProject, setEditingProject] = useState(null);
 
     useEffect(() => {
         fetchDashboardData();
@@ -179,6 +182,15 @@ const Dashboard = () => {
                 role: 'Member' // Default role
             }));
 
+            // Use custom currency/timezone if selected
+            const finalCurrency = projectFormData.budget.currency === 'CUSTOM'
+                ? (customCurrency || 'USD')
+                : projectFormData.budget.currency;
+
+            const finalTimezone = projectFormData.timezone === 'CUSTOM'
+                ? (customTimezone || 'UTC')
+                : projectFormData.timezone;
+
             const payload = {
                 name: projectFormData.name,
                 code: projectFormData.code || undefined,
@@ -194,14 +206,20 @@ const Dashboard = () => {
                 client: projectFormData.client || undefined,
                 budget: {
                     allocated: projectFormData.budget.allocated ? Number(projectFormData.budget.allocated) : 0,
-                    currency: projectFormData.budget.currency || 'USD'
+                    currency: finalCurrency
                 },
                 profitMargin: projectFormData.profitMargin ? Number(projectFormData.profitMargin) : 0,
                 country: projectFormData.country || undefined,
-                timezone: projectFormData.timezone || 'UTC'
+                timezone: finalTimezone
             };
 
-            await axios.post(`${API_URL}/projects`, payload, { headers });
+            if (editingProject) {
+                // Update existing project
+                await axios.put(`${API_URL}/projects/${editingProject._id}`, payload, { headers });
+            } else {
+                // Create new project
+                await axios.post(`${API_URL}/projects`, payload, { headers });
+            }
 
             setProjectFormData({
                 name: '',
@@ -224,9 +242,12 @@ const Dashboard = () => {
                 country: '',
                 timezone: 'UTC'
             });
+            setCustomCurrency('');
+            setCustomTimezone('');
+            setEditingProject(null);
             setShowProjectModal(false);
 
-            alert('Project created successfully!');
+            alert(editingProject ? 'Project updated successfully!' : 'Project created successfully!');
             fetchDashboardData(); // Refresh data
         } catch (error) {
             console.error('Error creating project:', error);
@@ -234,6 +255,61 @@ const Dashboard = () => {
         } finally {
             setIsCreatingProject(false);
         }
+    };
+
+    const handleEditProject = (project) => {
+        // Pre-fill the form with project data
+        const teamUserIds = project.team?.map(t => t.user?._id || t.user) || [];
+
+        setProjectFormData({
+            name: project.name || '',
+            code: project.code || '',
+            description: project.description || '',
+            clientName: project.clientName || '',
+            department: project.department?._id || project.department || '',
+            startDate: project.startDate ? new Date(project.startDate).toISOString().split('T')[0] : '',
+            endDate: project.endDate ? new Date(project.endDate).toISOString().split('T')[0] : '',
+            status: project.status || 'planning',
+            priority: project.priority || 'medium',
+            manager: project.manager?._id || project.manager || '',
+            team: teamUserIds,
+            client: project.client?._id || project.client || '',
+            budget: {
+                allocated: project.budget?.allocated || '',
+                currency: project.budget?.currency || 'USD'
+            },
+            profitMargin: project.profitMargin || '',
+            country: project.country || '',
+            timezone: project.timezone || 'UTC'
+        });
+
+        // Check if currency or timezone are custom (not in the predefined list)
+        const predefinedCurrencies = ['USD', 'EUR', 'GBP', 'INR', 'AUD', 'CAD', 'AED', 'QAR', 'SAR'];
+        const predefinedTimezones = ['UTC', 'America/New_York', 'America/Chicago', 'America/Denver', 'America/Los_Angeles', 'Europe/London', 'Europe/Paris', 'Asia/Dubai', 'Asia/Riyadh', 'Asia/Qatar', 'Asia/Kolkata', 'Asia/Shanghai', 'Asia/Tokyo', 'Australia/Sydney'];
+
+        if (project.budget?.currency && !predefinedCurrencies.includes(project.budget.currency)) {
+            setCustomCurrency(project.budget.currency);
+            setProjectFormData(prev => ({
+                ...prev,
+                budget: {
+                    ...prev.budget,
+                    currency: 'CUSTOM'
+                }
+            }));
+        }
+
+        if (project.timezone && !predefinedTimezones.includes(project.timezone)) {
+            setCustomTimezone(project.timezone);
+            setProjectFormData(prev => ({
+                ...prev,
+                timezone: 'CUSTOM'
+            }));
+        }
+
+        setEditingProject(project);
+        setShowProjectModal(true);
+        fetchUsers();
+        fetchDepartments();
     };
 
     const userName = user?.name?.split(' ')[0] || 'there';
@@ -407,7 +483,64 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            {/* New Project Modal */}
+            {/* Projects Section */}
+            <div className="card">
+                <div className="card-header">
+                    <h2>All Projects</h2>
+                </div>
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <th>Project Name</th>
+                            <th>Code</th>
+                            <th>Status</th>
+                            <th>Priority</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Budget</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {projects.filter(p => p._id !== 'all').length > 0 ? projects.filter(p => p._id !== 'all').map((project) => (
+                            <tr key={project._id}>
+                                <td><strong>{project.name}</strong></td>
+                                <td>{project.code || 'N/A'}</td>
+                                <td>
+                                    <span className={`badge badge-${project.status === 'active' ? 'success' : project.status === 'completed' ? 'info' : project.status === 'on_hold' ? 'warning' : 'secondary'}`}>
+                                        {project.status?.replace('_', ' ').toUpperCase()}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span className={`badge badge-${project.priority === 'critical' ? 'danger' : project.priority === 'high' ? 'danger' : project.priority === 'medium' ? 'warning' : 'info'}`}>
+                                        {project.priority?.toUpperCase()}
+                                    </span>
+                                </td>
+                                <td>{project.startDate ? formatDate(project.startDate) : 'N/A'}</td>
+                                <td>{project.endDate ? formatDate(project.endDate) : 'N/A'}</td>
+                                <td>{project.budget?.allocated ? `${project.budget.currency} ${project.budget.allocated}` : 'N/A'}</td>
+                                <td>
+                                    <button
+                                        className="btn btn-primary"
+                                        style={{ fontSize: '0.85rem', padding: '4px 12px' }}
+                                        onClick={() => handleEditProject(project)}
+                                    >
+                                        Edit
+                                    </button>
+                                </td>
+                            </tr>
+                        )) : (
+                            <tr>
+                                <td colSpan="8" style={{ textAlign: 'center', padding: '20px' }}>
+                                    No projects found. Click "New Project" to create one.
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
+
+            {/* New/Edit Project Modal */}
             {showProjectModal && (
                 <div style={{
                     position: 'fixed',
@@ -430,7 +563,7 @@ const Dashboard = () => {
                         maxHeight: '90vh',
                         overflow: 'auto'
                     }}>
-                        <h2 style={{ marginTop: 0 }}>Create New Project</h2>
+                        <h2 style={{ marginTop: 0 }}>{editingProject ? 'Edit Project' : 'Create New Project'}</h2>
                         <form onSubmit={handleCreateProject}>
                             {/* Basic Information Section */}
                             <h3 style={{ fontSize: '1.1rem', marginTop: '20px', marginBottom: '12px', color: 'var(--primary-color)' }}>Basic Information</h3>
@@ -647,7 +780,21 @@ const Dashboard = () => {
                                         <option value="INR">INR</option>
                                         <option value="AUD">AUD</option>
                                         <option value="CAD">CAD</option>
+                                        <option value="AED">AED</option>
+                                        <option value="QAR">QAR</option>
+                                        <option value="SAR">SAR</option>
+                                        <option value="CUSTOM">Custom...</option>
                                     </select>
+                                    {projectFormData.budget.currency === 'CUSTOM' && (
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            style={{ marginTop: '8px' }}
+                                            value={customCurrency}
+                                            onChange={(e) => setCustomCurrency(e.target.value.toUpperCase())}
+                                            placeholder="Enter custom currency code (e.g., JPY, CNY)"
+                                        />
+                                    )}
                                 </div>
                             </div>
 
@@ -703,7 +850,18 @@ const Dashboard = () => {
                                         <option value="Asia/Shanghai">China (CST)</option>
                                         <option value="Asia/Tokyo">Tokyo (JST)</option>
                                         <option value="Australia/Sydney">Sydney (AEST)</option>
+                                        <option value="CUSTOM">Custom...</option>
                                     </select>
+                                    {projectFormData.timezone === 'CUSTOM' && (
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            style={{ marginTop: '8px' }}
+                                            value={customTimezone}
+                                            onChange={(e) => setCustomTimezone(e.target.value)}
+                                            placeholder="Enter custom timezone (e.g., Asia/Bangkok, America/Mexico_City)"
+                                        />
+                                    )}
                                 </div>
                             </div>
 
@@ -734,13 +892,16 @@ const Dashboard = () => {
                                             country: '',
                                             timezone: 'UTC'
                                         });
+                                        setCustomCurrency('');
+                                        setCustomTimezone('');
+                                        setEditingProject(null);
                                     }}
                                     disabled={isCreatingProject}
                                 >
                                     Cancel
                                 </button>
                                 <button type="submit" className="btn btn-primary" disabled={isCreatingProject}>
-                                    {isCreatingProject ? 'Creating project...' : 'Create Project'}
+                                    {isCreatingProject ? (editingProject ? 'Updating project...' : 'Creating project...') : (editingProject ? 'Update Project' : 'Create Project')}
                                 </button>
                             </div>
                         </form>

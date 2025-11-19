@@ -13,14 +13,32 @@ const Dashboard = () => {
     const [loading, setLoading] = useState(true);
     const [showProjectModal, setShowProjectModal] = useState(false);
     const [isCreatingProject, setIsCreatingProject] = useState(false);
+    const [users, setUsers] = useState([]);
+    const [departments, setDepartments] = useState([]);
     const [projectFormData, setProjectFormData] = useState({
         name: '',
         code: '',
+        description: '',
         clientName: '',
+        department: '',
         startDate: '',
         endDate: '',
-        status: 'planning'
+        status: 'planning',
+        priority: 'medium',
+        manager: '',
+        team: [],
+        client: '',
+        budget: {
+            allocated: '',
+            currency: 'USD'
+        },
+        profitMargin: '',
+        country: '',
+        timezone: 'UTC'
     });
+    const [customCurrency, setCustomCurrency] = useState('');
+    const [customTimezone, setCustomTimezone] = useState('');
+    const [editingProject, setEditingProject] = useState(null);
 
     useEffect(() => {
         fetchDashboardData();
@@ -91,12 +109,51 @@ const Dashboard = () => {
         return new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     };
 
+    const fetchUsers = async () => {
+        try {
+            const headers = { Authorization: `Bearer ${token}` };
+            const response = await axios.get(`${API_URL}/users`, { headers });
+            setUsers(response.data.users || []);
+        } catch (error) {
+            console.error('Error fetching users:', error);
+        }
+    };
+
+    const fetchDepartments = async () => {
+        try {
+            const headers = { Authorization: `Bearer ${token}` };
+            const response = await axios.get(`${API_URL}/departments`, { headers });
+            setDepartments(response.data.departments || []);
+        } catch (error) {
+            console.error('Error fetching departments:', error);
+        }
+    };
+
     const handleProjectFormChange = (e) => {
-        const { name, value } = e.target;
-        setProjectFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
+        const { name, value, type } = e.target;
+
+        if (name.startsWith('budget.')) {
+            const budgetField = name.split('.')[1];
+            setProjectFormData(prev => ({
+                ...prev,
+                budget: {
+                    ...prev.budget,
+                    [budgetField]: value
+                }
+            }));
+        } else if (name === 'team') {
+            // Handle multi-select for team members
+            const selectedOptions = Array.from(e.target.selectedOptions, option => option.value);
+            setProjectFormData(prev => ({
+                ...prev,
+                team: selectedOptions
+            }));
+        } else {
+            setProjectFormData(prev => ({
+                ...prev,
+                [name]: value
+            }));
+        }
     };
 
     const handleCreateProject = async (e) => {
@@ -118,28 +175,79 @@ const Dashboard = () => {
 
         try {
             const headers = { Authorization: `Bearer ${token}` };
+
+            // Prepare team array with proper structure
+            const teamArray = projectFormData.team.map(userId => ({
+                user: userId,
+                role: 'Member' // Default role
+            }));
+
+            // Use custom currency/timezone if selected
+            const finalCurrency = projectFormData.budget.currency === 'CUSTOM'
+                ? (customCurrency || 'USD')
+                : projectFormData.budget.currency;
+
+            const finalTimezone = projectFormData.timezone === 'CUSTOM'
+                ? (customTimezone || 'UTC')
+                : projectFormData.timezone;
+
             const payload = {
                 name: projectFormData.name,
                 code: projectFormData.code || undefined,
+                description: projectFormData.description || undefined,
                 clientName: projectFormData.clientName || undefined,
+                department: projectFormData.department || undefined,
                 startDate: projectFormData.startDate || undefined,
                 endDate: projectFormData.endDate || undefined,
-                status: projectFormData.status || 'planning'
+                status: projectFormData.status || 'planning',
+                priority: projectFormData.priority || 'medium',
+                manager: projectFormData.manager || undefined,
+                team: teamArray.length > 0 ? teamArray : undefined,
+                client: projectFormData.client || undefined,
+                budget: {
+                    allocated: projectFormData.budget.allocated ? Number(projectFormData.budget.allocated) : 0,
+                    currency: finalCurrency
+                },
+                profitMargin: projectFormData.profitMargin ? Number(projectFormData.profitMargin) : 0,
+                country: projectFormData.country || undefined,
+                timezone: finalTimezone
             };
 
-            await axios.post(`${API_URL}/projects`, payload, { headers });
+            if (editingProject) {
+                // Update existing project
+                await axios.put(`${API_URL}/projects/${editingProject._id}`, payload, { headers });
+            } else {
+                // Create new project
+                await axios.post(`${API_URL}/projects`, payload, { headers });
+            }
 
             setProjectFormData({
                 name: '',
                 code: '',
+                description: '',
                 clientName: '',
+                department: '',
                 startDate: '',
                 endDate: '',
-                status: 'planning'
+                status: 'planning',
+                priority: 'medium',
+                manager: '',
+                team: [],
+                client: '',
+                budget: {
+                    allocated: '',
+                    currency: 'USD'
+                },
+                profitMargin: '',
+                country: '',
+                timezone: 'UTC'
             });
+            setCustomCurrency('');
+            setCustomTimezone('');
+            setEditingProject(null);
             setShowProjectModal(false);
 
-            alert('Project created successfully!');
+            alert(editingProject ? 'Project updated successfully!' : 'Project created successfully!');
             fetchDashboardData(); // Refresh data
         } catch (error) {
             console.error('Error creating project:', error);
@@ -147,6 +255,61 @@ const Dashboard = () => {
         } finally {
             setIsCreatingProject(false);
         }
+    };
+
+    const handleEditProject = (project) => {
+        // Pre-fill the form with project data
+        const teamUserIds = project.team?.map(t => t.user?._id || t.user) || [];
+
+        setProjectFormData({
+            name: project.name || '',
+            code: project.code || '',
+            description: project.description || '',
+            clientName: project.clientName || '',
+            department: project.department?._id || project.department || '',
+            startDate: project.startDate ? new Date(project.startDate).toISOString().split('T')[0] : '',
+            endDate: project.endDate ? new Date(project.endDate).toISOString().split('T')[0] : '',
+            status: project.status || 'planning',
+            priority: project.priority || 'medium',
+            manager: project.manager?._id || project.manager || '',
+            team: teamUserIds,
+            client: project.client?._id || project.client || '',
+            budget: {
+                allocated: project.budget?.allocated || '',
+                currency: project.budget?.currency || 'USD'
+            },
+            profitMargin: project.profitMargin || '',
+            country: project.country || '',
+            timezone: project.timezone || 'UTC'
+        });
+
+        // Check if currency or timezone are custom (not in the predefined list)
+        const predefinedCurrencies = ['USD', 'EUR', 'GBP', 'INR', 'AUD', 'CAD', 'AED', 'QAR', 'SAR'];
+        const predefinedTimezones = ['UTC', 'America/New_York', 'America/Chicago', 'America/Denver', 'America/Los_Angeles', 'Europe/London', 'Europe/Paris', 'Asia/Dubai', 'Asia/Riyadh', 'Asia/Qatar', 'Asia/Kolkata', 'Asia/Shanghai', 'Asia/Tokyo', 'Australia/Sydney'];
+
+        if (project.budget?.currency && !predefinedCurrencies.includes(project.budget.currency)) {
+            setCustomCurrency(project.budget.currency);
+            setProjectFormData(prev => ({
+                ...prev,
+                budget: {
+                    ...prev.budget,
+                    currency: 'CUSTOM'
+                }
+            }));
+        }
+
+        if (project.timezone && !predefinedTimezones.includes(project.timezone)) {
+            setCustomTimezone(project.timezone);
+            setProjectFormData(prev => ({
+                ...prev,
+                timezone: 'CUSTOM'
+            }));
+        }
+
+        setEditingProject(project);
+        setShowProjectModal(true);
+        fetchUsers();
+        fetchDepartments();
     };
 
     const userName = user?.name?.split(' ')[0] || 'there';
@@ -186,7 +349,11 @@ const Dashboard = () => {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
                             </svg>
                         </button>
-                        <button className="btn btn-primary" onClick={() => setShowProjectModal(true)}>
+                        <button className="btn btn-primary" onClick={() => {
+                            setShowProjectModal(true);
+                            fetchUsers();
+                            fetchDepartments();
+                        }}>
                             <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4"/>
                             </svg>
@@ -316,7 +483,64 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            {/* New Project Modal */}
+            {/* Projects Section */}
+            <div className="card">
+                <div className="card-header">
+                    <h2>All Projects</h2>
+                </div>
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <th>Project Name</th>
+                            <th>Code</th>
+                            <th>Status</th>
+                            <th>Priority</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Budget</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {projects.filter(p => p._id !== 'all').length > 0 ? projects.filter(p => p._id !== 'all').map((project) => (
+                            <tr key={project._id}>
+                                <td><strong>{project.name}</strong></td>
+                                <td>{project.code || 'N/A'}</td>
+                                <td>
+                                    <span className={`badge badge-${project.status === 'active' ? 'success' : project.status === 'completed' ? 'info' : project.status === 'on_hold' ? 'warning' : 'secondary'}`}>
+                                        {project.status?.replace('_', ' ').toUpperCase()}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span className={`badge badge-${project.priority === 'critical' ? 'danger' : project.priority === 'high' ? 'danger' : project.priority === 'medium' ? 'warning' : 'info'}`}>
+                                        {project.priority?.toUpperCase()}
+                                    </span>
+                                </td>
+                                <td>{project.startDate ? formatDate(project.startDate) : 'N/A'}</td>
+                                <td>{project.endDate ? formatDate(project.endDate) : 'N/A'}</td>
+                                <td>{project.budget?.allocated ? `${project.budget.currency} ${project.budget.allocated}` : 'N/A'}</td>
+                                <td>
+                                    <button
+                                        className="btn btn-primary"
+                                        style={{ fontSize: '0.85rem', padding: '4px 12px' }}
+                                        onClick={() => handleEditProject(project)}
+                                    >
+                                        Edit
+                                    </button>
+                                </td>
+                            </tr>
+                        )) : (
+                            <tr>
+                                <td colSpan="8" style={{ textAlign: 'center', padding: '20px' }}>
+                                    No projects found. Click "New Project" to create one.
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
+
+            {/* New/Edit Project Modal */}
             {showProjectModal && (
                 <div style={{
                     position: 'fixed',
@@ -335,12 +559,15 @@ const Dashboard = () => {
                         padding: '30px',
                         borderRadius: '8px',
                         width: '90%',
-                        maxWidth: '500px',
+                        maxWidth: '700px',
                         maxHeight: '90vh',
                         overflow: 'auto'
                     }}>
-                        <h2 style={{ marginTop: 0 }}>Create New Project</h2>
+                        <h2 style={{ marginTop: 0 }}>{editingProject ? 'Edit Project' : 'Create New Project'}</h2>
                         <form onSubmit={handleCreateProject}>
+                            {/* Basic Information Section */}
+                            <h3 style={{ fontSize: '1.1rem', marginTop: '20px', marginBottom: '12px', color: 'var(--primary-color)' }}>Basic Information</h3>
+
                             <div style={{ marginBottom: '16px' }}>
                                 <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Project Name *</label>
                                 <input
@@ -349,7 +576,7 @@ const Dashboard = () => {
                                     className="form-control"
                                     value={projectFormData.name}
                                     onChange={handleProjectFormChange}
-                                    placeholder="Enter project name"
+                                    placeholder="e.g., Website Redesign"
                                     required
                                 />
                             </div>
@@ -362,39 +589,76 @@ const Dashboard = () => {
                                     className="form-control"
                                     value={projectFormData.code}
                                     onChange={handleProjectFormChange}
-                                    placeholder="e.g., PROJ-001"
+                                    placeholder="e.g., WEB-2024-001"
                                 />
                             </div>
 
                             <div style={{ marginBottom: '16px' }}>
-                                <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Client Name</label>
-                                <input
-                                    type="text"
-                                    name="clientName"
+                                <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Description</label>
+                                <textarea
+                                    name="description"
                                     className="form-control"
-                                    value={projectFormData.clientName}
+                                    value={projectFormData.description}
                                     onChange={handleProjectFormChange}
-                                    placeholder="Enter client name"
+                                    placeholder="Detailed explanation of the project"
+                                    rows="3"
+                                    style={{ resize: 'vertical' }}
                                 />
                             </div>
 
                             <div style={{ marginBottom: '16px' }}>
-                                <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Status</label>
+                                <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Department</label>
                                 <select
-                                    name="status"
+                                    name="department"
                                     className="form-control"
-                                    value={projectFormData.status}
+                                    value={projectFormData.department}
                                     onChange={handleProjectFormChange}
                                 >
-                                    <option value="planning">Planning</option>
-                                    <option value="active">Active</option>
-                                    <option value="on_hold">On Hold</option>
-                                    <option value="completed">Completed</option>
-                                    <option value="cancelled">Cancelled</option>
+                                    <option value="">Select Department (Optional)</option>
+                                    {departments.map(dept => (
+                                        <option key={dept._id} value={dept._id}>
+                                            {dept.name}
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
 
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+                                <div>
+                                    <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Status</label>
+                                    <select
+                                        name="status"
+                                        className="form-control"
+                                        value={projectFormData.status}
+                                        onChange={handleProjectFormChange}
+                                    >
+                                        <option value="planning">Planning</option>
+                                        <option value="active">Active</option>
+                                        <option value="on_hold">On Hold</option>
+                                        <option value="completed">Completed</option>
+                                        <option value="cancelled">Cancelled</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Priority</label>
+                                    <select
+                                        name="priority"
+                                        className="form-control"
+                                        value={projectFormData.priority}
+                                        onChange={handleProjectFormChange}
+                                    >
+                                        <option value="low">Low</option>
+                                        <option value="medium">Medium</option>
+                                        <option value="high">High</option>
+                                        <option value="critical">Critical</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            {/* Dates Section */}
+                            <h3 style={{ fontSize: '1.1rem', marginTop: '20px', marginBottom: '12px', color: 'var(--primary-color)' }}>Dates</h3>
+
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
                                 <div>
                                     <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Start Date</label>
                                     <input
@@ -417,6 +681,190 @@ const Dashboard = () => {
                                 </div>
                             </div>
 
+                            {/* Team Section */}
+                            <h3 style={{ fontSize: '1.1rem', marginTop: '20px', marginBottom: '12px', color: 'var(--primary-color)' }}>Team</h3>
+
+                            <div style={{ marginBottom: '16px' }}>
+                                <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Manager</label>
+                                <select
+                                    name="manager"
+                                    className="form-control"
+                                    value={projectFormData.manager}
+                                    onChange={handleProjectFormChange}
+                                >
+                                    <option value="">Select Manager</option>
+                                    {users.map(user => (
+                                        <option key={user._id} value={user._id}>
+                                            {user.name} ({user.email})
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div style={{ marginBottom: '16px' }}>
+                                <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Team Members</label>
+                                <select
+                                    name="team"
+                                    className="form-control"
+                                    value={projectFormData.team}
+                                    onChange={handleProjectFormChange}
+                                    multiple
+                                    style={{ minHeight: '100px' }}
+                                >
+                                    {users.map(user => (
+                                        <option key={user._id} value={user._id}>
+                                            {user.name} ({user.email})
+                                        </option>
+                                    ))}
+                                </select>
+                                <small style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Hold Ctrl/Cmd to select multiple members</small>
+                            </div>
+
+                            <div style={{ marginBottom: '16px' }}>
+                                <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Client</label>
+                                <select
+                                    name="client"
+                                    className="form-control"
+                                    value={projectFormData.client}
+                                    onChange={handleProjectFormChange}
+                                >
+                                    <option value="">Select Client (or use Client Name below)</option>
+                                    {users.map(user => (
+                                        <option key={user._id} value={user._id}>
+                                            {user.name} ({user.email})
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div style={{ marginBottom: '16px' }}>
+                                <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Client Name (if not in system)</label>
+                                <input
+                                    type="text"
+                                    name="clientName"
+                                    className="form-control"
+                                    value={projectFormData.clientName}
+                                    onChange={handleProjectFormChange}
+                                    placeholder="Enter external client name"
+                                />
+                            </div>
+
+                            {/* Budget Section */}
+                            <h3 style={{ fontSize: '1.1rem', marginTop: '20px', marginBottom: '12px', color: 'var(--primary-color)' }}>Budget</h3>
+
+                            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '16px', marginBottom: '16px' }}>
+                                <div>
+                                    <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Allocated Budget</label>
+                                    <input
+                                        type="number"
+                                        name="budget.allocated"
+                                        className="form-control"
+                                        value={projectFormData.budget.allocated}
+                                        onChange={handleProjectFormChange}
+                                        placeholder="0.00"
+                                        min="0"
+                                        step="0.01"
+                                    />
+                                </div>
+                                <div>
+                                    <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Currency</label>
+                                    <select
+                                        name="budget.currency"
+                                        className="form-control"
+                                        value={projectFormData.budget.currency}
+                                        onChange={handleProjectFormChange}
+                                    >
+                                        <option value="USD">USD</option>
+                                        <option value="EUR">EUR</option>
+                                        <option value="GBP">GBP</option>
+                                        <option value="INR">INR</option>
+                                        <option value="AUD">AUD</option>
+                                        <option value="CAD">CAD</option>
+                                        <option value="AED">AED</option>
+                                        <option value="QAR">QAR</option>
+                                        <option value="SAR">SAR</option>
+                                        <option value="CUSTOM">Custom...</option>
+                                    </select>
+                                    {projectFormData.budget.currency === 'CUSTOM' && (
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            style={{ marginTop: '8px' }}
+                                            value={customCurrency}
+                                            onChange={(e) => setCustomCurrency(e.target.value.toUpperCase())}
+                                            placeholder="Enter custom currency code (e.g., JPY, CNY)"
+                                        />
+                                    )}
+                                </div>
+                            </div>
+
+                            <div style={{ marginBottom: '16px' }}>
+                                <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Profit Margin (%)</label>
+                                <input
+                                    type="number"
+                                    name="profitMargin"
+                                    className="form-control"
+                                    value={projectFormData.profitMargin}
+                                    onChange={handleProjectFormChange}
+                                    placeholder="e.g., 15"
+                                    min="0"
+                                    max="100"
+                                    step="0.1"
+                                />
+                            </div>
+
+                            {/* Location Section */}
+                            <h3 style={{ fontSize: '1.1rem', marginTop: '20px', marginBottom: '12px', color: 'var(--primary-color)' }}>Location</h3>
+
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
+                                <div>
+                                    <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Country</label>
+                                    <input
+                                        type="text"
+                                        name="country"
+                                        className="form-control"
+                                        value={projectFormData.country}
+                                        onChange={handleProjectFormChange}
+                                        placeholder="e.g., United States"
+                                    />
+                                </div>
+                                <div>
+                                    <label style={{ display: 'block', marginBottom: '4px', fontWeight: '600' }}>Timezone</label>
+                                    <select
+                                        name="timezone"
+                                        className="form-control"
+                                        value={projectFormData.timezone}
+                                        onChange={handleProjectFormChange}
+                                    >
+                                        <option value="UTC">UTC</option>
+                                        <option value="America/New_York">Eastern Time (ET)</option>
+                                        <option value="America/Chicago">Central Time (CT)</option>
+                                        <option value="America/Denver">Mountain Time (MT)</option>
+                                        <option value="America/Los_Angeles">Pacific Time (PT)</option>
+                                        <option value="Europe/London">London (GMT)</option>
+                                        <option value="Europe/Paris">Paris (CET)</option>
+                                        <option value="Asia/Dubai">Dubai (UAE - GST)</option>
+                                        <option value="Asia/Riyadh">Riyadh (Saudi Arabia - AST)</option>
+                                        <option value="Asia/Qatar">Qatar (AST)</option>
+                                        <option value="Asia/Kolkata">India (IST)</option>
+                                        <option value="Asia/Shanghai">China (CST)</option>
+                                        <option value="Asia/Tokyo">Tokyo (JST)</option>
+                                        <option value="Australia/Sydney">Sydney (AEST)</option>
+                                        <option value="CUSTOM">Custom...</option>
+                                    </select>
+                                    {projectFormData.timezone === 'CUSTOM' && (
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            style={{ marginTop: '8px' }}
+                                            value={customTimezone}
+                                            onChange={(e) => setCustomTimezone(e.target.value)}
+                                            placeholder="Enter custom timezone (e.g., Asia/Bangkok, America/Mexico_City)"
+                                        />
+                                    )}
+                                </div>
+                            </div>
+
                             <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
                                 <button
                                     type="button"
@@ -426,18 +874,34 @@ const Dashboard = () => {
                                         setProjectFormData({
                                             name: '',
                                             code: '',
+                                            description: '',
                                             clientName: '',
+                                            department: '',
                                             startDate: '',
                                             endDate: '',
-                                            status: 'planning'
+                                            status: 'planning',
+                                            priority: 'medium',
+                                            manager: '',
+                                            team: [],
+                                            client: '',
+                                            budget: {
+                                                allocated: '',
+                                                currency: 'USD'
+                                            },
+                                            profitMargin: '',
+                                            country: '',
+                                            timezone: 'UTC'
                                         });
+                                        setCustomCurrency('');
+                                        setCustomTimezone('');
+                                        setEditingProject(null);
                                     }}
                                     disabled={isCreatingProject}
                                 >
                                     Cancel
                                 </button>
                                 <button type="submit" className="btn btn-primary" disabled={isCreatingProject}>
-                                    {isCreatingProject ? 'Creating project...' : 'Create Project'}
+                                    {isCreatingProject ? (editingProject ? 'Updating project...' : 'Creating project...') : (editingProject ? 'Update Project' : 'Create Project')}
                                 </button>
                             </div>
                         </form>
