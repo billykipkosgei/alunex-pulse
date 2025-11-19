@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import { jsPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import { Document, Packer, Paragraph, Table, TableCell, TableRow, WidthType, BorderStyle, AlignmentType, HeadingLevel } from 'docx';
 
@@ -232,6 +232,7 @@ const Reports = () => {
             try {
                 console.log('Starting PDF generation...');
                 const doc = new jsPDF();
+
                 const pageWidth = doc.internal.pageSize.getWidth();
 
         // Header
@@ -256,7 +257,7 @@ const Reports = () => {
                 ['Time Entries', reportData.entriesCount]
             ];
 
-            doc.autoTable({
+            autoTable(doc, {
                 startY: yPos,
                 head: [['Metric', 'Value']],
                 body: summaryData,
@@ -277,7 +278,7 @@ const Reports = () => {
                 project, hours.toFixed(2) + 'h'
             ]);
 
-            doc.autoTable({
+            autoTable(doc, {
                 startY: yPos,
                 head: [['Project', 'Hours']],
                 body: projectData,
@@ -298,7 +299,7 @@ const Reports = () => {
                 user, hours.toFixed(2) + 'h'
             ]);
 
-            doc.autoTable({
+            autoTable(doc, {
                 startY: yPos,
                 head: [['Team Member', 'Hours']],
                 body: userData,
@@ -314,7 +315,7 @@ const Reports = () => {
                 ['Completion Rate', reportData.completionRate]
             ];
 
-            doc.autoTable({
+            autoTable(doc, {
                 startY: yPos,
                 head: [['Metric', 'Value']],
                 body: summaryData,
@@ -335,7 +336,7 @@ const Reports = () => {
                 return [project, data.total, data.completed, data.inProgress, completion + '%'];
             });
 
-            doc.autoTable({
+            autoTable(doc, {
                 startY: yPos,
                 head: [['Project', 'Total Tasks', 'Completed', 'In Progress', 'Completion %']],
                 body: projectData,
@@ -346,7 +347,7 @@ const Reports = () => {
         } else if (reportType === 'team-performance') {
             const summaryData = [['Active Team Members', reportData.teamMembers]];
 
-            doc.autoTable({
+            autoTable(doc, {
                 startY: yPos,
                 head: [['Metric', 'Value']],
                 body: summaryData,
@@ -367,7 +368,7 @@ const Reports = () => {
                 return [user, data.totalTasks, data.completedTasks, data.hoursLogged.toFixed(1) + 'h', completion + '%'];
             });
 
-            doc.autoTable({
+            autoTable(doc, {
                 startY: yPos,
                 head: [['Team Member', 'Total Tasks', 'Completed', 'Hours Logged', 'Completion Rate']],
                 body: userData,
@@ -383,7 +384,7 @@ const Reports = () => {
                 ['Utilization', reportData.utilizationRate]
             ];
 
-            doc.autoTable({
+            autoTable(doc, {
                 startY: yPos,
                 head: [['Metric', 'Value']],
                 body: summaryData,
@@ -406,7 +407,7 @@ const Reports = () => {
                 formatCurrency(data.remaining)
             ]);
 
-            doc.autoTable({
+            autoTable(doc, {
                 startY: yPos,
                 head: [['Department', 'Allocated', 'Spent', 'Remaining']],
                 body: deptData,
