@@ -22,6 +22,7 @@ const io = new Server(server, {
             'http://localhost:5173',
             'https://billyk.online',
             'https://billyk.online/alunex-production',
+            'https://pm.alunex.in',
             process.env.FRONTEND_URL
         ].filter(Boolean),
         methods: ['GET', 'POST'],
@@ -44,6 +45,7 @@ const allowedOrigins = [
     'http://localhost:5173',
     'https://billyk.online',
     'https://billyk.online/alunex-production',
+    'https://pm.alunex.in',
     process.env.FRONTEND_URL
 ].filter(Boolean);
 
