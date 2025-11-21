@@ -1,0 +1,10 @@
+# Netlify SPA configuration
+# This file ensures that all routes are handled by index.html
+# while static assets are served correctly
+
+# Serve static assets directly
+/assets/*  200
+/vite.svg  200
+
+# Redirect all other routes to index.html for client-side routing
+/*  /index.html  200
