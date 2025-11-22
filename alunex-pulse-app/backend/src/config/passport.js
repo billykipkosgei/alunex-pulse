@@ -42,8 +42,10 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
                             user.providerId = profile.id;
                             user.authProvider = 'google';
                             user.avatar = user.avatar || profile.photos?.[0]?.value || '';
-                            await user.save();
                         }
+                        // Update last login timestamp
+                        user.lastLogin = Date.now();
+                        await user.save();
                         return done(null, user);
                     }
 
@@ -63,7 +65,8 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
                         avatar: profile.photos?.[0]?.value || '',
                         organization: organization._id,
                         role: 'admin',
-                        isActive: true
+                        isActive: true,
+                        lastLogin: Date.now()
                     });
 
                     // Update organization owner
@@ -105,8 +108,10 @@ if (process.env.MICROSOFT_CLIENT_ID && process.env.MICROSOFT_CLIENT_SECRET) {
                         if (!user.providerId || user.authProvider !== 'microsoft') {
                             user.providerId = profile.id;
                             user.authProvider = 'microsoft';
-                            await user.save();
                         }
+                        // Update last login timestamp
+                        user.lastLogin = Date.now();
+                        await user.save();
                         return done(null, user);
                     }
 
@@ -125,7 +130,8 @@ if (process.env.MICROSOFT_CLIENT_ID && process.env.MICROSOFT_CLIENT_SECRET) {
                         providerId: profile.id,
                         organization: organization._id,
                         role: 'admin',
-                        isActive: true
+                        isActive: true,
+                        lastLogin: Date.now()
                     });
 
                     // Update organization owner
