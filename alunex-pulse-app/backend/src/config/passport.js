@@ -97,7 +97,19 @@ if (process.env.MICROSOFT_CLIENT_ID && process.env.MICROSOFT_CLIENT_SECRET) {
             },
             async (accessToken, refreshToken, profile, done) => {
                 try {
+                    console.log('🟢🟢🟢 MICROSOFT OAUTH PROFILE 🟢🟢🟢');
+                    console.log('Profile:', JSON.stringify(profile, null, 2));
+                    console.log('Emails:', profile.emails);
+                    console.log('Display Name:', profile.displayName);
+
+                    // Check if email exists
+                    if (!profile.emails || !profile.emails[0] || !profile.emails[0].value) {
+                        console.error('❌ No email found in Microsoft profile');
+                        return done(new Error('No email found in Microsoft profile'), null);
+                    }
+
                     const email = profile.emails[0].value;
+                    const displayName = profile.displayName || email.split('@')[0];
 
                     // Check if user already exists (either invited or previously registered)
                     let user = await User.findOne({ email });
@@ -116,15 +128,17 @@ if (process.env.MICROSOFT_CLIENT_ID && process.env.MICROSOFT_CLIENT_SECRET) {
                     }
 
                     // NEW USER - Create organization and make them admin
-                    const orgName = `${profile.displayName}'s Workspace`;
+                    console.log('🆕 Creating new Microsoft user and organization');
+                    const orgName = `${displayName}'s Workspace`;
                     const organization = await Organization.create({
                         name: orgName,
                         owner: null // Will be updated after user creation
                     });
+                    console.log('✅ Organization created:', organization._id);
 
                     // Create new user as admin of their own organization
                     user = await User.create({
-                        name: profile.displayName,
+                        name: displayName,
                         email: email,
                         authProvider: 'microsoft',
                         providerId: profile.id,
@@ -133,6 +147,7 @@ if (process.env.MICROSOFT_CLIENT_ID && process.env.MICROSOFT_CLIENT_SECRET) {
                         isActive: true,
                         lastLogin: Date.now()
                     });
+                    console.log('✅ User created:', user._id);
 
                     // Update organization owner
                     await Organization.findByIdAndUpdate(organization._id, {
