@@ -14,7 +14,7 @@ const Login = () => {
 
     const navigate = useNavigate();
     const location = useLocation();
-    const { login, API_URL } = useAuth();
+    const { login, handleOAuthCallback, API_URL } = useAuth();
 
     // Handle OAuth callback
     useEffect(() => {
@@ -22,21 +22,30 @@ const Login = () => {
         const token = params.get('token');
         const errorParam = params.get('error');
 
-        if (token) {
-            console.log('✅ OAuth token received, redirecting...');
-            // Save token to localStorage
-            localStorage.setItem('token', token);
-            
-            // Force page reload to dashboard - this lets AuthContext pick up the token
-            window.location.replace('/dashboard');
-        } else if (errorParam) {
-            if (errorParam === 'google_auth_failed') {
-                setError('Google authentication failed. Please try again.');
-            } else if (errorParam === 'microsoft_auth_failed') {
-                setError('Microsoft authentication failed. Please try again.');
+        const processOAuthToken = async () => {
+            if (token) {
+                console.log('✅ OAuth token received, processing...');
+                setLoading(true);
+                try {
+                    await handleOAuthCallback(token);
+                    console.log('✅ OAuth callback successful, navigating to dashboard');
+                    navigate('/dashboard', { replace: true });
+                } catch (error) {
+                    console.error('❌ OAuth callback failed:', error);
+                    setError('Authentication failed. Please try again.');
+                    setLoading(false);
+                }
+            } else if (errorParam) {
+                if (errorParam === 'google_auth_failed') {
+                    setError('Google authentication failed. Please try again.');
+                } else if (errorParam === 'microsoft_auth_failed') {
+                    setError('Microsoft authentication failed. Please try again.');
+                }
             }
-        }
-    }, [location]);
+        };
+
+        processOAuthToken();
+    }, [location.search, handleOAuthCallback, navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();

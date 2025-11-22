@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
 const AuthContext = createContext();
@@ -87,6 +87,29 @@ export const AuthProvider = ({ children }) => {
         return res.data;
     };
 
+    const handleOAuthCallback = useCallback(async (oauthToken) => {
+        try {
+            console.log('📱 handleOAuthCallback: Setting token and loading user');
+            setToken(oauthToken);
+            setLoading(true);
+
+            // Set the token in axios headers immediately
+            axios.defaults.headers.common['Authorization'] = `Bearer ${oauthToken}`;
+
+            // Load user data
+            const res = await axios.get(`${API_URL}/auth/me`);
+            setUser(res.data.user);
+            console.log('✅ OAuth user loaded successfully:', res.data.user.email);
+            return res.data;
+        } catch (error) {
+            console.error('❌ Error in handleOAuthCallback:', error);
+            setToken(null);
+            throw error;
+        } finally {
+            setLoading(false);
+        }
+    }, [API_URL]);
+
     const value = {
         user,
         token,
@@ -96,6 +119,7 @@ export const AuthProvider = ({ children }) => {
         logout,
         updateProfile,
         updatePreferences,
+        handleOAuthCallback,
         API_URL
     };
 
