@@ -23,20 +23,12 @@ const Login = () => {
         const errorParam = params.get('error');
 
         if (token) {
-            // Set token and redirect to dashboard
+            console.log('✅ OAuth token received, redirecting...');
+            // Save token to localStorage
             localStorage.setItem('token', token);
-            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
-            // Fetch user data
-            axios.get(`${API_URL}/auth/me`)
-                .then(() => {
-                    navigate('/dashboard');
-                })
-                .catch(err => {
-                    console.error('Error loading user:', err);
-                    setError('Failed to load user data. Please try again.');
-                    localStorage.removeItem('token');
-                });
+            
+            // Force page reload to dashboard - this lets AuthContext pick up the token
+            window.location.replace('/dashboard');
         } else if (errorParam) {
             if (errorParam === 'google_auth_failed') {
                 setError('Google authentication failed. Please try again.');
@@ -44,7 +36,7 @@ const Login = () => {
                 setError('Microsoft authentication failed. Please try again.');
             }
         }
-    }, [location, navigate, API_URL]);
+    }, [location]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
