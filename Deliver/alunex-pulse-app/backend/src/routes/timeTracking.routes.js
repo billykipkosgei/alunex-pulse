@@ -7,6 +7,8 @@ const {
     getActiveTimer,
     getTimeLogs,
     getWeeklySummary,
+    createManualEntry,
+    updateTimeLog,
     deleteTimeLog
 } = require('../controllers/timeTracking.controller');
 
@@ -20,6 +22,8 @@ router.get('/active', protect, getActiveTimer);
 
 // Time logs
 router.get('/logs', protect, getTimeLogs);
+router.post('/manual', protect, createManualEntry);
+router.put('/logs/:id', protect, updateTimeLog);
 router.get('/weekly-summary', protect, getWeeklySummary);
 router.delete('/logs/:id', protect, deleteTimeLog);
 

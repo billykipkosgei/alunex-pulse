@@ -1,317 +1,300 @@
-# Alunex Pulse - Project Management Application
+# Alunex Pulse - Project Management System
 
-## 🎯 Project Overview
+A comprehensive time tracking and project management system designed specifically for the aluminum & glass industry.
 
-**Alunex Pulse** is a comprehensive project management application designed to streamline team collaboration, task management, and project tracking. Built with modern web technologies, it offers a powerful yet intuitive interface for managing projects efficiently.
+## Features
 
----
+- User authentication with JWT
+- Time tracking with Clockify integration
+- Task management with Kanban boards
+- Department & budget management
+- Real-time team chat (Socket.io)
+- File sharing with Google Drive integration
+- Video calls with Jitsi Meet
+- Reports & analytics
+- Multi-user roles (Admin, Manager, Team Member, Client)
+- Multi-country & timezone support
 
-## 📦 Delivery Package Contents
+## Tech Stack
 
-This delivery package includes:
+### Frontend
+- React 18 + Vite
+- React Router for navigation
+- Axios for API calls
+- Socket.io-client for real-time chat
+- CSS3 with CSS variables
+
+### Backend
+- Node.js + Express
+- MongoDB + Mongoose
+- JWT authentication
+- Socket.io for real-time features
+- Bcrypt for password hashing
+
+## Color Scheme
+
+The application uses the exact colors from the approved wireframe:
+
+- **Primary Blue:** #2563eb
+- **Background:** #f8fafc
+- **Text Dark:** #1e293b
+- **Success Green:** #10b981
+- **Warning Orange:** #f59e0b
+- **Danger Red:** #dc2626
+
+## Project Structure
 
 ```
 alunex-pulse-app/
-├── backend/                     # Node.js/Express backend server
-├── frontend/                    # React frontend application
-├── documentation/              # Complete project documentation
-│   ├── SETUP_GUIDE.md         # Step-by-step setup instructions
-│   ├── DEPLOYMENT_GUIDE.md    # Production deployment guide
-│   ├── FEATURES.md            # Detailed features documentation
-│   └── API_REFERENCE.md       # Backend API documentation
-├── .env.example (backend)     # Environment variables template
-├── .env.example (frontend)    # Frontend environment template
-└── README.md                  # This file
+├── backend/           # Node.js Express backend
+│   ├── src/
+│   │   ├── config/    # Database configuration
+│   │   ├── controllers/  # Request handlers
+│   │   ├── middleware/   # Auth & validation
+│   │   ├── models/    # Mongoose models
+│   │   ├── routes/    # API routes
+│   │   └── server.js  # Main server file
+│   └── package.json
+│
+├── frontend/          # React frontend
+│   ├── src/
+│   │   ├── components/   # Reusable components
+│   │   ├── context/   # React context (Auth)
+│   │   ├── pages/     # Page components
+│   │   ├── services/  # API services
+│   │   ├── utils/     # Helper functions
+│   │   ├── App.jsx    # Main app component
+│   │   └── index.css  # Global styles
+│   └── package.json
+│
+├── PROJECT-STATUS.md  # Detailed project status
+└── README.md          # This file
 ```
 
----
-
-## ✨ Key Features
-
-### 🔐 Authentication & Security
-- **User Registration & Login** with email/password
-- **OAuth Integration** (Google & Microsoft)
-- **Password Visibility Toggle** - NEW! Eye icon to show/hide passwords
-- **JWT-based** authentication
-- **Secure password hashing** with bcrypt
-
-### 📊 Project Management
-- **Dashboard** with real-time project overview
-- **Task Management** - Create, assign, and track tasks
-- **Team Collaboration** - Multi-user support
-- **Project Timeline** tracking
-- **Status Updates** and progress monitoring
-
-### 💬 Communication
-- **Real-time Chat** using Socket.IO
-- **Team Messaging**
-- **Project Comments**
-- **Notifications**
-
-### 📈 Reporting & Analytics
-- **Project Reports** generation
-- **PDF Export** functionality
-- **Excel Export** capabilities
-- **Performance Metrics**
-- **Data Visualization**
-
-### 🎨 User Experience
-- **Dark Mode Support** - Toggle between light/dark themes
-- **Responsive Design** - Works on all devices
-- **Intuitive UI** - Clean, modern interface
-- **Accessibility Features**
-
-### 🏢 Organization Management
-- **Multi-tenant Architecture**
-- **Organization Settings**
-- **User Roles & Permissions**
-- **Team Management**
-
----
-
-## 🛠️ Technology Stack
-
-### Frontend
-- **React 19.1.1** - Modern UI framework
-- **Vite 7.1.7** - Fast build tool
-- **React Router DOM 7.9.5** - Routing
-- **Axios** - HTTP client
-- **Socket.IO Client** - Real-time communication
-- **jsPDF** - PDF generation
-- **XLSX** - Excel file handling
-- **Driver.js** - User onboarding/tours
-
-### Backend
-- **Node.js** - Runtime environment
-- **Express 5.1.0** - Web framework
-- **MongoDB (Mongoose 8.19.2)** - Database
-- **Socket.IO 4.8.1** - WebSocket server
-- **Passport.js** - OAuth authentication
-- **JWT** - Token-based auth
-- **Nodemailer** - Email service
-- **Resend** - Modern email API
-- **Multer** - File upload handling
-
----
-
-## 🚀 Quick Start
+## Getting Started
 
 ### Prerequisites
-- **Node.js** v16+ and npm
-- **MongoDB** database (local or cloud)
-- **Git** (for version control)
 
-### Installation Steps
+- Node.js (v18 or higher)
+- MongoDB Atlas account (free tier)
+- npm or yarn
 
-1. **Extract the project files** to your desired location
+### Backend Setup
 
-2. **Backend Setup**
-   ```bash
-   cd backend
-   npm install
-   cp .env.example .env
-   # Edit .env with your configuration
-   npm start
-   ```
-
-3. **Frontend Setup**
-   ```bash
-   cd frontend
-   npm install
-   cp .env.example .env
-   # Edit .env with backend API URL
-   npm run dev
-   ```
-
-4. **Access the Application**
-   - Frontend: http://localhost:5173
-   - Backend: http://localhost:5000
-
-For detailed setup instructions, see **[SETUP_GUIDE.md](documentation/SETUP_GUIDE.md)**
-
----
-
-## 📚 Documentation
-
-| Document | Description |
-|----------|-------------|
-| **SETUP_GUIDE.md** | Complete installation and configuration guide |
-| **DEPLOYMENT_GUIDE.md** | Production deployment instructions (cPanel, Render, etc.) |
-| **FEATURES.md** | Detailed feature descriptions and usage |
-| **API_REFERENCE.md** | Backend API endpoints documentation |
-
----
-
-## 🔑 Environment Configuration
-
-### Backend Environment Variables
-Required variables (see `.env.example`):
-- `MONGODB_URI` - MongoDB connection string
-- `JWT_SECRET` - Secret key for JWT tokens
-- `PORT` - Server port (default: 5000)
-- `FRONTEND_URL` - Frontend URL for CORS
-- `GOOGLE_CLIENT_ID` & `GOOGLE_CLIENT_SECRET` - For Google OAuth
-- `MICROSOFT_CLIENT_ID` & `MICROSOFT_CLIENT_SECRET` - For Microsoft OAuth
-- Email service configuration (Nodemailer or Resend)
-
-### Frontend Environment Variables
-Required variables:
-- `VITE_API_URL` - Backend API URL
-
----
-
-## 🆕 Recent Updates
-
-### Password Visibility Toggle (Latest)
-- Added eye icon to password fields in Login and Registration forms
-- Users can now toggle password visibility
-- Separate toggle for password and confirm password fields
-- Accessible with proper ARIA labels
-- Smooth animations and hover effects
-
-### Other Recent Features
-- Multi-tenant organization support
-- Dark mode implementation
-- Email error handling improvements
-- Report download functionality
-- OAuth production setup
-
----
-
-## 📁 Project Structure
-
-### Backend Structure
-```
-backend/
-├── src/
-│   ├── config/         # Configuration files
-│   ├── controllers/    # Request handlers
-│   ├── middleware/     # Custom middleware
-│   ├── models/         # Database models
-│   ├── routes/         # API routes
-│   ├── services/       # Business logic
-│   ├── utils/          # Helper functions
-│   └── server.js       # Entry point
-├── .env.example
-└── package.json
-```
-
-### Frontend Structure
-```
-frontend/
-├── src/
-│   ├── components/     # Reusable components
-│   ├── pages/          # Page components
-│   ├── context/        # React Context (State)
-│   ├── services/       # API services
-│   ├── utils/          # Utilities
-│   ├── App.jsx         # Main app component
-│   └── main.jsx        # Entry point
-├── public/             # Static assets
-├── .env.example
-└── package.json
-```
-
----
-
-## 🧪 Testing
-
-### Run Development Servers
+1. Navigate to the backend directory:
 ```bash
-# Backend (Terminal 1)
 cd backend
-npm run dev
+```
 
-# Frontend (Terminal 2)
-cd frontend
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Create a `.env` file in the backend directory:
+```env
+PORT=5000
+NODE_ENV=development
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret_key_here
+JWT_EXPIRE=7d
+FRONTEND_URL=http://localhost:5173
+CLOCKIFY_API_KEY=your_clockify_api_key
+GOOGLE_DRIVE_API_KEY=your_google_drive_api_key
+CLICKUP_API_KEY=your_clickup_api_key
+```
+
+4. Start the development server:
+```bash
 npm run dev
 ```
 
-### Build for Production
+The backend will run on `http://localhost:5000`
+
+### Frontend Setup
+
+1. Navigate to the frontend directory:
 ```bash
-# Frontend
+cd frontend
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Create a `.env` file in the frontend directory:
+```env
+VITE_API_URL=http://localhost:5000/api
+```
+
+4. Start the development server:
+```bash
+npm run dev
+```
+
+The frontend will run on `http://localhost:5173`
+
+## API Endpoints
+
+### Authentication
+- `POST /api/auth/register` - Register new user
+- `POST /api/auth/login` - Login user
+- `GET /api/auth/me` - Get current user
+- `PUT /api/auth/profile` - Update user profile
+- `PUT /api/auth/preferences` - Update user preferences
+
+### Users
+- `GET /api/users` - Get all users
+- `GET /api/users/:id` - Get single user
+
+### Projects
+- `GET /api/projects` - Get all projects
+- `POST /api/projects` - Create project
+- `GET /api/projects/:id` - Get single project
+- `PUT /api/projects/:id` - Update project
+
+### Tasks
+- `GET /api/tasks` - Get all tasks
+- `POST /api/tasks` - Create task
+- `PUT /api/tasks/:id` - Update task
+
+### Departments
+- `GET /api/departments` - Get all departments
+- `POST /api/departments` - Create department
+- `GET /api/departments/:id` - Get single department
+- `PUT /api/departments/:id` - Update department
+
+## User Roles
+
+1. **Admin** - Full access to all features
+2. **Manager** - Project and team management
+3. **Team Member** - Task and time tracking
+4. **Client** - View-only access to assigned projects
+
+## Database Models
+
+### User
+- Name, email, password (hashed)
+- Role (admin, manager, team_member, client)
+- Department reference
+- Timezone & country
+- Theme preferences
+
+### Project
+- Name, description, status, priority
+- Budget (allocated, spent, currency)
+- Profit margin
+- Start/end dates
+- Manager, team members, client
+- Progress percentage
+
+### Task
+- Title, description
+- Project reference
+- Status (todo, in_progress, completed, blocked)
+- Assigned users, department
+- Due date, estimated/actual hours
+- Progress percentage
+- Attachments & comments
+
+### Department
+- Name, description
+- Department head
+- Team members
+- Budget (allocated, spent)
+- Categories for tasks
+
+## Deployment
+
+### Frontend (cPanel)
+1. Build the production version:
+```bash
 cd frontend
 npm run build
-# Outputs to: frontend/dist/
-
-# Backend
-# No build needed - runs directly with Node.js
 ```
 
+2. Upload the `dist` folder contents to your cPanel public_html directory
+
+### Backend (Render.com)
+1. Create a new Web Service on Render
+2. Connect your GitHub repository
+3. Set build command: `npm install`
+4. Set start command: `npm start`
+5. Add environment variables from `.env`
+
+### Database (MongoDB Atlas)
+1. Create a free cluster
+2. Add database user
+3. Whitelist IP addresses
+4. Get connection string
+5. Add to backend `.env` file
+
+## Features by Page
+
+### Dashboard
+- Overview statistics
+- Active projects selector
+- Recent tasks list
+- Team activity feed
+
+### Time Tracking
+- Live timer
+- Time logs table
+- Weekly summary
+- Clockify integration
+
+### Task Management
+- Kanban board (drag & drop)
+- Task filtering
+- Progress tracking
+- WIP calculation
+
+### Departments
+- Budget allocation
+- Team assignments
+- Performance metrics
+- Category management
+
+### Team Chat
+- Real-time messaging
+- Channel/room system
+- Typing indicators
+- File attachments
+
+### File Sharing
+- File upload
+- Google Drive integration
+- Link-only saving
+- Activity history
+
+### Reports
+- Time by project charts
+- Team performance graphs
+- Budget utilization
+- Export to PDF/Excel
+
+### Video Calls
+- Jitsi Meet integration
+- Screen sharing
+- Meeting recording
+- Participant management
+
+### Settings
+- User profile
+- Team management
+- API integrations
+- Notification preferences
+
+## Support
+
+For issues or questions, please contact the development team.
+
+## License
+
+Proprietary - Alunex Project Management System
+
 ---
 
-## 🌐 Deployment
-
-The application can be deployed to various platforms:
-
-- **cPanel** - Traditional web hosting
-- **Render** - Modern cloud platform
-- **Heroku** - Platform as a Service
-- **DigitalOcean** - VPS hosting
-- **AWS** - Scalable cloud infrastructure
-
-See **[DEPLOYMENT_GUIDE.md](documentation/DEPLOYMENT_GUIDE.md)** for platform-specific instructions.
-
----
-
-## 🔒 Security Features
-
-- **Password Hashing** - bcrypt with salt rounds
-- **JWT Authentication** - Secure token-based auth
-- **CORS Protection** - Configured for allowed origins
-- **Input Validation** - express-validator for request validation
-- **SQL Injection Prevention** - MongoDB parameterized queries
-- **XSS Protection** - React built-in escaping
-- **Environment Variables** - Sensitive data in .env files
-
----
-
-## 📧 Support & Maintenance
-
-### Common Issues
-1. **MongoDB Connection Errors**
-   - Check MongoDB URI in `.env`
-   - Ensure MongoDB service is running
-   - Verify network connectivity
-
-2. **OAuth Not Working**
-   - Verify client IDs and secrets
-   - Check redirect URLs in provider console
-   - Ensure frontend/backend URLs are correct
-
-3. **CORS Errors**
-   - Update `FRONTEND_URL` in backend `.env`
-   - Check allowed origins in backend config
-
-### Getting Help
-- Review documentation files
-- Check error logs in terminal/console
-- Verify environment variables
-- Ensure all dependencies are installed
-
----
-
-## 📝 License
-
-This project is delivered as a complete package for your use.
-
----
-
-## 🎉 Thank You!
-
-Thank you for choosing my services on Fiverr! This project has been carefully developed with attention to detail, security, and user experience.
-
-### Delivery Checklist
-- ✅ Complete source code (frontend & backend)
-- ✅ Comprehensive documentation
-- ✅ Setup and deployment guides
-- ✅ Environment configuration examples
-- ✅ Latest features implemented (password toggle)
-- ✅ Production-ready build
-- ✅ Security best practices implemented
-
-If you have any questions or need assistance with setup, please don't hesitate to reach out!
-
----
-
-**Developed with ❤️ for efficient project management**
+**Version:** 1.0.0
+**Last Updated:** 2025-11-01

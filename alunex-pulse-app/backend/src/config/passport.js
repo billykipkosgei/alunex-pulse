@@ -2,6 +2,7 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const MicrosoftStrategy = require('passport-microsoft').Strategy;
 const User = require('../models/User.model');
+const Organization = require('../models/Organization.model');
 
 // Serialize user for session
 passport.serializeUser((user, done) => {
@@ -29,36 +30,50 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
             },
             async (accessToken, refreshToken, profile, done) => {
                 try {
-                    // Check if user already exists
-                    let user = await User.findOne({
-                        $or: [
-                            { providerId: profile.id, authProvider: 'google' },
-                            { email: profile.emails[0].value }
-                        ]
-                    });
+                    const email = profile.emails[0].value;
+
+                    // Check if user already exists (either invited or previously registered)
+                    let user = await User.findOne({ email });
 
                     if (user) {
-                        // Update existing user's provider info if needed
+                        // EXISTING USER (Invited or previously registered)
+                        // Update their OAuth provider info if they're logging in with Google
                         if (!user.providerId || user.authProvider !== 'google') {
                             user.providerId = profile.id;
                             user.authProvider = 'google';
+                            user.avatar = user.avatar || profile.photos?.[0]?.value || '';
                             await user.save();
                         }
                         return done(null, user);
                     }
 
-                    // Create new user
+                    // NEW USER - Create organization and make them admin
+                    const orgName = `${profile.displayName}'s Workspace`;
+                    const organization = await Organization.create({
+                        name: orgName,
+                        owner: null // Will be updated after user creation
+                    });
+
+                    // Create new user as admin of their own organization
                     user = await User.create({
                         name: profile.displayName,
-                        email: profile.emails[0].value,
+                        email: email,
                         authProvider: 'google',
                         providerId: profile.id,
                         avatar: profile.photos?.[0]?.value || '',
+                        organization: organization._id,
+                        role: 'admin',
                         isActive: true
+                    });
+
+                    // Update organization owner
+                    await Organization.findByIdAndUpdate(organization._id, {
+                        owner: user._id
                     });
 
                     done(null, user);
                 } catch (error) {
+                    console.error('Google OAuth error:', error);
                     done(error, null);
                 }
             }
@@ -79,16 +94,14 @@ if (process.env.MICROSOFT_CLIENT_ID && process.env.MICROSOFT_CLIENT_SECRET) {
             },
             async (accessToken, refreshToken, profile, done) => {
                 try {
-                    // Check if user already exists
-                    let user = await User.findOne({
-                        $or: [
-                            { providerId: profile.id, authProvider: 'microsoft' },
-                            { email: profile.emails[0].value }
-                        ]
-                    });
+                    const email = profile.emails[0].value;
+
+                    // Check if user already exists (either invited or previously registered)
+                    let user = await User.findOne({ email });
 
                     if (user) {
-                        // Update existing user's provider info if needed
+                        // EXISTING USER (Invited or previously registered)
+                        // Update their OAuth provider info if they're logging in with Microsoft
                         if (!user.providerId || user.authProvider !== 'microsoft') {
                             user.providerId = profile.id;
                             user.authProvider = 'microsoft';
@@ -97,17 +110,32 @@ if (process.env.MICROSOFT_CLIENT_ID && process.env.MICROSOFT_CLIENT_SECRET) {
                         return done(null, user);
                     }
 
-                    // Create new user
+                    // NEW USER - Create organization and make them admin
+                    const orgName = `${profile.displayName}'s Workspace`;
+                    const organization = await Organization.create({
+                        name: orgName,
+                        owner: null // Will be updated after user creation
+                    });
+
+                    // Create new user as admin of their own organization
                     user = await User.create({
                         name: profile.displayName,
-                        email: profile.emails[0].value,
+                        email: email,
                         authProvider: 'microsoft',
                         providerId: profile.id,
+                        organization: organization._id,
+                        role: 'admin',
                         isActive: true
+                    });
+
+                    // Update organization owner
+                    await Organization.findByIdAndUpdate(organization._id, {
+                        owner: user._id
                     });
 
                     done(null, user);
                 } catch (error) {
+                    console.error('Microsoft OAuth error:', error);
                     done(error, null);
                 }
             }

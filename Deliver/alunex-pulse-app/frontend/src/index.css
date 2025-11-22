@@ -363,3 +363,13 @@ p {
         transform: translateY(-8px);
     }
 }
+
+/* Spin Animation for Loading States */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
