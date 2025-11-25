@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 const User = require('../models/User.model');
 const Organization = require('../models/Organization.model');
-const { sendInvitationEmail } = require('../utils/emailService');
+const { sendInvitationEmail, sendPasswordResetEmail } = require('../utils/emailService');
 
 // Generate JWT Token
 const generateToken = (id) => {
@@ -80,7 +81,7 @@ exports.register = async (req, res) => {
 
             if (hasEmailService) {
                 try {
-                    await sendInvitationEmail(email, name, password, req.user.name);
+                    await sendInvitationEmail, sendPasswordResetEmail(email, name, password, req.user.name);
                     emailSent = true;
                     console.log(`Invitation email sent to ${email}`);
                 } catch (emailError) {
