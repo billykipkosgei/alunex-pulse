@@ -325,3 +325,122 @@ exports.setupAdmin = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+// Forgot password - Request password reset
+exports.forgotPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        // Validate input
+        if (!email) {
+            return res.status(400).json({ message: 'Please provide your email address' });
+        }
+
+        // Find user by email
+        const user = await User.findOne({ email: email.toLowerCase() });
+
+        if (!user) {
+            // Return success even if user doesn't exist (security best practice)
+            return res.status(200).json({
+                success: true,
+                message: 'If an account with that email exists, a password reset link has been sent.'
+            });
+        }
+
+        // Check if user uses OAuth (Google/Microsoft)
+        if (user.authProvider !== 'local') {
+            return res.status(400).json({
+                message: `This account uses ${user.authProvider} authentication. Please sign in with ${user.authProvider}.`
+            });
+        }
+
+        // Generate reset token
+        const resetToken = crypto.randomBytes(32).toString('hex');
+
+        // Hash the token before saving to database
+        user.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+        user.resetPasswordExpires = Date.now() + 3600000; // Token expires in 1 hour
+
+        await user.save();
+
+        // Send reset email
+        try {
+            await sendPasswordResetEmail(user.email, user.name, resetToken);
+
+            res.status(200).json({
+                success: true,
+                message: 'Password reset email sent successfully'
+            });
+        } catch (emailError) {
+            // If email fails, remove the reset token
+            user.resetPasswordToken = null;
+            user.resetPasswordExpires = null;
+            await user.save();
+
+            console.error('Error sending password reset email:', emailError);
+            return res.status(500).json({
+                message: 'Email could not be sent. Please try again later.'
+            });
+        }
+    } catch (error) {
+        console.error('Forgot password error:', error);
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Reset password - Set new password with token
+exports.resetPassword = async (req, res) => {
+    try {
+        const { token, password } = req.body;
+
+        // Validate input
+        if (!token || !password) {
+            return res.status(400).json({ message: 'Please provide token and new password' });
+        }
+
+        if (password.length < 6) {
+            return res.status(400).json({ message: 'Password must be at least 6 characters long' });
+        }
+
+        // Hash the token to compare with database
+        const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
+        // Find user with valid token
+        const user = await User.findOne({
+            resetPasswordToken: hashedToken,
+            resetPasswordExpires: { $gt: Date.now() }
+        }).select('+password');
+
+        if (!user) {
+            return res.status(400).json({
+                message: 'Invalid or expired reset token'
+            });
+        }
+
+        // Set new password
+        user.password = password;
+        user.resetPasswordToken = null;
+        user.resetPasswordExpires = null;
+
+        await user.save();
+
+        // Generate new JWT token
+        const jwtToken = generateToken(user._id);
+
+        res.status(200).json({
+            success: true,
+            message: 'Password reset successful',
+            token: jwtToken,
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+                initials: user.getInitials()
+            }
+        });
+    } catch (error) {
+        console.error('Reset password error:', error);
+        res.status(500).json({ message: error.message });
+    }
+};

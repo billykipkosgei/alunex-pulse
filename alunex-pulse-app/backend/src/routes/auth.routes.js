@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { register, login, getMe, updateProfile, updatePreferences, setupAdmin } = require('../controllers/auth.controller');
+const { register, login, getMe, updateProfile, updatePreferences, setupAdmin, forgotPassword, resetPassword } = require('../controllers/auth.controller');
 const { protect, optionalProtect } = require('../middleware/auth.middleware');
 const passport = require('../config/passport');
 const jwt = require('jsonwebtoken');
@@ -9,6 +9,8 @@ const jwt = require('jsonwebtoken');
 router.post('/setup-admin', setupAdmin);
 router.post('/register', optionalProtect, register);
 router.post('/login', login);
+router.post('/forgot-password', forgotPassword);
+router.post('/reset-password', resetPassword);
 
 // Google OAuth routes
 router.get('/google',

@@ -191,7 +191,7 @@ const Login = () => {
                     <p style={{ marginBottom: '8px', color: 'var(--text-muted)', fontSize: '14px' }}>
                         Don't have an account? <Link to="/register" style={{ color: 'var(--primary-blue)', textDecoration: 'none', fontWeight: '600' }}>Sign up here</Link>
                     </p>
-                    <a href="#">Forgot your password?</a>
+                    <Link to="/forgot-password">Forgot your password?</Link>
                 </div>
             </div>
         </div>
