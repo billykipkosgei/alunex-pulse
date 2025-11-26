@@ -175,8 +175,8 @@ exports.createChannel = async (req, res) => {
             members: [userId]
         };
 
-        // Only add project if provided
-        if (projectId) {
+        // Only add project if provided and not empty
+        if (projectId && projectId.trim() !== '') {
             channelData.project = projectId;
         }
 

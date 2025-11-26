@@ -162,15 +162,21 @@ exports.createChannel = async (req, res) => {
             });
         }
 
-        const channel = await Channel.create({
+        const channelData = {
             name,
             organization: req.user.organization,
             description,
-            project: projectId,
             isPrivate: isPrivate || false,
             createdBy: userId,
             members: [userId]
-        });
+        };
+
+        // Only add project if provided and not empty
+        if (projectId && projectId.trim() !== '') {
+            channelData.project = projectId;
+        }
+
+        const channel = await Channel.create(channelData);
 
         const populatedChannel = await Channel.findById(channel._id)
             .populate('project', 'name')
