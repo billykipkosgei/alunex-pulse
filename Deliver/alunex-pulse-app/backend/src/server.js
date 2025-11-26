@@ -109,9 +109,17 @@ io.on('connection', (socket) => {
         try {
             const { channelId, userId, text, replyTo } = data;
 
+            // Get channel to retrieve organization
+            const channel = await Channel.findById(channelId);
+            if (!channel) {
+                socket.emit('message_error', { error: 'Channel not found' });
+                return;
+            }
+
             // Save message to database
             const message = await Message.create({
                 channel: channelId,
+                organization: channel.organization,
                 sender: userId,
                 text,
                 replyTo: replyTo || null,
