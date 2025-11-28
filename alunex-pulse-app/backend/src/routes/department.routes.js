@@ -59,13 +59,37 @@ router.get('/', protect, async (req, res) => {
 // Create department
 router.post('/', protect, async (req, res) => {
     try {
+        console.log('🔷 Creating department with data:', {
+            bodyData: req.body,
+            userId: req.user?.id,
+            userOrganization: req.user?.organization
+        });
+
+        if (!req.user?.organization) {
+            console.error('❌ User has no organization:', req.user);
+            return res.status(400).json({
+                message: 'User must belong to an organization to create departments',
+                error: 'MISSING_ORGANIZATION'
+            });
+        }
+
         const department = await Department.create({
             ...req.body,
             organization: req.user.organization
         });
+
+        console.log('✅ Department created successfully:', department._id);
         res.status(201).json({ success: true, department });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error('❌ Error creating department:', {
+            message: error.message,
+            stack: error.stack,
+            validationErrors: error.errors
+        });
+        res.status(500).json({
+            message: error.message,
+            errors: error.errors
+        });
     }
 });
 
