@@ -190,6 +190,12 @@ router.put('/:id', protect, async (req, res) => {
             { new: true, runValidators: true }
         );
 
+        // Check budget alerts if budget was updated
+        if (req.body.budget) {
+            const budgetAlert = require('../utils/budgetAlert');
+            await budgetAlert.checkDepartmentBudget(department);
+        }
+
         res.json({ success: true, department });
     } catch (error) {
         res.status(500).json({ message: error.message });

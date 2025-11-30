@@ -36,7 +36,7 @@ router.get('/:id', protect, async (req, res) => {
 router.put('/profile', protect, async (req, res) => {
     try {
         const User = require('../models/User.model');
-        const { name, email, phone, department } = req.body;
+        const { name, email, phone, department, preferences } = req.body;
 
         const user = await User.findById(req.user.id);
         if (!user) {
@@ -56,6 +56,19 @@ router.put('/profile', protect, async (req, res) => {
         if (email) user.email = email;
         if (phone !== undefined) user.phone = phone;
         if (department !== undefined) user.department = department;
+
+        // Update notification preferences
+        if (preferences) {
+            if (preferences.notifications) {
+                user.preferences.notifications = {
+                    ...user.preferences.notifications,
+                    ...preferences.notifications
+                };
+            }
+            if (preferences.theme) {
+                user.preferences.theme = preferences.theme;
+            }
+        }
 
         await user.save();
 

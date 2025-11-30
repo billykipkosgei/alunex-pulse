@@ -234,10 +234,24 @@ const Settings = () => {
         alert(`Theme changed to ${newTheme} mode!`);
     };
 
-    const handleNotificationChange = (key) => {
+    const handleNotificationChange = async (key) => {
         const newValue = !notifications[key];
         setNotifications(prev => ({ ...prev, [key]: newValue }));
         localStorage.setItem(`${key}Notifications`, JSON.stringify(newValue));
+
+        // Save to backend
+        try {
+            const headers = { Authorization: `Bearer ${token}` };
+            await axios.put(`${API_URL}/users/profile`, {
+                preferences: {
+                    notifications: {
+                        [key]: newValue
+                    }
+                }
+            }, { headers });
+        } catch (error) {
+            console.error('Error updating notification preferences:', error);
+        }
     };
 
     return (

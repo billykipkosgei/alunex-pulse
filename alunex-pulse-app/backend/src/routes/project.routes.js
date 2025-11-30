@@ -125,6 +125,64 @@ router.put('/:id', protect, async (req, res) => {
         if (!project) {
             return res.status(404).json({ message: 'Project not found' });
         }
+
+        // Send notification to team members about project update
+        if (project.team && project.team.length > 0) {
+            const User = require('../models/User.model');
+            const emailService = require('../utils/emailService');
+            const updatedBy = await User.findById(req.user.id).select('name');
+
+            for (const teamMember of project.team) {
+                try {
+                    const user = await User.findById(teamMember.user._id || teamMember.user).select('name email preferences');
+
+                    // Check if user has email and project update notifications enabled
+                    if (user && user.preferences?.notifications?.email && user.preferences?.notifications?.projectUpdates) {
+                        await emailService.sendProjectUpdateEmail(
+                            user.email,
+                            user.name,
+                            project.name,
+                            'updated',
+                            updatedBy.name
+                        );
+                        console.log(`Project update notification sent to ${user.email}`);
+                    }
+                } catch (emailError) {
+                    console.error(`Error sending project notification to user:`, emailError);
+                }
+            }
+
+            // Also notify project manager if not already in team
+            if (project.manager) {
+                try {
+                    const managerId = project.manager._id || project.manager;
+                    const isInTeam = project.team.some(tm => (tm.user._id || tm.user).toString() === managerId.toString());
+
+                    if (!isInTeam) {
+                        const manager = await User.findById(managerId).select('name email preferences');
+                        if (manager && manager.preferences?.notifications?.email && manager.preferences?.notifications?.projectUpdates) {
+                            await emailService.sendProjectUpdateEmail(
+                                manager.email,
+                                manager.name,
+                                project.name,
+                                'updated',
+                                updatedBy.name
+                            );
+                            console.log(`Project update notification sent to manager ${manager.email}`);
+                        }
+                    }
+                } catch (emailError) {
+                    console.error(`Error sending project notification to manager:`, emailError);
+                }
+            }
+        }
+
+        // Check budget alerts if budget was updated
+        if (updateData.budget) {
+            const budgetAlert = require('../utils/budgetAlert');
+            await budgetAlert.checkProjectBudget(project);
+        }
+
         res.json({ success: true, project });
     } catch (error) {
         res.status(500).json({ message: error.message });

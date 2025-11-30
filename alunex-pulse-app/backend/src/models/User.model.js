@@ -73,7 +73,11 @@ const userSchema = new mongoose.Schema({
         },
         notifications: {
             email: { type: Boolean, default: true },
-            push: { type: Boolean, default: true }
+            push: { type: Boolean, default: true },
+            taskAssignments: { type: Boolean, default: true },
+            projectUpdates: { type: Boolean, default: true },
+            chatMessages: { type: Boolean, default: true },
+            budgetAlerts: { type: Boolean, default: true }
         }
     },
     resetPasswordToken: {

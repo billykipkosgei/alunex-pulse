@@ -136,6 +136,46 @@ exports.sendMessage = async (req, res) => {
         // Update channel's updatedAt
         await Channel.findByIdAndUpdate(channelId, { updatedAt: new Date() });
 
+        // Send email notifications to channel members
+        try {
+            const User = require('../models/User.model');
+            const emailService = require('../utils/emailService');
+
+            const channel = await Channel.findById(channelId).populate('members', '_id');
+            const sender = await User.findById(userId).select('name');
+
+            if (channel && channel.members && channel.members.length > 0) {
+                // Get message preview (first 100 characters)
+                const messagePreview = text.length > 100 ? text.substring(0, 100) + '...' : text;
+
+                // Send to all channel members except the sender
+                for (const member of channel.members) {
+                    if (member._id.toString() !== userId) {
+                        try {
+                            const user = await User.findById(member._id).select('name email preferences');
+
+                            // Check if user has email and chat message notifications enabled
+                            if (user && user.preferences?.notifications?.email && user.preferences?.notifications?.chatMessages) {
+                                await emailService.sendChatMessageEmail(
+                                    user.email,
+                                    user.name,
+                                    sender.name,
+                                    channel.name,
+                                    messagePreview
+                                );
+                                console.log(`Chat notification sent to ${user.email}`);
+                            }
+                        } catch (emailError) {
+                            console.error(`Error sending chat notification:`, emailError);
+                        }
+                    }
+                }
+            }
+        } catch (notificationError) {
+            console.error('Error sending chat notifications:', notificationError);
+            // Don't fail the message send if notifications fail
+        }
+
         res.status(201).json({
             success: true,
             message: populatedMessage
