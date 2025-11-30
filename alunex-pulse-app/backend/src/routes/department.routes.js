@@ -78,6 +78,15 @@ router.post('/', protect, async (req, res) => {
             organization: req.user.organization
         });
 
+        // Update the department head's user record if a head was assigned
+        if (req.body.head) {
+            const User = require('../models/User.model');
+            await User.findByIdAndUpdate(req.body.head, {
+                department: department._id
+            });
+            console.log('✅ Updated department head user:', req.body.head);
+        }
+
         console.log('✅ Department created successfully:', department._id);
         res.status(201).json({ success: true, department });
     } catch (error) {
@@ -141,14 +150,46 @@ router.get('/:id/projects', protect, async (req, res) => {
 // Update department
 router.put('/:id', protect, async (req, res) => {
     try {
+        // Get the current department to check if head is changing
+        const currentDepartment = await Department.findOne({
+            _id: req.params.id,
+            organization: req.user.organization
+        });
+
+        if (!currentDepartment) {
+            return res.status(404).json({ message: 'Department not found' });
+        }
+
+        const User = require('../models/User.model');
+
+        // If the head is changing, update user records
+        if (req.body.head !== undefined) {
+            const oldHead = currentDepartment.head?.toString();
+            const newHead = req.body.head;
+
+            // Remove old head from department if it's changing
+            if (oldHead && oldHead !== newHead) {
+                await User.findByIdAndUpdate(oldHead, {
+                    $unset: { department: 1 }
+                });
+                console.log('✅ Removed old department head:', oldHead);
+            }
+
+            // Add new head to department
+            if (newHead) {
+                await User.findByIdAndUpdate(newHead, {
+                    department: req.params.id
+                });
+                console.log('✅ Updated new department head:', newHead);
+            }
+        }
+
         const department = await Department.findOneAndUpdate(
             { _id: req.params.id, organization: req.user.organization },
             req.body,
             { new: true, runValidators: true }
         );
-        if (!department) {
-            return res.status(404).json({ message: 'Department not found' });
-        }
+
         res.json({ success: true, department });
     } catch (error) {
         res.status(500).json({ message: error.message });
