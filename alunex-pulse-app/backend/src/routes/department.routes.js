@@ -267,11 +267,30 @@ router.put('/:id/spend-documentation/link', protect, async (req, res) => {
             return res.status(404).json({ message: 'Department not found' });
         }
 
-        const { documentLink, notes } = req.body;
+        const { documentLink, notes, project } = req.body;
+
+        // Create a File record for the external link
+        let fileRecord = null;
+        if (documentLink) {
+            fileRecord = await File.create({
+                name: `${department.name} - Spend Documentation Link`,
+                originalName: `${department.name} - Spend Documentation Link`,
+                mimeType: 'external/link',
+                size: 0,
+                path: documentLink,
+                url: documentLink,
+                organization: req.user.organization,
+                uploadedBy: req.user.id,
+                project: project || null,
+                department: req.params.id,
+                description: notes || 'Department spend documentation',
+                tags: ['spend', 'budget', 'documentation', 'department', 'link']
+            });
+        }
 
         // Update or create spend documentation
         department.spendDocumentation = {
-            excelFile: department.spendDocumentation?.excelFile || null,
+            excelFile: fileRecord ? fileRecord._id : (department.spendDocumentation?.excelFile || null),
             documentLink: documentLink || '',
             uploadedBy: req.user.id,
             uploadedAt: new Date(),

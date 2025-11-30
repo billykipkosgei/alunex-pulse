@@ -76,6 +76,22 @@ router.post('/upload', protect, upload.single('file'), async (req, res) => {
             tags: tags ? JSON.parse(tags) : []
         });
 
+        // If file is associated with a department, update department's spendDocumentation
+        if (department) {
+            const Department = require('../models/Department.model');
+            const dept = await Department.findById(department);
+            if (dept) {
+                dept.spendDocumentation = {
+                    excelFile: file._id,
+                    documentLink: dept.spendDocumentation?.documentLink || '',
+                    uploadedBy: req.user.id,
+                    uploadedAt: new Date(),
+                    notes: description || dept.spendDocumentation?.notes || ''
+                };
+                await dept.save();
+            }
+        }
+
         const populatedFile = await File.findById(file._id)
             .populate('uploadedBy', 'name email')
             .populate('project', 'name')
@@ -147,6 +163,22 @@ router.post('/add-link', protect, async (req, res) => {
             description: description || '',
             tags: tags ? (Array.isArray(tags) ? tags : [tags]) : ['report']
         });
+
+        // If link is associated with a department, update department's spendDocumentation
+        if (department) {
+            const Department = require('../models/Department.model');
+            const dept = await Department.findById(department);
+            if (dept) {
+                dept.spendDocumentation = {
+                    excelFile: file._id,
+                    documentLink: url,
+                    uploadedBy: req.user.id,
+                    uploadedAt: new Date(),
+                    notes: description || dept.spendDocumentation?.notes || ''
+                };
+                await dept.save();
+            }
+        }
 
         const populatedFile = await File.findById(file._id)
             .populate('uploadedBy', 'name email')
