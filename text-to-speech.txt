@@ -1,0 +1,318 @@
+ALUNEX PULSE - PROJECT MANAGEMENT SYSTEM
+Video Script for Voice-Over
+
+===== INTRODUCTION =====
+
+Hello and welcome to Alunex Pulse, your complete project management solution.
+
+In today's fast-paced business environment, managing projects, teams, and resources efficiently can be challenging. That's where Alunex Pulse comes in. This comprehensive platform brings together everything you need to plan, execute, and monitor your projects, all in one intuitive interface.
+
+Whether you're managing a small team or coordinating multiple departments across large-scale projects, Alunex Pulse provides the tools and insights you need to stay organized, productive, and on track.
+
+In this demonstration, we'll walk you through every feature of Alunex Pulse, showing you how this powerful platform can transform the way you manage your projects and collaborate with your team.
+
+Let's dive in and explore what makes Alunex Pulse the ultimate project management solution for modern businesses.
+
+===== AUTHENTICATION & SECURITY =====
+
+Before we begin, let's talk about security. Alunex Pulse takes your data security seriously.
+
+The platform features a robust authentication system with secure user registration and login. Users can easily create accounts, and administrators can invite team members directly through the system.
+
+We've implemented password security with encrypted storage, and if you ever forget your password, there's a comprehensive password reset system that sends secure reset links to your email.
+
+All user sessions are protected with token-based authentication, ensuring that your data remains secure at all times.
+
+===== DASHBOARD OVERVIEW =====
+
+Once you log in, you're greeted with the Dashboard - your command center for all project activities.
+
+The dashboard provides a comprehensive overview of everything happening in your organization. At the top, you'll see key performance indicators showing the total number of active projects, tasks in progress, team members, and overall completion rates.
+
+You can filter the entire dashboard by specific projects, allowing you to focus on what matters most at any given time. This project filter dynamically updates all statistics, recent tasks, and team activity to show you exactly what's happening in your selected project.
+
+The dashboard displays your recent tasks with their current status, priority levels, and assigned team members. You can quickly see which tasks need attention and which ones are on track.
+
+Below that, you'll find team activity showing who's working on what, giving you real-time visibility into your team's productivity and current focus areas.
+
+The interface is clean, modern, and designed to give you the information you need at a glance, without overwhelming you with unnecessary details.
+
+===== PROJECT MANAGEMENT =====
+
+Now, let's explore the heart of Alunex Pulse - the Project Management system.
+
+Creating a new project is straightforward and comprehensive. You can define the project name, assign a unique project code for easy reference, and provide a detailed description of what the project entails.
+
+Every project can be assigned to a specific department, making it easy to organize work across your organization. You can set start and end dates, define the project status from planning through execution to completion, and assign priority levels to help your team focus on what's most important.
+
+One of the powerful features is the ability to assign a project manager who oversees the entire project, and build a complete team by selecting members from your organization. This ensures everyone knows who's responsible for what.
+
+The budget management system is particularly robust. You can set an allocated budget in your preferred currency, track spending in real-time, and set profit margins. The system automatically calculates budget utilization and alerts you when spending approaches or exceeds thresholds.
+
+Projects can be associated with clients, tracked by country and timezone, making it perfect for international operations.
+
+For complete financial transparency, each project supports spend documentation. You can upload Excel files, PDFs, or link to external budget documents stored in Google Sheets or other platforms. All documentation is tracked with upload dates and user information.
+
+===== TASK MANAGEMENT =====
+
+Tasks are where the actual work gets done, and Alunex Pulse makes task management intuitive and powerful.
+
+The task board uses a Kanban-style interface with four columns: To Do, In Progress, Blocked, and Completed. This visual layout makes it easy to see the status of all work at a glance.
+
+When creating a task, you can provide a title and description, assign it to specific team members, link it to a project and department, set priority levels from low to critical, and define start and due dates.
+
+But here's where it gets really powerful - each main task can have multiple sub-tasks. This allows you to break down complex work into manageable pieces. Each sub-task can have its own assignee, start and end dates, estimated hours, and completion status.
+
+The system automatically calculates overall task progress based on sub-task completion, giving you accurate insights into how work is progressing.
+
+Tasks can be dragged between columns to update their status, assigned team members receive email notifications, and overdue tasks are highlighted to ensure nothing falls through the cracks.
+
+You can filter tasks by project, search for specific tasks, and view detailed information including time logged, progress percentages, and assigned team members.
+
+===== DEPARTMENT MANAGEMENT =====
+
+Departments help you organize your team and resources effectively.
+
+Each department has a name, description, and can be assigned a department head who oversees operations. You can assign team members to departments, making it easy to see who's part of which team.
+
+Budget management at the department level allows you to allocate funds, track spending, and maintain financial oversight. Just like projects, departments support spend documentation with Excel file uploads and external links.
+
+The budget tracking system shows you exactly how much has been allocated, how much has been spent, and what percentage of the budget has been utilized. When spending reaches critical thresholds, automatic email alerts are sent to department heads and administrators.
+
+Departments can be linked to multiple projects, providing a clear organizational structure that shows how resources are distributed across your company.
+
+===== DEPARTMENT ANALYTICS =====
+
+Understanding how your departments are performing is crucial, and the Department Analytics module provides comprehensive insights.
+
+You'll see beautiful visualizations showing budget allocation versus actual spending across all departments. This makes it easy to identify which departments are staying within budget and which ones might need attention.
+
+The analytics show spending trends over time, allowing you to forecast future needs and make informed decisions about resource allocation.
+
+All data can be exported to Excel or PDF reports, perfect for sharing with stakeholders or including in presentations.
+
+===== TIME TRACKING =====
+
+Accurate time tracking is essential for project success, and Alunex Pulse makes it simple.
+
+Team members can log time against specific tasks and sub-tasks, providing granular visibility into where effort is being spent. The timer can be started and stopped for real-time tracking, or manual entries can be added for past work.
+
+Here's a powerful feature that's critical for client billing: the billable hours tracking system. When you start a timer or add a manual time entry, you can mark it as "Billable" - meaning this work should be charged to the client - or leave it unchecked for non-billable work like internal meetings, training, or administrative tasks.
+
+The system automatically separates and tracks billable versus non-billable hours. Your weekly summary shows total hours worked, but also breaks it down into billable hours that can be invoiced to clients, and non-billable hours for internal visibility.
+
+This is incredibly valuable when preparing client invoices. You can easily export time reports filtered to show only billable hours for a specific project or client, ensuring you're billing accurately for the work performed.
+
+Each time entry includes the date, hours worked, billable status, and optional notes about what was accomplished. This creates a detailed history of work that's invaluable for project analysis, client billing, and internal cost tracking.
+
+Time tracking data rolls up to tasks and projects, showing total hours logged, estimated hours remaining, and helping project managers understand if work is on track.
+
+You can track multiple projects in a single day - work three hours on Project A, switch to two hours on Project B, then finish with one hour on Project C. Each time block is logged separately with its own billable status and description.
+
+Reports can be generated to show time spent by project, by team member, or by date range. You can filter reports to show only billable hours, only non-billable hours, or see the complete breakdown, making it easy to analyze productivity, resource utilization, and prepare accurate client invoices.
+
+===== TEAM CHAT & COLLABORATION =====
+
+Communication is key to project success, and the integrated chat system keeps your team connected.
+
+You can create channels for different projects, departments, or topics. Channels can be public for organization-wide communication or private for confidential discussions.
+
+The chat supports real-time messaging with Socket.IO, ensuring instant delivery of messages. Team members can reply to specific messages, creating threaded conversations that are easy to follow.
+
+Unread message counts are displayed, ensuring important communications aren't missed. When enabled, email notifications are sent for new messages, keeping team members informed even when they're away from the platform.
+
+Messages show sender information, timestamps, and can be edited or deleted if needed. The interface is clean and familiar, similar to popular chat applications everyone already knows how to use.
+
+===== FILES & DOCUMENT SHARING =====
+
+Managing project documents is seamless with the Files and Sharing module.
+
+You can upload any type of file - documents, spreadsheets, images, PDFs - up to 100 megabytes each. Files can be organized by project and department, making them easy to find when you need them.
+
+In addition to uploading files, you can add links to external documents stored in Google Drive, Dropbox, or any other platform. This flexibility means all your project resources can be accessed from one central location.
+
+Each file shows who uploaded it, when it was uploaded, its size, and any associated projects or departments. You can add descriptions and tags to files, making them searchable and easier to categorize.
+
+Files can be downloaded directly from the platform, and the search functionality helps you quickly find the documents you need.
+
+The system maintains complete audit trails, showing who has accessed files and when, providing transparency and accountability.
+
+===== REPORTS & ANALYTICS =====
+
+Data-driven decision making is powered by the comprehensive reporting system.
+
+Reports can be generated across multiple dimensions - by project, by department, by time period, or by team member. This flexibility means you can answer almost any question about your organization's performance.
+
+The system generates beautiful visualizations including charts, graphs, and tables that make complex data easy to understand at a glance.
+
+All reports can be exported to PDF or Excel formats, perfect for presentations, stakeholder meetings, or archival purposes.
+
+Common reports include project status reports showing completion percentages and timeline adherence, budget reports comparing allocated versus spent funds, time tracking reports showing hours logged by team or project, and task completion reports analyzing productivity trends.
+
+The reporting engine is fast and responsive, handling large datasets without slowdown, ensuring you can analyze your entire organization's data efficiently.
+
+===== VIDEO CONFERENCING =====
+
+Built-in video conferencing means you never have to leave the platform to meet with your team.
+
+The video system allows you to start instant meetings or schedule them for later. You can invite specific team members or entire departments to join calls.
+
+During meetings, you have full video and audio capabilities, screen sharing for presentations and demonstrations, and a chat sidebar for questions and discussions that don't interrupt the main conversation.
+
+All meetings are associated with projects or departments, creating a record of when discussions took place and who participated.
+
+This integration means project discussions, decisions, and action items are all tracked in context, making it easy to remember what was decided and why.
+
+===== EMAIL NOTIFICATION SYSTEM =====
+
+Staying informed is crucial, and the comprehensive email notification system ensures you never miss important updates.
+
+Users can customize exactly which notifications they want to receive through the Settings page. The system supports four types of notifications:
+
+Task Assignment Notifications - receive an email whenever you're assigned to a new task or a task is reassigned to you. The email includes the task title, description, due date, and who assigned it.
+
+Project Update Notifications - when projects you're involved in are updated, you'll receive an email with details about what changed and who made the update. This keeps the entire team aligned on project status.
+
+Chat Message Notifications - get notified by email when someone sends a message in your channels. This is perfect for team members who might not be constantly checking the platform but need to stay in the loop.
+
+Budget Alert Notifications - when project or department spending reaches 75%, 90%, or 100% of allocated budgets, automatic alerts are sent to managers and administrators. This proactive system helps prevent budget overruns.
+
+All email notifications are beautifully designed, mobile-friendly, and include direct links back to the relevant section of the platform.
+
+The notification system respects user preferences - if you disable a notification type, you won't receive those emails. It's all about giving you control over your communication.
+
+===== SETTINGS & PREFERENCES =====
+
+Personalization is important, and the Settings page gives you complete control over your experience.
+
+In the Profile section, you can update your name, email, phone number, and department assignment. Your profile information is used throughout the platform, so keeping it current ensures accurate attribution on tasks, files, and communications.
+
+Password management is secure and straightforward. You can change your password at any time, and the system enforces strong password requirements to keep your account secure.
+
+The Preferences section is where you customize your experience. Choose between light and dark themes to match your working style and reduce eye strain.
+
+The notification preferences we discussed earlier are all configured here, with simple toggles to enable or disable each type of email notification.
+
+The Team Management section, available to administrators, shows all organization members. You can view their roles, departments, assigned tasks, and contact information. This central directory makes it easy to know who's who in your organization.
+
+Administrators can invite new team members directly from this interface, sending them secure invitation emails with temporary passwords they'll change on first login.
+
+===== USER ROLES & PERMISSIONS =====
+
+Security and access control are managed through a robust role-based system.
+
+Administrators have full access to all features, can create and manage departments, invite and remove users, access all projects and financial data, and configure organization-wide settings.
+
+Managers can oversee their assigned projects and departments, manage budgets and team assignments, view reports and analytics for their areas, but cannot access organization-wide administrative functions.
+
+Regular team members can access projects they're assigned to, complete their tasks and log time, participate in chat channels, upload and access project files, but have limited access to budgeting and administrative features.
+
+This granular permission system ensures everyone has access to what they need while protecting sensitive information and preventing accidental changes to critical data.
+
+===== BUDGET MANAGEMENT & ALERTS =====
+
+Financial oversight is a critical feature of Alunex Pulse.
+
+At both the project and department levels, you can set allocated budgets in any currency. As spending occurs, the system tracks every dollar and calculates real-time utilization percentages.
+
+Visual indicators show budget health at a glance - green for healthy budgets under 75%, yellow for budgets between 75% and 90%, and red for budgets approaching or exceeding allocation.
+
+The automatic alert system sends emails when spending crosses critical thresholds. At 75% utilization, managers receive an early warning. At 90%, urgent notifications go out to ensure appropriate action can be taken. At 100%, alerts notify both managers and administrators that the budget has been fully spent.
+
+All spending can be documented with uploaded Excel files or links to external financial systems. This creates a complete audit trail showing not just how much was spent, but where detailed breakdowns can be found.
+
+Budget reports can be generated at any time, showing historical trends, comparing planned versus actual spending, and forecasting future needs based on current burn rates.
+
+===== SEARCH & FILTERING =====
+
+With potentially hundreds of tasks, projects, and files, finding what you need is crucial.
+
+Every major section of the platform includes powerful search and filtering capabilities.
+
+Projects can be filtered by status, priority, department, or manager. Tasks can be filtered by project, status, assignee, or priority. Files can be searched by name, type, project, or department.
+
+The dashboard includes a project filter that dynamically updates all information to show only data relevant to your selected project.
+
+Search results are instant, updating as you type, and highlight matching terms to help you quickly identify the right result.
+
+Advanced filters can be combined - for example, showing only high-priority tasks in the 'In Progress' status assigned to a specific team member. This flexibility ensures you can slice and dice your data however you need.
+
+===== MOBILE RESPONSIVENESS =====
+
+Work doesn't stop when you leave your desk, and neither does Alunex Pulse.
+
+The entire platform is fully responsive, adapting seamlessly to tablets and mobile phones. The interface reorganizes itself for smaller screens, ensuring all functionality remains accessible without horizontal scrolling or tiny text.
+
+On mobile devices, the navigation collapses into a menu, cards stack vertically for easy scrolling, and forms adapt to touch input with appropriately sized buttons and form fields.
+
+You can check your dashboard, update task statuses, log time, send chat messages, and access files from anywhere, on any device.
+
+The responsive design isn't an afterthought - it's built into every page, ensuring a consistent, high-quality experience regardless of how you access the platform.
+
+===== REAL-TIME UPDATES =====
+
+Collaboration requires real-time information, and Alunex Pulse delivers.
+
+The chat system uses WebSocket technology to provide instant message delivery. When a team member sends a message, everyone in the channel sees it immediately without refreshing the page.
+
+Task updates, time logging, and file uploads are immediately reflected across all connected users. If someone moves a task from 'To Do' to 'In Progress', everyone viewing that board sees the change in real time.
+
+This real-time synchronization prevents conflicts, ensures everyone is working with current information, and creates a truly collaborative environment where teams can work together seamlessly.
+
+===== DATA SECURITY & PRIVACY =====
+
+Your data's security is paramount.
+
+All passwords are encrypted using industry-standard bcrypt hashing before storage. This means even database administrators cannot see user passwords.
+
+API communications are secured with token-based authentication. Each request includes a JWT token that verifies the user's identity and permissions.
+
+User data is isolated by organization. You can only see projects, tasks, and files belonging to your organization. This multi-tenant architecture ensures complete data separation.
+
+File uploads are validated for type and size, preventing malicious uploads. All user inputs are sanitized to prevent SQL injection and cross-site scripting attacks.
+
+The platform can be deployed on your own infrastructure for complete control, or used as a hosted solution with regular backups and disaster recovery procedures.
+
+===== INTEGRATION CAPABILITIES =====
+
+While Alunex Pulse is a complete solution, we understand you might use other tools.
+
+The file system supports linking to external documents in Google Drive, Dropbox, OneDrive, or any other platform. This means you don't have to migrate existing documents - just link to them.
+
+The email notification system integrates with standard email services, ensuring notifications reach users regardless of their email provider.
+
+The platform supports standard export formats - Excel, PDF, CSV - making it easy to share data with external systems or stakeholders who don't use the platform.
+
+Future integrations are planned for popular tools like Slack, Microsoft Teams, and accounting software, further extending the platform's capabilities.
+
+===== SCALABILITY =====
+
+Whether you're a team of 10 or an organization of 1000, Alunex Pulse scales with you.
+
+The architecture is designed to handle growth. As you add more projects, tasks, users, and files, performance remains consistent.
+
+The database uses efficient indexing and query optimization to ensure fast response times even with large datasets.
+
+File storage can be expanded as needed, and the system supports multiple file storage backends for flexibility.
+
+Organizations can have unlimited projects, unlimited tasks, and unlimited team members. There are no artificial limits constraining your growth.
+
+The permission system scales too - as your organization grows and becomes more complex, the role-based access control ensures new users automatically get appropriate permissions based on their role.
+
+===== CONCLUSION =====
+
+Alunex Pulse is more than just project management software - it's a complete solution for modern organizations.
+
+From the moment you log in to your personalized dashboard, through creating and managing complex projects, tracking time and budgets, collaborating with your team in real-time chat, sharing files and documents, generating insightful reports, conducting video meetings, and staying informed through intelligent email notifications - every feature is designed to make your work easier and more efficient.
+
+The platform eliminates the need for multiple disconnected tools. Instead of juggling separate applications for tasks, chat, file sharing, time tracking, and video calls, everything is integrated in one cohesive platform.
+
+Your data is secure, your team is connected, and your projects are on track.
+
+Whether you're managing a software development team, coordinating a marketing campaign, overseeing construction projects, or running any type of organization that needs to get things done, Alunex Pulse provides the structure, visibility, and collaboration tools you need to succeed.
+
+Thank you for watching this complete overview of Alunex Pulse. We hope you've seen how this powerful platform can transform the way you manage projects and work with your team.
+
+To get started with Alunex Pulse, visit our website, create your organization, invite your team, and experience the difference that truly integrated project management can make.
+
+Welcome to the future of project management. Welcome to Alunex Pulse.
