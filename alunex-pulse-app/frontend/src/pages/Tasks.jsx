@@ -7,7 +7,7 @@ const Tasks = () => {
     const { token, API_URL, user } = useAuth();
     const [selectedProject, setSelectedProject] = useState('all');
     const [projects, setProjects] = useState([]);
-    const [tasks, setTasks] = useState({ todo: [], inProgress: [], completed: [] });
+    const [tasks, setTasks] = useState({ todo: [], inProgress: [], blocked: [], completed: [] });
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
     const [showProjectModal, setShowProjectModal] = useState(false);
@@ -79,6 +79,7 @@ const Tasks = () => {
             setTasks({
                 todo: allTasks.filter(t => t.status === 'todo'),
                 inProgress: allTasks.filter(t => t.status === 'in_progress'),
+                blocked: allTasks.filter(t => t.status === 'blocked'),
                 completed: allTasks.filter(t => t.status === 'completed')
             });
         } catch (error) {
@@ -458,6 +459,7 @@ const Tasks = () => {
     const filteredTasks = {
         todo: filterTasksByProject(tasks.todo),
         inProgress: filterTasksByProject(tasks.inProgress),
+        blocked: filterTasksByProject(tasks.blocked),
         completed: filterTasksByProject(tasks.completed)
     };
 
@@ -599,6 +601,58 @@ const Tasks = () => {
                         {filteredTasks.inProgress.length === 0 && (
                             <div style={{ padding: '20px', textAlign: 'center', color: 'var(--text-muted)' }}>
                                 No tasks in progress
+                            </div>
+                        )}
+                    </div>
+
+                    {/* BLOCKED Column */}
+                    <div className="kanban-column">
+                        <div className="kanban-header">
+                            <h3>BLOCKED</h3>
+                            <span className="kanban-count">{filteredTasks.blocked.length}</span>
+                        </div>
+
+                        {filteredTasks.blocked.map(task => (
+                            <div key={task._id} className="kanban-card" style={{ borderLeft: '4px solid #f59e0b' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                                    <div style={{ flex: 1 }}>
+                                        <h4>{task.title}</h4>
+                                        <p>{task.description}</p>
+                                    </div>
+                                    <div style={{ display: 'flex', gap: '4px' }}>
+                                        <button
+                                            onClick={(e) => { e.stopPropagation(); handleOpenModal(task); }}
+                                            style={{ padding: '4px 8px', fontSize: '12px', background: '#3b82f6', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+                                        >
+                                            Edit
+                                        </button>
+                                        <button
+                                            onClick={(e) => { e.stopPropagation(); handleDeleteTask(task._id); }}
+                                            style={{ padding: '4px 8px', fontSize: '12px', background: '#ef4444', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="kanban-footer">
+                                    <div className="assignee-info">
+                                        <div className="avatar" style={{ background: getColorForUser((Array.isArray(task.assignedTo) ? task.assignedTo[0]?.name : task.assignedTo?.name)) }}>
+                                            {getInitials(Array.isArray(task.assignedTo) ? task.assignedTo[0]?.name : task.assignedTo?.name)}
+                                        </div>
+                                        <span>{(Array.isArray(task.assignedTo) ? task.assignedTo[0]?.name : task.assignedTo?.name) || 'Unassigned'}</span>
+                                    </div>
+                                    <span className="due-date" style={{ color: '#f59e0b', fontWeight: '600' }}>
+                                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ marginRight: '4px', verticalAlign: 'middle' }}>
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                                        </svg>
+                                        Blocked
+                                    </span>
+                                </div>
+                            </div>
+                        ))}
+                        {filteredTasks.blocked.length === 0 && (
+                            <div style={{ padding: '20px', textAlign: 'center', color: 'var(--text-muted)' }}>
+                                No blocked tasks
                             </div>
                         )}
                     </div>
