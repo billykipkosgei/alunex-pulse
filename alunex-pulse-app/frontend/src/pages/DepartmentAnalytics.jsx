@@ -25,16 +25,7 @@ const DepartmentAnalytics = () => {
     });
     const [recentTasks, setRecentTasks] = useState([]);
     const [departmentPerformance, setDepartmentPerformance] = useState([]);
-    const [budgetVarianceTrend, setBudgetVarianceTrend] = useState([]);
     const [costBreakdown, setCostBreakdown] = useState([]);
-    const [costByCategory, setCostByCategory] = useState([]);
-    const [profitAnalysis, setProfitAnalysis] = useState({
-        totalRevenue: 0,
-        totalCostsActual: 0,
-        projectedFinalCost: 0,
-        projectedProfit: 0,
-        profitMargin: 0
-    });
 
     useEffect(() => {
         fetchData();
@@ -145,16 +136,6 @@ const DepartmentAnalytics = () => {
             });
             setDepartmentPerformance(deptPerformance);
 
-            // Calculate budget variance trend (last 4 weeks)
-            const variance = Math.abs(costVariance);
-            const weeklyVariance = variance / 4;
-            setBudgetVarianceTrend([
-                { week: 'Week 1', variance: -(weeklyVariance * 0.6).toFixed(0), height: 60 },
-                { week: 'Week 2', variance: -(weeklyVariance * 0.9).toFixed(0), height: 90 },
-                { week: 'Week 3', variance: -(weeklyVariance * 0.4).toFixed(0), height: 45 },
-                { week: 'Week 4', variance: -(weeklyVariance * 0.7).toFixed(0), height: 70 }
-            ]);
-
             // Calculate cost breakdown by department
             const breakdown = depts.map(dept => {
                 const deptBudget = dept.budget?.allocated || 0;
@@ -172,33 +153,6 @@ const DepartmentAnalytics = () => {
                 };
             });
             setCostBreakdown(breakdown);
-
-            // Calculate cost by category (simplified distribution)
-            const laborCost = totalSpent * 0.55;
-            const materialCost = totalSpent * 0.35;
-            const equipmentCost = totalSpent * 0.08;
-            const otherCost = totalSpent * 0.02;
-
-            setCostByCategory([
-                { category: 'Labor Costs', amount: laborCost, percentage: 55 },
-                { category: 'Materials', amount: materialCost, percentage: 35 },
-                { category: 'Equipment', amount: equipmentCost, percentage: 8 },
-                { category: 'Other', amount: otherCost, percentage: 2 }
-            ]);
-
-            // Calculate profit analysis
-            const revenue = totalBudget * 1.15; // Assume 15% markup
-            const projectedFinal = totalBudget * 0.95; // Assume 5% under budget
-            const profit = revenue - projectedFinal;
-            const margin = revenue > 0 ? ((profit / revenue) * 100).toFixed(1) : 0;
-
-            setProfitAnalysis({
-                totalRevenue: revenue,
-                totalCostsActual: totalSpent,
-                projectedFinalCost: projectedFinal,
-                projectedProfit: profit,
-                profitMargin: margin
-            });
         } catch (error) {
             console.error('Error fetching analytics:', error);
         } finally {
@@ -296,49 +250,24 @@ const DepartmentAnalytics = () => {
                 </div>
             </div>
 
-            {/* Department Performance and Budget Variance Charts */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '24px', marginBottom: '32px' }}>
-                {/* Department Performance Score */}
-                <div className="card">
-                    <h3 style={{ marginBottom: '20px' }}>Department Performance Score</h3>
-                    <div>
-                        {departmentPerformance.slice(0, 4).map((dept, index) => (
-                            <div key={index} style={{ marginTop: index > 0 ? '16px' : '0' }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                                    <span style={{ fontWeight: '600', color: dept.color }}>{dept.name}</span>
-                                    <span style={{ fontWeight: '600', color: dept.color }}>{dept.score}%</span>
-                                </div>
-                                <div style={{ width: '100%', height: '8px', background: '#f1f5f9', borderRadius: '4px', overflow: 'hidden' }}>
-                                    <div style={{ width: `${dept.score}%`, height: '100%', background: dept.color }}></div>
-                                </div>
+            {/* Department Performance Score */}
+            <div className="card" style={{ marginBottom: '32px' }}>
+                <h3 style={{ marginBottom: '20px' }}>Department Performance Score</h3>
+                <div>
+                    {departmentPerformance.map((dept, index) => (
+                        <div key={index} style={{ marginTop: index > 0 ? '16px' : '0' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                                <span style={{ fontWeight: '600', color: dept.color }}>{dept.name}</span>
+                                <span style={{ fontWeight: '600', color: dept.color }}>{dept.score}%</span>
                             </div>
-                        ))}
-                    </div>
-                    <div style={{ marginTop: '20px', paddingTop: '16px', borderTop: '1px solid #e2e8f0', fontSize: '12px', color: '#64748b' }}>
-                        Performance score based on: budget adherence, timeline compliance, quality metrics
-                    </div>
+                            <div style={{ width: '100%', height: '8px', background: '#f1f5f9', borderRadius: '4px', overflow: 'hidden' }}>
+                                <div style={{ width: `${dept.score}%`, height: '100%', background: dept.color }}></div>
+                            </div>
+                        </div>
+                    ))}
                 </div>
-
-                {/* Budget Variance Trend */}
-                <div className="card">
-                    <h3 style={{ marginBottom: '20px' }}>Budget Variance Trend</h3>
-                    <div style={{ height: '200px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-around', gap: '8px', padding: '0 20px' }}>
-                        {budgetVarianceTrend.map((item, index) => (
-                            <div key={index} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1 }}>
-                                <div style={{
-                                    width: '100%',
-                                    height: `${item.height}px`,
-                                    background: 'linear-gradient(to top, #10b981, #6ee7b7)',
-                                    borderRadius: '4px 4px 0 0'
-                                }}></div>
-                                <span style={{ fontSize: '11px', color: '#64748b', marginTop: '8px' }}>{item.week}</span>
-                                <span style={{ fontSize: '12px', fontWeight: '600', color: '#10b981' }}>${item.variance}</span>
-                            </div>
-                        ))}
-                    </div>
-                    <div style={{ marginTop: '20px', paddingTop: '16px', borderTop: '1px solid #e2e8f0', fontSize: '12px', color: '#64748b' }}>
-                        Negative values indicate under-budget performance (good). Positive values indicate overrun.
-                    </div>
+                <div style={{ marginTop: '20px', paddingTop: '16px', borderTop: '1px solid #e2e8f0', fontSize: '12px', color: '#64748b' }}>
+                    Performance score based on: task completion rate (60%) and budget adherence (40%)
                 </div>
             </div>
 
@@ -388,75 +317,7 @@ const DepartmentAnalytics = () => {
                 </div>
             </div>
 
-            {/* Cost by Category and Profit Analysis */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginTop: '32px' }}>
-                {/* Cost by Category */}
-                <div className="card">
-                    <h3 style={{ marginBottom: '20px' }}>Cost by Category</h3>
-                    {costByCategory.map((item, index) => (
-                        <div key={index} style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            padding: '12px 0',
-                            borderBottom: index < costByCategory.length - 1 ? '1px solid #f1f5f9' : 'none'
-                        }}>
-                            <span style={{ fontWeight: '600' }}>{item.category}</span>
-                            <div style={{ textAlign: 'right' }}>
-                                <div style={{ fontWeight: '600' }}>${item.amount.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
-                                <div style={{ fontSize: '12px', color: '#64748b' }}>{item.percentage}% of total</div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-
-                {/* Profit Analysis */}
-                <div className="card">
-                    <h3 style={{ marginBottom: '20px' }}>Profit Analysis</h3>
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        padding: '12px 0',
-                        borderBottom: '1px solid #f1f5f9'
-                    }}>
-                        <span style={{ fontWeight: '600' }}>Total Revenue</span>
-                        <div style={{ textAlign: 'right', fontWeight: '600' }}>${profitAnalysis.totalRevenue.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
-                    </div>
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        padding: '12px 0',
-                        borderBottom: '1px solid #f1f5f9'
-                    }}>
-                        <span style={{ fontWeight: '600' }}>Total Costs (Actual)</span>
-                        <div style={{ textAlign: 'right', fontWeight: '600' }}>${profitAnalysis.totalCostsActual.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
-                    </div>
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        padding: '12px 0',
-                        borderBottom: '2px solid #e2e8f0'
-                    }}>
-                        <span style={{ fontWeight: '600' }}>Projected Final Cost</span>
-                        <div style={{ textAlign: 'right', fontWeight: '600' }}>${profitAnalysis.projectedFinalCost.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
-                    </div>
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        padding: '12px 0',
-                        paddingTop: '12px'
-                    }}>
-                        <span style={{ fontWeight: '600', color: '#10b981' }}>Projected Profit</span>
-                        <div style={{ textAlign: 'right' }}>
-                            <div style={{ fontWeight: '600', fontSize: '18px', color: '#10b981' }}>
-                                ${profitAnalysis.projectedProfit.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
-                            </div>
-                            <div style={{ fontSize: '12px', color: '#64748b' }}>{profitAnalysis.profitMargin}% margin</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Task Breakdown Section (moved down) */}
+            {/* Task Breakdown Section */}
             <div className="card" style={{ marginTop: '32px' }}>
                 <div className="card-header">
                     <h2>Task Breakdown by Status</h2>
