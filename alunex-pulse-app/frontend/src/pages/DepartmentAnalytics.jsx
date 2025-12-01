@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
-import jsPDF from 'jspdf';
+import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
 const DepartmentAnalytics = () => {
@@ -205,7 +205,7 @@ const DepartmentAnalytics = () => {
             margin: { left: 14 }
         });
 
-        yPos = doc.previousAutoTable.finalY + 10;
+        yPos = doc.lastAutoTable.finalY + 10;
 
         // Department Performance Scores
         if (departmentPerformance.length > 0) {
@@ -223,7 +223,7 @@ const DepartmentAnalytics = () => {
                 margin: { left: 14 }
             });
 
-            yPos = doc.previousAutoTable.finalY + 10;
+            yPos = doc.lastAutoTable.finalY + 10;
         }
 
         // Cost Breakdown by Department
@@ -261,7 +261,7 @@ const DepartmentAnalytics = () => {
                 }
             });
 
-            yPos = doc.previousAutoTable.finalY + 10;
+            yPos = doc.lastAutoTable.finalY + 10;
         }
 
         // Task Breakdown by Status
