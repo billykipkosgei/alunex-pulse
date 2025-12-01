@@ -113,7 +113,10 @@ const DepartmentAnalytics = () => {
             setRecentTasks(recent);
 
             // Calculate department performance scores
-            const deptPerformance = depts.map(dept => {
+            // Filter departments based on selection
+            const deptsToShow = selectedDept === 'all' ? depts : depts.filter(d => d._id === selectedDept);
+
+            const deptPerformance = deptsToShow.map(dept => {
                 const deptTasks = tasks.filter(t => {
                     const taskDeptId = t.department?._id || t.department;
                     const projectDeptId = t.project?.department?._id || t.project?.department;
@@ -137,7 +140,7 @@ const DepartmentAnalytics = () => {
             setDepartmentPerformance(deptPerformance);
 
             // Calculate cost breakdown by department
-            const breakdown = depts.map(dept => {
+            const breakdown = deptsToShow.map(dept => {
                 const deptBudget = dept.budget?.allocated || 0;
                 const deptSpent = dept.budget?.spent || 0;
                 const variance = deptBudget - deptSpent;
@@ -161,11 +164,62 @@ const DepartmentAnalytics = () => {
     };
 
     const handleExportPDF = () => {
-        alert('PDF Export: This feature will generate a comprehensive PDF report including all charts, tables, and analytics. This would typically use a library like jsPDF or call a backend API endpoint.');
+        window.print();
     };
 
     const handleExportExcel = () => {
-        alert('Excel Export: This feature will generate an Excel file with all data tables for further analysis. This would typically use a library like SheetJS (xlsx) or call a backend API endpoint.');
+        // Prepare CSV data
+        let csvContent = "Department Analytics Report\n\n";
+
+        // Add summary metrics
+        csvContent += "Summary Metrics\n";
+        csvContent += "Metric,Value\n";
+        csvContent += `Budget Efficiency,${analytics.budgetEfficiency}%\n`;
+        csvContent += `Cost Variance,$${Math.abs(analytics.costVariance).toLocaleString()}\n`;
+        csvContent += `Projected ROI,${analytics.projectedROI}%\n`;
+        csvContent += `Cost per Hour,$${analytics.costPerHour}\n`;
+        csvContent += `Tasks Completed,${analytics.tasksCompleted}/${analytics.tasksTotal}\n`;
+        csvContent += `Hours Logged,${analytics.hoursLogged}\n`;
+        csvContent += `Team Size,${analytics.teamSize}\n\n`;
+
+        // Add department performance
+        csvContent += "Department Performance Scores\n";
+        csvContent += "Department,Performance Score\n";
+        departmentPerformance.forEach(dept => {
+            csvContent += `${dept.name},${dept.score}%\n`;
+        });
+        csvContent += "\n";
+
+        // Add cost breakdown
+        csvContent += "Cost Breakdown by Department\n";
+        csvContent += "Department,Budgeted,Actual Cost,Variance,% Used,Status\n";
+        costBreakdown.forEach(item => {
+            csvContent += `${item.department},$${item.budgeted},$${item.actual},$${Math.abs(item.variance)},${item.percentUsed}%,${item.status}\n`;
+        });
+        csvContent += "\n";
+
+        // Add task breakdown
+        csvContent += "Task Breakdown by Status\n";
+        csvContent += "Status,Count\n";
+        csvContent += `To Do,${taskBreakdown.todo}\n`;
+        csvContent += `In Progress,${taskBreakdown.inProgress}\n`;
+        csvContent += `Completed,${taskBreakdown.completed}\n`;
+        csvContent += `Blocked,${taskBreakdown.blocked}\n`;
+
+        // Create and download CSV file
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+
+        const selectedDeptName = selectedDept === 'all' ? 'All-Departments' : departments.find(d => d._id === selectedDept)?.name || 'Department';
+        const fileName = `Department-Analytics-${selectedDeptName}-${new Date().toISOString().split('T')[0]}.csv`;
+
+        link.setAttribute('href', url);
+        link.setAttribute('download', fileName);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     };
 
     if (loading) {
@@ -183,6 +237,26 @@ const DepartmentAnalytics = () => {
 
     return (
         <div>
+            {/* Print Styles for PDF Export */}
+            <style>{`
+                @media print {
+                    .btn, button {
+                        display: none !important;
+                    }
+                    select {
+                        border: none !important;
+                        background: transparent !important;
+                    }
+                    .page-break {
+                        page-break-after: always;
+                    }
+                    body {
+                        print-color-adjust: exact;
+                        -webkit-print-color-adjust: exact;
+                    }
+                }
+            `}</style>
+
             {/* Enhanced Analytics Header */}
             <div style={{
                 background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)',
