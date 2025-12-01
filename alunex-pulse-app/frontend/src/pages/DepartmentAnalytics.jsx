@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 const DepartmentAnalytics = () => {
     const { token, API_URL } = useAuth();
@@ -164,7 +166,133 @@ const DepartmentAnalytics = () => {
     };
 
     const handleExportPDF = () => {
-        window.print();
+        const doc = new jsPDF();
+        const selectedDeptName = selectedDept === 'all' ? 'All Departments' : departments.find(d => d._id === selectedDept)?.name || 'Department';
+
+        // Title
+        doc.setFontSize(20);
+        doc.setTextColor(30, 58, 138); // Blue color
+        doc.text('Department Analytics Report', 14, 20);
+
+        doc.setFontSize(12);
+        doc.setTextColor(0, 0, 0);
+        doc.text(`Department: ${selectedDeptName}`, 14, 30);
+        doc.text(`Generated: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`, 14, 37);
+
+        let yPos = 45;
+
+        // Summary Metrics Section
+        doc.setFontSize(14);
+        doc.setFont(undefined, 'bold');
+        doc.text('Summary Metrics', 14, yPos);
+        yPos += 7;
+
+        doc.autoTable({
+            startY: yPos,
+            head: [['Metric', 'Value']],
+            body: [
+                ['Budget Efficiency', `${analytics.budgetEfficiency}%`],
+                ['Cost Variance', `$${Math.abs(analytics.costVariance).toLocaleString()}`],
+                ['Projected ROI', `${analytics.projectedROI}%`],
+                ['Cost per Hour', `$${analytics.costPerHour}`],
+                ['Tasks Completed', `${analytics.tasksCompleted}/${analytics.tasksTotal}`],
+                ['Completion Rate', `${completionRate}%`],
+                ['Hours Logged', `${analytics.hoursLogged}h`],
+                ['Team Size', `${analytics.teamSize}`]
+            ],
+            theme: 'striped',
+            headStyles: { fillColor: [30, 58, 138] },
+            margin: { left: 14 }
+        });
+
+        yPos = doc.lastAutoTable.finalY + 10;
+
+        // Department Performance Scores
+        if (departmentPerformance.length > 0) {
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'bold');
+            doc.text('Department Performance Scores', 14, yPos);
+            yPos += 7;
+
+            doc.autoTable({
+                startY: yPos,
+                head: [['Department', 'Performance Score']],
+                body: departmentPerformance.map(dept => [dept.name, `${dept.score}%`]),
+                theme: 'striped',
+                headStyles: { fillColor: [30, 58, 138] },
+                margin: { left: 14 }
+            });
+
+            yPos = doc.lastAutoTable.finalY + 10;
+        }
+
+        // Cost Breakdown by Department
+        if (costBreakdown.length > 0) {
+            // Check if we need a new page
+            if (yPos > 200) {
+                doc.addPage();
+                yPos = 20;
+            }
+
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'bold');
+            doc.text('Cost Breakdown by Department', 14, yPos);
+            yPos += 7;
+
+            doc.autoTable({
+                startY: yPos,
+                head: [['Department', 'Budgeted', 'Actual', 'Variance', '% Used', 'Status']],
+                body: costBreakdown.map(item => [
+                    item.department,
+                    `$${item.budgeted.toLocaleString()}`,
+                    `$${item.actual.toLocaleString()}`,
+                    `$${Math.abs(item.variance).toLocaleString()}`,
+                    `${item.percentUsed}%`,
+                    item.status
+                ]),
+                theme: 'striped',
+                headStyles: { fillColor: [30, 58, 138] },
+                margin: { left: 14 },
+                columnStyles: {
+                    1: { halign: 'right' },
+                    2: { halign: 'right' },
+                    3: { halign: 'right' },
+                    4: { halign: 'right' }
+                }
+            });
+
+            yPos = doc.lastAutoTable.finalY + 10;
+        }
+
+        // Task Breakdown by Status
+        if (yPos > 200) {
+            doc.addPage();
+            yPos = 20;
+        }
+
+        doc.setFontSize(14);
+        doc.setFont(undefined, 'bold');
+        doc.text('Task Breakdown by Status', 14, yPos);
+        yPos += 7;
+
+        doc.autoTable({
+            startY: yPos,
+            head: [['Status', 'Count']],
+            body: [
+                ['To Do', taskBreakdown.todo],
+                ['In Progress', taskBreakdown.inProgress],
+                ['Completed', taskBreakdown.completed],
+                ['Blocked', taskBreakdown.blocked],
+                ['Total', taskBreakdown.todo + taskBreakdown.inProgress + taskBreakdown.completed + taskBreakdown.blocked]
+            ],
+            theme: 'striped',
+            headStyles: { fillColor: [30, 58, 138] },
+            margin: { left: 14 }
+        });
+
+        // Save the PDF
+        const fileName = `Department-Analytics-${selectedDeptName.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.pdf`;
+        doc.save(fileName);
     };
 
     const handleExportExcel = () => {
@@ -237,26 +365,6 @@ const DepartmentAnalytics = () => {
 
     return (
         <div>
-            {/* Print Styles for PDF Export */}
-            <style>{`
-                @media print {
-                    .btn, button {
-                        display: none !important;
-                    }
-                    select {
-                        border: none !important;
-                        background: transparent !important;
-                    }
-                    .page-break {
-                        page-break-after: always;
-                    }
-                    body {
-                        print-color-adjust: exact;
-                        -webkit-print-color-adjust: exact;
-                    }
-                }
-            `}</style>
-
             {/* Enhanced Analytics Header */}
             <div style={{
                 background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)',
