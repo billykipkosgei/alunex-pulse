@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 
 const DepartmentAnalytics = () => {
     const { token, API_URL } = useAuth();
@@ -187,7 +187,7 @@ const DepartmentAnalytics = () => {
         doc.text('Summary Metrics', 14, yPos);
         yPos += 7;
 
-        doc.autoTable({
+        autoTable(doc, {
             startY: yPos,
             head: [['Metric', 'Value']],
             body: [
@@ -205,7 +205,7 @@ const DepartmentAnalytics = () => {
             margin: { left: 14 }
         });
 
-        yPos = doc.lastAutoTable.finalY + 10;
+        yPos = doc.previousAutoTable.finalY + 10;
 
         // Department Performance Scores
         if (departmentPerformance.length > 0) {
@@ -214,7 +214,7 @@ const DepartmentAnalytics = () => {
             doc.text('Department Performance Scores', 14, yPos);
             yPos += 7;
 
-            doc.autoTable({
+            autoTable(doc, {
                 startY: yPos,
                 head: [['Department', 'Performance Score']],
                 body: departmentPerformance.map(dept => [dept.name, `${dept.score}%`]),
@@ -223,7 +223,7 @@ const DepartmentAnalytics = () => {
                 margin: { left: 14 }
             });
 
-            yPos = doc.lastAutoTable.finalY + 10;
+            yPos = doc.previousAutoTable.finalY + 10;
         }
 
         // Cost Breakdown by Department
@@ -239,7 +239,7 @@ const DepartmentAnalytics = () => {
             doc.text('Cost Breakdown by Department', 14, yPos);
             yPos += 7;
 
-            doc.autoTable({
+            autoTable(doc, {
                 startY: yPos,
                 head: [['Department', 'Budgeted', 'Actual', 'Variance', '% Used', 'Status']],
                 body: costBreakdown.map(item => [
@@ -261,7 +261,7 @@ const DepartmentAnalytics = () => {
                 }
             });
 
-            yPos = doc.lastAutoTable.finalY + 10;
+            yPos = doc.previousAutoTable.finalY + 10;
         }
 
         // Task Breakdown by Status
@@ -275,7 +275,7 @@ const DepartmentAnalytics = () => {
         doc.text('Task Breakdown by Status', 14, yPos);
         yPos += 7;
 
-        doc.autoTable({
+        autoTable(doc, {
             startY: yPos,
             head: [['Status', 'Count']],
             body: [
